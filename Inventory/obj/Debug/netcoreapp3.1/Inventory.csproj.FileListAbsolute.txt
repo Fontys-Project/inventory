@@ -7,3 +7,14 @@ C:\Users\884573\Documents\Repositories\Inventory\Inventory\obj\Debug\netcoreapp3
 C:\Users\884573\Documents\Repositories\Inventory\Inventory\obj\Debug\netcoreapp3.1\Inventory.RazorTargetAssemblyInfo.cache
 C:\Users\884573\Documents\Repositories\Inventory\Inventory\obj\Debug\netcoreapp3.1\staticwebassets\Inventory.StaticWebAssets.Manifest.cache
 C:\Users\884573\Documents\Repositories\Inventory\Inventory\obj\Debug\netcoreapp3.1\staticwebassets\Inventory.StaticWebAssets.xml
+C:\Users\884573\Documents\Repositories\Inventory\Inventory\bin\Debug\netcoreapp3.1\Inventory.exe
+C:\Users\884573\Documents\Repositories\Inventory\Inventory\bin\Debug\netcoreapp3.1\Inventory.deps.json
+C:\Users\884573\Documents\Repositories\Inventory\Inventory\bin\Debug\netcoreapp3.1\Inventory.runtimeconfig.json
+C:\Users\884573\Documents\Repositories\Inventory\Inventory\bin\Debug\netcoreapp3.1\Inventory.runtimeconfig.dev.json
+C:\Users\884573\Documents\Repositories\Inventory\Inventory\bin\Debug\netcoreapp3.1\Inventory.dll
+C:\Users\884573\Documents\Repositories\Inventory\Inventory\bin\Debug\netcoreapp3.1\Inventory.pdb
+C:\Users\884573\Documents\Repositories\Inventory\Inventory\obj\Debug\netcoreapp3.1\Inventory.csproj.CoreCompileInputs.cache
+C:\Users\884573\Documents\Repositories\Inventory\Inventory\obj\Debug\netcoreapp3.1\Inventory.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\884573\Documents\Repositories\Inventory\Inventory\obj\Debug\netcoreapp3.1\Inventory.dll
+C:\Users\884573\Documents\Repositories\Inventory\Inventory\obj\Debug\netcoreapp3.1\Inventory.pdb
+C:\Users\884573\Documents\Repositories\Inventory\Inventory\obj\Debug\netcoreapp3.1\Inventory.genruntimeconfig.cache
