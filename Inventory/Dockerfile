@@ -3,14 +3,13 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["Inventory/Inventory.csproj", "Inventory/"]
-RUN dotnet restore "Inventory/Inventory.csproj"
+COPY ["inventory/Inventory/Inventory.csproj", "inventory/Inventory/"]
+RUN dotnet restore "inventory/Inventory/Inventory.csproj"
 COPY . .
-WORKDIR "/src/Inventory"
+WORKDIR "/src/inventory/Inventory"
 RUN dotnet build "Inventory.csproj" -c Release -o /app/build
 
 FROM build AS publish
