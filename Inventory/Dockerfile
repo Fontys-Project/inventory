@@ -6,10 +6,10 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["inventory/Inventory/Inventory.csproj", "inventory/Inventory/"]
-RUN dotnet restore "inventory/Inventory/Inventory.csproj"
+COPY ["Inventory/Inventory.csproj", "Inventory/"]
+RUN dotnet restore "Inventory/Inventory.csproj"
 COPY . .
-WORKDIR "/src/inventory/Inventory"
+WORKDIR "/src/Inventory"
 RUN dotnet build "Inventory.csproj" -c Release -o /app/build
 
 FROM build AS publish
