@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\richard\\source\\repos\\inventory\\Inventory\\Inventory.csproj": {}
+    "C:\\Users\\richard\\Source\\Repos\\inventory\\Inventory\\Inventory.csproj": {}
   },
   "projects": {
-    "C:\\Users\\richard\\source\\repos\\inventory\\Inventory\\Inventory.csproj": {
+    "C:\\Users\\richard\\Source\\Repos\\inventory\\Inventory\\Inventory.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\richard\\source\\repos\\inventory\\Inventory\\Inventory.csproj",
+        "projectUniqueName": "C:\\Users\\richard\\Source\\Repos\\inventory\\Inventory\\Inventory.csproj",
         "projectName": "Inventory",
-        "projectPath": "C:\\Users\\richard\\source\\repos\\inventory\\Inventory\\Inventory.csproj",
+        "projectPath": "C:\\Users\\richard\\Source\\Repos\\inventory\\Inventory\\Inventory.csproj",
         "packagesPath": "C:\\Users\\richard\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\richard\\source\\repos\\inventory\\Inventory\\obj\\",
+        "outputPath": "C:\\Users\\richard\\Source\\Repos\\inventory\\Inventory\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\richard\\AppData\\Roaming\\NuGet\\NuGet.Config",
