@@ -9,6 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+project.assets.json
 Inventory.assets.cache
 Inventory.csproj.FileListAbsolute.txt
 
