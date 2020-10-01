@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using InventoryLogic.Product;
+using InventoryLogic.Facade;
+using InventoryDI.Database;
 
 namespace InventoryAPI.Controllers
 {
@@ -12,13 +14,28 @@ namespace InventoryAPI.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<IProduct> Get()
+
+        private ProductFacade productFacade;
+
+        public ProductController(ProductFacade productFacade)
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new Product
-            (1, "Koek", 10, "Koek1"))
-            .ToArray();
+            this.productFacade = productFacade;
         }
+
+        [HttpGet]
+        public IEnumerable<Product> Get()
+        {
+            return productFacade.GetProducts();
+        }
+
+        [HttpPost]
+        public System.Net.Http.HttpResponseMessage Post([FromBody]Product product)
+        {
+            productFacade.AddProduct(product.Name,product.Id,product.Price,product.Sku);
+            return null;
+        }
+
     }
+
+
 }

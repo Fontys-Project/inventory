@@ -6,8 +6,8 @@ namespace InventoryLogic.Product
 {
     class ProductCollection
     {
-        public List<IProduct> SortProducts(decimal price) { return null; }
-        public List<IProduct> ShowProducts() { return null; }
+        public List<Product> SortProducts(decimal price) { return null; }
+        public List<Product> ShowProducts() { return null; }
 
 
 

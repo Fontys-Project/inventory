@@ -4,13 +4,13 @@ using System.Text;
 
 namespace InventoryLogic.Product
 {
-    interface IProductDAO
+    public interface IProductDAO
     {
-        IProduct GetProduct(int ID);
-        List<IProduct> GetAllProducts();
-        void AddProduct(IProduct product);
+        Product GetProduct(int ID);
+        List<Product> GetAllProducts();
+        void AddProduct(Product product);
         void RemoveProduct(int ID);
-        void ModifyProduct(IProduct product);
+        void ModifyProduct(Product product);
 
     }
 }
