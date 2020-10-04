@@ -26,6 +26,7 @@ namespace InventoryDAL.Product
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired();
+                entity.Property(e => e.Sku).IsRequired();
             });
         }
 
@@ -49,17 +50,19 @@ namespace InventoryDAL.Product
 
         public InventoryLogic.Product.Product GetProduct(int ID)
         {
-            throw new NotImplementedException();
+            return this.Product.Find(ID);
         }
 
         public void ModifyProduct(InventoryLogic.Product.Product product)
         {
-            throw new NotImplementedException();
+            this.Product.Update(product);
+            this.SaveChangesAsync();
         }
 
         public void RemoveProduct(int ID)
         {
-            throw new NotImplementedException();
+            this.Product.Remove(this.GetProduct(ID));
+            this.SaveChangesAsync();
         }
     }
 }
