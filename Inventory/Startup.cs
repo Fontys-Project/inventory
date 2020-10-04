@@ -27,7 +27,7 @@ namespace Inventory
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddTransient<ProductFacade>();
+            services.AddSingleton<ProductFacade>();
             services.AddSingleton<IDatabaseFactory,DatabaseFactory>();
 
             services.AddSwaggerDocument(config =>
