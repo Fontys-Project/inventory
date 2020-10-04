@@ -3,34 +3,34 @@ using System.Collections.Generic;
 using System.Text;
 using InventoryLogic.Product;
 
-namespace InventoryDAL.Database
+namespace InventoryDAL.Product
 {
 
     public class ProductMockDAO : IProductDAO
     {
 
-        private List<Product> products;
+        private List<InventoryLogic.Product.Product> products;
 
         public ProductMockDAO()
         {
-            products = new List<Product>();
-            products.Add(new Product(1, "Mondkapje", 100, "SKU123"));
+            products = new List<InventoryLogic.Product.Product>();
+            products.Add(new InventoryLogic.Product.Product(1, "Mondkapje", 100, Environment.GetEnvironmentVariable("TEST")));
         }
 
 
-        public void AddProduct(Product product)
+        public void AddProduct(InventoryLogic.Product.Product product)
         {
             products.Add(product);
         }
 
-        public List<Product> GetAllProducts()
+        public List<InventoryLogic.Product.Product> GetAllProducts()
         {
             return products;
         }
 
-        public Product GetProduct(int ID)
+        public InventoryLogic.Product.Product GetProduct(int ID)
         {
-            foreach(Product product in products)
+            foreach(InventoryLogic.Product.Product product in products)
             {
                 if (product.Id == ID)
                     return product;
@@ -39,7 +39,7 @@ namespace InventoryDAL.Database
             return null;
         }
 
-        public void ModifyProduct(Product product)
+        public void ModifyProduct(InventoryLogic.Product.Product product)
         {
             throw new NotImplementedException();
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using InventoryDI.Database;
 using InventoryLogic.Facade;
+using InventoryLogic.Product;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,18 @@ namespace Inventory
         {
             services.AddControllers();
             services.AddSingleton<ProductFacade>();
-            services.AddSingleton<IDatabaseFactory,DatabaseFactory>();
+
+            DatabaseType databaseType;
+
+            try
+            {
+                databaseType = (DatabaseType)Enum.Parse(typeof(DatabaseType), Environment.GetEnvironmentVariable("DBTYPE"), true);
+            } catch
+            {
+                databaseType = DatabaseType.MOCK;
+            }
+
+            services.AddSingleton<IDatabaseFactory,DatabaseFactory>(x => new DatabaseFactory(databaseType));
 
             services.AddSwaggerDocument(config =>
             {

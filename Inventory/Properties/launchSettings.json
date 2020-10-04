@@ -30,6 +30,10 @@
       "commandName": "Docker",
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "environmentVariables": {
+        "DBTYPE": "MYSQL",
+        "CONNECTSTRING": "server=studmysql01.fhict.local;database=dbi434991;user=dbi434991;password=komenwenogopterug"
+      },
       "publishAllPorts": true
     }
   }

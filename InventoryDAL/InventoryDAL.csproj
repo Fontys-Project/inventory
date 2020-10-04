@@ -9,9 +9,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Database\" />
     <Folder Include="Stock\" />
     <Folder Include="ProductTag\" />
-    <Folder Include="Product\" />
   </ItemGroup>
 
   <ItemGroup>

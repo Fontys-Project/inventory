@@ -6,12 +6,15 @@ namespace InventoryLogic.Product
 {
     public class Product
     {
-        public int Id { get; private set; }
-        public string Name { get; private set; }
-        public decimal Price { get; private set; }
+        
+        public int Id { get; }
 
-        public string Sku { get; private set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public string Sku { get; set; }
 
+
+        // Constructor used by .net API framwork
         public Product()
         {
 

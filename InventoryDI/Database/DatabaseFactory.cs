@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using InventoryLogic.Product;
-using InventoryDAL.Database;
+using InventoryDAL.Product;
 using InventoryLogic.Facade;
 
 namespace InventoryDI.Database
@@ -11,9 +11,14 @@ namespace InventoryDI.Database
     {
         private IProductDAO productDAO;
 
-        public DatabaseFactory()
+        public DatabaseFactory(DatabaseType databaseType)
         {
-            productDAO = new ProductMockDAO();
+            switch(databaseType)
+            {
+                case DatabaseType.MOCK: productDAO = new ProductMockDAO(); break;
+                case DatabaseType.MYSQL: productDAO = new ProductMySQLDAO(); break;
+            }
+            
         }
 
         public IProductDAO GetProductDAO()
