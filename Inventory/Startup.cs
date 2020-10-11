@@ -12,6 +12,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NSwag.Generation.Processors.Security;
+using NSwag.Generation.Processors.Contexts;
+using NSwag;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Inventory
 {
@@ -28,6 +35,33 @@ namespace Inventory
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            RSACryptoServiceProvider myRSA = new RSACryptoServiceProvider(2048);
+            RSAParameters publicKey = myRSA.ExportParameters(true);
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                ValidateIssuer = true,
+                ValidIssuer = "http://localhost:5000/",
+                IssuerSigningKey = new RsaSecurityKey(publicKey),
+            };
+
+            services.AddAuthentication().AddJwtBearer(a => new JwtBearerOptions()
+            {
+                Audience = "http://localhost:5001/",
+                //AutomaticAuthenticate = true,
+                TokenValidationParameters = tokenValidationParameters
+            });
+
+
+            services.AddAuthorization(auth =>
+            {
+                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser().Build());
+            });
+
             services.AddSingleton<ProductFacade>();
 
             DatabaseType databaseType;
@@ -42,11 +76,41 @@ namespace Inventory
 
             services.AddSingleton<IDatabaseFactory,DatabaseFactory>(x => new DatabaseFactory(databaseType));
 
+            services.AddApiVersioning(x =>
+            {
+                x.DefaultApiVersion = new ApiVersion(0, 1);
+                x.AssumeDefaultVersionWhenUnspecified = true;
+                x.ReportApiVersions = true;
+            });
+
+            services.AddVersionedApiExplorer(options =>
+                {
+                    options.GroupNameFormat = "VVVV";
+                    options.SubstituteApiVersionInUrl = true;
+                    options.SubstitutionFormat = "VVVV";
+                });
+
             services.AddSwaggerDocument(config =>
             {
+                config.DocumentName = "0.* (not for production)";
+                config.ApiGroupNames = new[] { "0.1", "0.2" };
+
+                // Authentication
+                config.OperationProcessors.Add(new OperationSecurityScopeProcessor("JWT token"));
+                config.AddSecurity("JWT token", Enumerable.Empty<string>(),
+                    new OpenApiSecurityScheme()
+                    {
+                        Type = OpenApiSecuritySchemeType.ApiKey,
+                        Name = "Authorization",
+                        In = OpenApiSecurityApiKeyLocation.Header,
+                        Description = "Copy this into the value field: \nBearer {my long token}"
+                    }
+                );
+
                 config.PostProcess = document =>
                 {
-                    document.Info.Version = "v1";
+                 
+                    document.Info.Version = "0.1";
                     document.Info.Title = "Inventory Microservice API";
                     document.Info.Description = "API Documentation";
                 
@@ -70,6 +134,9 @@ namespace Inventory
             app.UseRouting();
 
             app.UseAuthorization();
+
+
+          
 
             app.UseEndpoints(endpoints =>
             {
