@@ -38,7 +38,6 @@ namespace Inventory
 
             RSACryptoServiceProvider myRSA = new RSACryptoServiceProvider(2048);
             RSAParameters publicKey = myRSA.ExportParameters(true);
-
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
@@ -46,15 +45,12 @@ namespace Inventory
                 ValidIssuer = "http://localhost:5000/",
                 IssuerSigningKey = new RsaSecurityKey(publicKey),
             };
-
             services.AddAuthentication().AddJwtBearer(a => new JwtBearerOptions()
             {
                 Audience = "http://localhost:5001/",
                 //AutomaticAuthenticate = true,
                 TokenValidationParameters = tokenValidationParameters
             });
-
-
             services.AddAuthorization(auth =>
             {
                 auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
@@ -65,7 +61,6 @@ namespace Inventory
             services.AddSingleton<ProductFacade>();
 
             DatabaseType databaseType;
-
             try
             {
                 databaseType = (DatabaseType)Enum.Parse(typeof(DatabaseType), Environment.GetEnvironmentVariable("DBTYPE"), true);
@@ -73,7 +68,6 @@ namespace Inventory
             {
                 databaseType = DatabaseType.MOCK;
             }
-
             services.AddSingleton<IDatabaseFactory,DatabaseFactory>(x => new DatabaseFactory(databaseType));
 
             services.AddApiVersioning(x =>
@@ -82,14 +76,12 @@ namespace Inventory
                 x.AssumeDefaultVersionWhenUnspecified = true;
                 x.ReportApiVersions = true;
             });
-
             services.AddVersionedApiExplorer(options =>
                 {
                     options.GroupNameFormat = "VVVV";
                     options.SubstituteApiVersionInUrl = true;
                     options.SubstitutionFormat = "VVVV";
                 });
-
             services.AddSwaggerDocument(config =>
             {
                 config.DocumentName = "0.* (not for production)";
@@ -129,15 +121,8 @@ namespace Inventory
             // Register the Swagger generator and the Swagger UI middlewares
             app.UseOpenApi();
             app.UseSwaggerUi3();
-
-
             app.UseRouting();
-
             app.UseAuthorization();
-
-
-          
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
