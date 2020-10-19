@@ -8,6 +8,7 @@ using InventoryLogic.Product;
 using InventoryLogic.Facade;
 using InventoryDI.Database;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace InventoryAPI.Controllers
 {
@@ -39,15 +40,12 @@ namespace InventoryAPI.Controllers
         /// <summary>
         /// Create a new product definition
         /// </summary>
-        [Authorize()]
-        [ProducesResponseType(StatusCodes.Status201Created)]     // Created
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]  // BadRequest
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [MapToApiVersion("0.2")]
         [HttpPut]
-        public System.Net.Http.HttpResponseMessage Put([FromBody]Product product)
+        public Product Put([FromBody]Product product)
         {
-            productFacade.AddProduct(product.Name,product.Id,product.Price,product.Sku);
-            return null;
+            return productFacade.AddProduct(product.Name, product.Id, product.Price, product.Sku); ;
         }
 
     }

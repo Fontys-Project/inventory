@@ -21,9 +21,12 @@ namespace InventoryLogic.Facade
             return databaseFactory.GetProductDAO().GetAllProducts();
         } 
         
-        public void AddProduct(string name, int id, decimal price,string sku )
+        public Product.Product AddProduct(string name, int id, decimal price,string sku )
         {
-            databaseFactory.GetProductDAO().AddProduct(new Product.Product(id,name,price,sku));
+            Product.Product product = new Product.Product(id, name, price, sku);
+            databaseFactory.GetProductDAO().AddProduct(product);
+
+            return product;
         }
 
     }

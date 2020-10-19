@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authorization;
 using System.Text;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Inventory
 {
@@ -37,32 +38,14 @@ namespace Inventory
         {
             services.AddControllers();
 
-            RSACryptoServiceProvider myRSA = new RSACryptoServiceProvider(2048);
-            RSAParameters publicKey = myRSA.ExportParameters(true);
-            //var tokenValidationParameters = new TokenValidationParameters
-            //{
-            //    //ValidateIssuerSigningKey = false,
-            //    //ValidateIssuer = false,
-            //    //ValidIssuer = "http://localhost:5000/",
-            //    //IssuerSigningKey = new RsaSecurityKey(publicKey),
-            //    ValidateIssuer = false,
-            //    ValidateAudience = false,
-            //    ValidateIssuerSigningKey = false,
-            //    ValidateLifetime = false,
-            //    RequireExpirationTime = false,
-            //    RequireSignedTokens = false
-            //};
-
             services.AddAuthentication(o =>
             {
                 o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
             })
-                    .AddJwtBearer(o =>
+                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,o =>
                     {
-                        o.RequireHttpsMetadata = false;
-                        o.SaveToken = true;
+                     
                         o.TokenValidationParameters = new TokenValidationParameters
                         {
                             ValidateIssuer = false,
@@ -71,18 +54,10 @@ namespace Inventory
                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("qwertyuiopasdfghjklzxcvbnm123456")),
                             ValidateLifetime = false,
                             RequireExpirationTime = false,
-                            RequireSignedTokens = false
+                            RequireSignedTokens = true
                         };
                     });
 
-            services.AddAuthorization(
-            //    auth =>
-            //{
-            //    auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
-            //        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-            //        .RequireAuthenticatedUser().Build());
-            //}
-            );
 
             services.AddSingleton<ProductFacade>();
 
