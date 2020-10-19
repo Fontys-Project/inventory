@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authorization;
+using System.Text;
 
 namespace Inventory
 {
@@ -38,25 +39,50 @@ namespace Inventory
 
             RSACryptoServiceProvider myRSA = new RSACryptoServiceProvider(2048);
             RSAParameters publicKey = myRSA.ExportParameters(true);
-            var tokenValidationParameters = new TokenValidationParameters
+            //var tokenValidationParameters = new TokenValidationParameters
+            //{
+            //    //ValidateIssuerSigningKey = false,
+            //    //ValidateIssuer = false,
+            //    //ValidIssuer = "http://localhost:5000/",
+            //    //IssuerSigningKey = new RsaSecurityKey(publicKey),
+            //    ValidateIssuer = false,
+            //    ValidateAudience = false,
+            //    ValidateIssuerSigningKey = false,
+            //    ValidateLifetime = false,
+            //    RequireExpirationTime = false,
+            //    RequireSignedTokens = false
+            //};
+
+            services.AddAuthentication(o =>
             {
-                ValidateIssuerSigningKey = true,
-                ValidateIssuer = true,
-                ValidIssuer = "http://localhost:5000/",
-                IssuerSigningKey = new RsaSecurityKey(publicKey),
-            };
-            services.AddAuthentication().AddJwtBearer(a => new JwtBearerOptions()
-            {
-                Audience = "http://localhost:5001/",
-                //AutomaticAuthenticate = true,
-                TokenValidationParameters = tokenValidationParameters
-            });
-            services.AddAuthorization(auth =>
-            {
-                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
-                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .RequireAuthenticatedUser().Build());
-            });
+                o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            })
+                    .AddJwtBearer(o =>
+                    {
+                        o.RequireHttpsMetadata = false;
+                        o.SaveToken = true;
+                        o.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = false,
+                            ValidateAudience = false,
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("qwertyuiopasdfghjklzxcvbnm123456")),
+                            ValidateLifetime = false,
+                            RequireExpirationTime = false,
+                            RequireSignedTokens = false
+                        };
+                    });
+
+            services.AddAuthorization(
+            //    auth =>
+            //{
+            //    auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+            //        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+            //        .RequireAuthenticatedUser().Build());
+            //}
+            );
 
             services.AddSingleton<ProductFacade>();
 
@@ -64,11 +90,12 @@ namespace Inventory
             try
             {
                 databaseType = (DatabaseType)Enum.Parse(typeof(DatabaseType), Environment.GetEnvironmentVariable("DBTYPE"), true);
-            } catch
+            }
+            catch
             {
                 databaseType = DatabaseType.MOCK;
             }
-            services.AddSingleton<IDatabaseFactory,DatabaseFactory>(x => new DatabaseFactory(databaseType));
+            services.AddSingleton<IDatabaseFactory, DatabaseFactory>(x => new DatabaseFactory(databaseType));
 
             services.AddApiVersioning(x =>
             {
@@ -101,11 +128,11 @@ namespace Inventory
 
                 config.PostProcess = document =>
                 {
-                 
+
                     document.Info.Version = "0.1";
                     document.Info.Title = "Inventory Microservice API";
                     document.Info.Description = "API Documentation";
-                
+
                 };
             });
         }

@@ -39,7 +39,7 @@ namespace InventoryAPI.Controllers
         /// <summary>
         /// Create a new product definition
         /// </summary>
-        [Authorize(Roles = "Administrators")]
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status201Created)]     // Created
         [ProducesResponseType(StatusCodes.Status400BadRequest)]  // BadRequest
         [MapToApiVersion("0.2")]
