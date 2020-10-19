@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authorization;
+using System.Text;
 
 namespace Inventory
 {
@@ -38,43 +39,63 @@ namespace Inventory
 
             RSACryptoServiceProvider myRSA = new RSACryptoServiceProvider(2048);
             RSAParameters publicKey = myRSA.ExportParameters(true);
+            //var tokenValidationParameters = new TokenValidationParameters
+            //{
+            //    //ValidateIssuerSigningKey = false,
+            //    //ValidateIssuer = false,
+            //    //ValidIssuer = "http://localhost:5000/",
+            //    //IssuerSigningKey = new RsaSecurityKey(publicKey),
+            //    ValidateIssuer = false,
+            //    ValidateAudience = false,
+            //    ValidateIssuerSigningKey = false,
+            //    ValidateLifetime = false,
+            //    RequireExpirationTime = false,
+            //    RequireSignedTokens = false
+            //};
 
-            var tokenValidationParameters = new TokenValidationParameters
+            services.AddAuthentication(o =>
             {
-                ValidateIssuerSigningKey = true,
-                ValidateIssuer = true,
-                ValidIssuer = "http://localhost:5000/",
-                IssuerSigningKey = new RsaSecurityKey(publicKey),
-            };
+                o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
-            services.AddAuthentication().AddJwtBearer(a => new JwtBearerOptions()
-            {
-                Audience = "http://localhost:5001/",
-                //AutomaticAuthenticate = true,
-                TokenValidationParameters = tokenValidationParameters
-            });
+            })
+                    .AddJwtBearer(o =>
+                    {
+                        o.RequireHttpsMetadata = false;
+                        o.SaveToken = true;
+                        o.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = false,
+                            ValidateAudience = false,
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("qwertyuiopasdfghjklzxcvbnm123456")),
+                            ValidateLifetime = false,
+                            RequireExpirationTime = false,
+                            RequireSignedTokens = false
+                        };
+                    });
 
-
-            services.AddAuthorization(auth =>
-            {
-                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
-                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .RequireAuthenticatedUser().Build());
-            });
+            services.AddAuthorization(
+            //    auth =>
+            //{
+            //    auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+            //        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+            //        .RequireAuthenticatedUser().Build());
+            //}
+            );
 
             services.AddSingleton<ProductFacade>();
 
             DatabaseType databaseType;
-
             try
             {
                 databaseType = (DatabaseType)Enum.Parse(typeof(DatabaseType), Environment.GetEnvironmentVariable("DBTYPE"), true);
-            } catch
+            }
+            catch
             {
                 databaseType = DatabaseType.MOCK;
             }
-
-            services.AddSingleton<IDatabaseFactory,DatabaseFactory>(x => new DatabaseFactory(databaseType));
+            services.AddSingleton<IDatabaseFactory, DatabaseFactory>(x => new DatabaseFactory(databaseType));
 
             services.AddApiVersioning(x =>
             {
@@ -82,14 +103,12 @@ namespace Inventory
                 x.AssumeDefaultVersionWhenUnspecified = true;
                 x.ReportApiVersions = true;
             });
-
             services.AddVersionedApiExplorer(options =>
                 {
                     options.GroupNameFormat = "VVVV";
                     options.SubstituteApiVersionInUrl = true;
                     options.SubstitutionFormat = "VVVV";
                 });
-
             services.AddSwaggerDocument(config =>
             {
                 config.DocumentName = "0.* (not for production)";
@@ -109,11 +128,11 @@ namespace Inventory
 
                 config.PostProcess = document =>
                 {
-                 
+
                     document.Info.Version = "0.1";
                     document.Info.Title = "Inventory Microservice API";
                     document.Info.Description = "API Documentation";
-                
+
                 };
             });
         }
@@ -129,15 +148,8 @@ namespace Inventory
             // Register the Swagger generator and the Swagger UI middlewares
             app.UseOpenApi();
             app.UseSwaggerUi3();
-
-
             app.UseRouting();
-
             app.UseAuthorization();
-
-
-          
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

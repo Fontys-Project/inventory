@@ -30,7 +30,6 @@ namespace InventoryDAL.Product
             });
         }
 
-
         public void AddProduct(InventoryLogic.Product.Product product)
         {
             this.Product.Add(product);

@@ -14,7 +14,9 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DBTYPE": "MYSQL",
+        "CONNECTSTRING": "server=studmysql01.fhict.local;database=dbi434991;user=dbi434991;password=komenwenogopterug"
       }
     },
     "Inventory": {

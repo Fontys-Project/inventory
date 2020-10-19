@@ -8,11 +8,9 @@ namespace InventoryLogic.Product
     {
         
         public int Id { get; }
-
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string Sku { get; set; }
-
 
         // Constructor used by .net API framwork
         public Product()
