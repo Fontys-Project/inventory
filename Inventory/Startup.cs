@@ -62,15 +62,8 @@ namespace Inventory
             services.AddSingleton<ProductFacade>();
 
             DatabaseType databaseType;
-            try
-            {
-                databaseType = (DatabaseType)Enum.Parse(typeof(DatabaseType), Environment.GetEnvironmentVariable("DBTYPE"), true);
-            }
-            catch
-            {
-                databaseType = DatabaseType.MOCK;
-            }
-            services.AddSingleton<IDatabaseFactory, DatabaseFactory>(x => new DatabaseFactory(databaseType));
+
+            services.AddSingleton<IDatabaseFactory, DatabaseFactory>(x => new DatabaseFactory(DatabaseType.MYSQL));
 
             services.AddApiVersioning(x =>
             {
@@ -87,7 +80,7 @@ namespace Inventory
             services.AddSwaggerDocument(config =>
             {
                 config.DocumentName = "0.* (not for production)";
-                config.ApiGroupNames = new[] { "0.1", "0.2" };
+                //config.ApiGroupNames = new[] { "0.1" };
 
                 // Authentication
                 config.OperationProcessors.Add(new OperationSecurityScopeProcessor("JWT token"));

@@ -2,20 +2,19 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using MySQL.Data.EntityFrameworkCore;
+using MySql.Data.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace InventoryDAL.Product
 {
     public class ProductMySQLDAO : DbContext, IProductDAO
     {
-
         private DbSet<InventoryLogic.Product.Product> Product { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL(Environment.GetEnvironmentVariable("CONNECTSTRING"));
-            
+            // use docker composer mysql credentials (safe to store in code)
+            optionsBuilder.UseMySQL("server=db;port=3306;userid=dbuser;password=dbuserpassword;database=accountowner;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,6 +31,7 @@ namespace InventoryDAL.Product
 
         public void AddProduct(InventoryLogic.Product.Product product)
         {
+            this.Database.EnsureCreated();
             this.Product.Add(product);
             this.SaveChangesAsync();
         }
@@ -39,7 +39,6 @@ namespace InventoryDAL.Product
         public List<InventoryLogic.Product.Product> GetAllProducts()
         {
             this.Database.EnsureCreated();
-
             Task<List<InventoryLogic.Product.Product>> products = Product.ToListAsync();
 
             products.Wait();
@@ -49,18 +48,21 @@ namespace InventoryDAL.Product
 
         public InventoryLogic.Product.Product GetProduct(int ID)
         {
+            this.Database.EnsureCreated();
             return this.Product.Find(ID);
         }
 
         public void ModifyProduct(InventoryLogic.Product.Product product)
         {
+            this.Database.EnsureCreated();
             this.Product.Update(product);
             this.SaveChangesAsync();
         }
 
         public void RemoveProduct(int ID)
         {
-            this.Product.Remove(this.GetProduct(ID));
+            this.Database.EnsureCreated();
+            this.Product.Remove(this.Product.Find(ID));
             this.SaveChangesAsync();
         }
     }

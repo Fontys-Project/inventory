@@ -29,11 +29,35 @@ namespace InventoryAPI.Controllers
         /// <summary>
         /// List of product definitions
         /// </summary>
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
         public IEnumerable<Product> Get()
         {
             return productFacade.GetProducts();
+        }
+
+        /// <summary>
+        /// Get product
+        /// </summary>
+        [HttpGet]
+        [Route("{id}")]
+        public Product Get(int id)
+        {
+                return productFacade.GetProduct(id);
+        }
+
+        /// <summary>
+        /// Modify a product
+        /// </summary>
+        [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Route("{id}")]
+        public Boolean Modify([FromBody]Product product,int id)
+        {
+            Product curProduct = productFacade.GetProduct(id);
+            curProduct.Name = product.Name;
+            curProduct.Price = product.Price;
+            curProduct.Sku = product.Sku;
+            return productFacade.ModifyProduct(curProduct);
         }
 
 
@@ -41,11 +65,21 @@ namespace InventoryAPI.Controllers
         /// Create a new product definition
         /// </summary>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [MapToApiVersion("0.2")]
         [HttpPut]
         public Product Put([FromBody]Product product)
         {
-            return productFacade.AddProduct(product.Name, product.Id, product.Price, product.Sku); ;
+            return productFacade.AddProduct(product.Name, product.Id, product.Price, product.Sku);
+        }
+
+        /// <summary>
+        /// Deletes a product definition
+        /// </summary>
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpDelete]
+        [Route("{id}")]
+        public Boolean Delete(int id)
+        {
+            return productFacade.RemoveProduct(id);
         }
 
     }
