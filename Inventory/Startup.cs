@@ -1,26 +1,17 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using InventoryDI.Database;
 using InventoryLogic.Facade;
-using InventoryLogic.Product;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using NSwag.Generation.Processors.Security;
-using NSwag.Generation.Processors.Contexts;
 using NSwag;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.Authorization;
 using System.Text;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace Inventory
 {
@@ -45,7 +36,6 @@ namespace Inventory
             })
                     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,o =>
                     {
-                     
                         o.TokenValidationParameters = new TokenValidationParameters
                         {
                             ValidateIssuer = false,
@@ -58,11 +48,8 @@ namespace Inventory
                         };
                     });
 
-
             services.AddSingleton<ProductFacade>();
-
-            DatabaseType databaseType;
-
+            services.AddSingleton<ProductTagFacade>();
             services.AddSingleton<IDatabaseFactory, DatabaseFactory>(x => new DatabaseFactory(DatabaseType.MYSQL));
 
             services.AddApiVersioning(x =>
@@ -93,14 +80,12 @@ namespace Inventory
                         Description = "Copy this into the value field: \nBearer {my long token}"
                     }
                 );
-
                 config.PostProcess = document =>
                 {
 
                     document.Info.Version = "0.1";
                     document.Info.Title = "Inventory Microservice API";
                     document.Info.Description = "API Documentation";
-
                 };
             });
         }
