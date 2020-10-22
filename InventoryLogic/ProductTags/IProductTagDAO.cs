@@ -8,6 +8,6 @@ namespace InventoryLogic.ProductTags
         List<ProductTag> GetAll();
         void Add(ProductTag tag);
         void Remove(int id);
-        void Modify(ProductTag tag);
+        void Modify(ProductTag tag, int id);
     }
 }
