@@ -5,9 +5,8 @@ using InventoryLogic.Product;
 
 namespace InventoryLogic.Facade
 {
-    public class ProductFacade
+    public class ProductFacade : IFacade<Product.Product>
     {
-
         private readonly IDatabaseFactory databaseFactory;
 
         public ProductFacade(IDatabaseFactory databaseFactory)
@@ -15,36 +14,33 @@ namespace InventoryLogic.Facade
             this.databaseFactory = databaseFactory;
         }
 
-        public Product.Product GetProduct(int id)
+        public Product.Product Get(int id)
         {
             return databaseFactory.GetProductDAO().GetProduct(id);
         }
 
 
-        public List<Product.Product> GetProducts()
+        public List<Product.Product> GetAll()
         {
             return databaseFactory.GetProductDAO().GetAllProducts();
         } 
         
-        public Product.Product AddProduct(string name, int id, decimal price,string sku )
+        public Product.Product Add(Product.Product product)
         {
-            Product.Product product = new Product.Product(id, name, price, sku);
             databaseFactory.GetProductDAO().AddProduct(product);
             return product;
         }
 
-        public Boolean RemoveProduct(int id)
+        public Boolean Remove(int id)
         {
             databaseFactory.GetProductDAO().RemoveProduct(id);
             return true;
         }
 
-        public Boolean ModifyProduct(Product.Product product)
+        public Boolean Modify(Product.Product product, int id)
         {
-            databaseFactory.GetProductDAO().ModifyProduct(product);
+            databaseFactory.GetProductDAO().ModifyProduct(product, id);
             return true;
-
         }
-
     }
 }

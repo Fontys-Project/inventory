@@ -6,9 +6,8 @@ using InventoryLogic.ProductTags;
 
 namespace InventoryLogic.Facade
 {
-    public class ProductTagsFacade
+    public class ProductTagsFacade : IFacade<ProductTag>
     {
-
         private readonly IDatabaseFactory databaseFactory;
 
         public ProductTagsFacade(IDatabaseFactory databaseFactory)
@@ -21,14 +20,13 @@ namespace InventoryLogic.Facade
             return databaseFactory.GetProductTagDAO().Get(id);
         }
 
-        public List<ProductTag> Get()
+        public List<ProductTag> GetAll()
         {
             return databaseFactory.GetProductTagDAO().GetAll();
         } 
         
-        public ProductTag Add(int id, string name)
+        public ProductTag Add(ProductTag tag)
         {
-            ProductTag tag = new ProductTag(id, name); //TODO: instantiëren??
             databaseFactory.GetProductTagDAO().Add(tag);
             return tag;
         }
@@ -39,9 +37,9 @@ namespace InventoryLogic.Facade
             return true;
         }
 
-        public Boolean Modify(ProductTag tag)
+        public Boolean Modify(ProductTag tag, int id)
         {
-            databaseFactory.GetProductTagDAO().Modify(tag);
+            databaseFactory.GetProductTagDAO().Modify(tag, id);
             return true;
         }
     }
