@@ -39,7 +39,7 @@ namespace InventoryDAL.Product
             return null;
         }
 
-        public void ModifyProduct(InventoryLogic.Product.Product product)
+        public void ModifyProduct(InventoryLogic.Product.Product product, int id)
         {
             throw new NotImplementedException();
         }

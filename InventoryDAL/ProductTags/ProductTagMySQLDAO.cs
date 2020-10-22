@@ -12,7 +12,7 @@ namespace InventoryDAL.ProductTags
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // use docker composer mysql credentials (safe to store in code)
-            optionsBuilder.UseMySQL("server=db;port=3306;userid=dbuser;password=dbuserpassword;database=accountowner;");
+            optionsBuilder.UseMySQL("server=db;port=3306;userid=dbuser;password=dbuserpassword;database=accountowner2;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -47,10 +47,12 @@ namespace InventoryDAL.ProductTags
             return this.ProductTags.Find(id);
         }
 
-        public void Modify(ProductTag tag)
+        public void Modify(ProductTag tag, int id)
         {
             this.Database.EnsureCreated();
-            this.ProductTags.Update(tag);
+            ProductTag curTag = this.Get(id);
+            curTag.Name = tag.Name;
+            this.ProductTags.Update(curTag);
             this.SaveChangesAsync();
         }
 

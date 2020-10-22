@@ -52,10 +52,14 @@ namespace InventoryDAL.Product
             return this.Product.Find(ID);
         }
 
-        public void ModifyProduct(InventoryLogic.Product.Product product)
+        public void ModifyProduct(InventoryLogic.Product.Product product, int id)
         {
             this.Database.EnsureCreated();
-            this.Product.Update(product);
+            InventoryLogic.Product.Product curProduct = this.GetProduct(id);
+            curProduct.Name = product.Name;
+            curProduct.Price = product.Price;
+            curProduct.Sku = product.Sku;
+            this.Product.Update(curProduct);
             this.SaveChangesAsync();
         }
 

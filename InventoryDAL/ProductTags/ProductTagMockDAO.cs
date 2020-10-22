@@ -40,7 +40,7 @@ namespace InventoryDAL.ProductTags
             return null;
         }
 
-        public void Modify(ProductTag tag)
+        public void Modify(ProductTag tag, int id)
         {
             throw new NotImplementedException();
         }
