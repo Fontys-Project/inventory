@@ -29,5 +29,30 @@
             Deletes a product definition
             </summary>
         </member>
+        <member name="M:InventoryAPI.Controllers.ProductTagsController.Get">
+            <summary>
+            List of product definitions
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Controllers.ProductTagsController.Get(System.Int32)">
+            <summary>
+            Get product
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Controllers.ProductTagsController.Modify(InventoryLogic.ProductTags.ProductTag,System.Int32)">
+            <summary>
+            Modify a product
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Controllers.ProductTagsController.Put(InventoryLogic.ProductTags.ProductTag)">
+            <summary>
+            Create a new product definition
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Controllers.ProductTagsController.Delete(System.Int32)">
+            <summary>
+            Deletes a product definition
+            </summary>
+        </member>
     </members>
 </doc>

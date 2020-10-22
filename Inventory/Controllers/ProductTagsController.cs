@@ -28,7 +28,7 @@ namespace InventoryAPI.Controllers
         }
 
         /// <summary>
-        /// List of product definitions
+        /// List of tag definitions
         /// </summary>
         [HttpGet]
         public IEnumerable<ProductTag> Get()
@@ -37,7 +37,7 @@ namespace InventoryAPI.Controllers
         }
 
         /// <summary>
-        /// Get product
+        /// Get tag
         /// </summary>
         [HttpGet]
         [Route("{id}")]
@@ -47,7 +47,7 @@ namespace InventoryAPI.Controllers
         }
 
         /// <summary>
-        /// Modify a product
+        /// Modify a tag
         /// </summary>
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -61,7 +61,7 @@ namespace InventoryAPI.Controllers
 
 
         /// <summary>
-        /// Create a new product definition
+        /// Create a new tag definition
         /// </summary>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut]
@@ -71,7 +71,7 @@ namespace InventoryAPI.Controllers
         }
 
         /// <summary>
-        /// Deletes a product definition
+        /// Deletes a tag definition
         /// </summary>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpDelete]
