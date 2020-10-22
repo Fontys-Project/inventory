@@ -17,71 +17,11 @@ namespace InventoryAPI.Controllers
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("0.1")]
-    public class ProductTagsController : ControllerBase
+    public class ProductTagsController : APIController<ProductTag>
     {
-
-        private readonly ProductTagsFacade tagsFacade;
-
         public ProductTagsController(ProductTagsFacade tagsFacade)
+            : base(tagsFacade)
         {
-            this.tagsFacade = tagsFacade;
         }
-
-        /// <summary>
-        /// List of tag definitions
-        /// </summary>
-        [HttpGet]
-        public IEnumerable<ProductTag> Get()
-        {
-            return tagsFacade.Get();
-        }
-
-        /// <summary>
-        /// Get tag
-        /// </summary>
-        [HttpGet]
-        [Route("{id}")]
-        public ProductTag Get(int id)
-        {
-                return tagsFacade.Get(id);
-        }
-
-        /// <summary>
-        /// Modify a tag
-        /// </summary>
-        [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Route("{id}")]
-        public Boolean Modify([FromBody]ProductTag tag, int id)
-        {
-            ProductTag curTag = tagsFacade.Get(id);
-            curTag.Name = tag.Name;
-            return tagsFacade.Modify(curTag);
-        }
-
-
-        /// <summary>
-        /// Create a new tag definition
-        /// </summary>
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpPut]
-        public ProductTag Put([FromBody]ProductTag tag)
-        {
-            return tagsFacade.Add(tag.Id, tag.Name);
-        }
-
-        /// <summary>
-        /// Deletes a tag definition
-        /// </summary>
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpDelete]
-        [Route("{id}")]
-        public Boolean Delete(int id)
-        {
-            return tagsFacade.Remove(id);
-        }
-
     }
-
-
 }
