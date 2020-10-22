@@ -9,6 +9,7 @@ using InventoryLogic.Facade;
 using InventoryDI.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using InventoryLogic.ProductTags;
 
 namespace InventoryAPI.Controllers
 {
@@ -16,23 +17,23 @@ namespace InventoryAPI.Controllers
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("0.1")]
-    public class ProductController : ControllerBase
+    public class ProductTagsController : ControllerBase
     {
 
-        private ProductFacade productFacade;
+        private ProductTagsFacade tagsFacade;
 
-        public ProductController(ProductFacade productFacade)
+        public ProductTagsController(ProductTagsFacade tagsFacade)
         {
-            this.productFacade = productFacade;
+            this.tagsFacade = tagsFacade;
         }
 
         /// <summary>
         /// List of product definitions
         /// </summary>
         [HttpGet]
-        public IEnumerable<Product> Get()
+        public IEnumerable<ProductTag> Get()
         {
-            return productFacade.GetProducts();
+            return tagsFacade.Get();
         }
 
         /// <summary>
@@ -40,9 +41,9 @@ namespace InventoryAPI.Controllers
         /// </summary>
         [HttpGet]
         [Route("{id}")]
-        public Product Get(int id)
+        public ProductTag Get(int id)
         {
-                return productFacade.GetProduct(id);
+                return tagsFacade.Get(id);
         }
 
         /// <summary>
@@ -51,13 +52,11 @@ namespace InventoryAPI.Controllers
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("{id}")]
-        public Boolean Modify([FromBody]Product product,int id)
+        public Boolean Modify([FromBody]ProductTag tag, int id)
         {
-            Product curProduct = productFacade.GetProduct(id);
-            curProduct.Name = product.Name;
-            curProduct.Price = product.Price;
-            curProduct.Sku = product.Sku;
-            return productFacade.ModifyProduct(curProduct);
+            ProductTag curTag = tagsFacade.Get(id);
+            curTag.Name = tag.Name;
+            return tagsFacade.Modify(curTag);
         }
 
 
@@ -66,9 +65,9 @@ namespace InventoryAPI.Controllers
         /// </summary>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut]
-        public Product Put([FromBody]Product product)
+        public Product Put([FromBody]ProductTag tag)
         {
-            return productFacade.AddProduct(product.Name, product.Id, product.Price, product.Sku);
+            return tagsFacade.Add(tag.Name, tag.Id);
         }
 
         /// <summary>
@@ -79,7 +78,7 @@ namespace InventoryAPI.Controllers
         [Route("{id}")]
         public Boolean Delete(int id)
         {
-            return productFacade.RemoveProduct(id);
+            return tagsFacade.Remove(id);
         }
 
     }

@@ -9,8 +9,6 @@ namespace InventoryLogic.ProductTags
         
         public int Id { get; }
         public string Name { get; set; }
-        public decimal Price { get; set; }
-        public string Sku { get; set; }
 
         // Constructor used by .net API framwork
         public ProductTag()
@@ -18,12 +16,10 @@ namespace InventoryLogic.ProductTags
 
         }
 
-        public ProductTag(int id, string name, decimal price, string sku)
+        public ProductTag(int id, string name)
         {
             Id = id;
             Name = name;
-            Price = price;
-            Sku = sku;
         }
     }
 

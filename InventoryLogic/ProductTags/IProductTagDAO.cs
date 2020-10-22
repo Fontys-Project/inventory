@@ -4,10 +4,10 @@ namespace InventoryLogic.ProductTags
 {
     public interface IProductTagDAO
     {
-        ProductTag GetTag(int id);
-        List<ProductTag> GetAllTags();
-        void AddTag(ProductTag tag);
-        void RemoveTag(int id);
-        void ModifyTag(ProductTag tag);
+        ProductTag Get(int id);
+        List<ProductTag> GetAll();
+        void Add(ProductTag tag);
+        void Remove(int id);
+        void Modify(ProductTag tag);
     }
 }

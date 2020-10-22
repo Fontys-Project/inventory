@@ -1,6 +1,4 @@
-﻿using InventoryLogic.Product;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using InventoryLogic.ProductTags;
@@ -25,41 +23,38 @@ namespace InventoryDAL.ProductTags
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired();
-                entity.Property(e => e.Sku).IsRequired();
             });
         }
 
-        public void AddTag(ProductTag tag)
+        public void Add(ProductTag tag)
         {
             this.Database.EnsureCreated();
             this.ProductTags.Add(tag);
             this.SaveChangesAsync();
         }
 
-        public List<ProductTag> GetAllTags()
+        public List<ProductTag> GetAll()
         {
             this.Database.EnsureCreated();
             Task<List<ProductTag>> tags = ProductTags.ToListAsync();
-
-            tags.Wait();
-
+            tags.Wait(); // TODO: beter async uitwerken?
             return tags.Result;
         }
 
-        public ProductTag GetTag(int id)
+        public ProductTag Get(int id)
         {
             this.Database.EnsureCreated();
             return this.ProductTags.Find(id);
         }
 
-        public void ModifyTag(ProductTag tag)
+        public void Modify(ProductTag tag)
         {
             this.Database.EnsureCreated();
             this.ProductTags.Update(tag);
             this.SaveChangesAsync();
         }
 
-        public void RemoveTag(int id)
+        public void Remove(int id)
         {
             this.Database.EnsureCreated();
             this.ProductTags.Remove(this.ProductTags.Find(id));

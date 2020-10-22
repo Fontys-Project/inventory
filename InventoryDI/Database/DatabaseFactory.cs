@@ -33,5 +33,10 @@ namespace InventoryDI.Database
         {
             return productDAO;
         }
+
+        public IProductTagDAO GetProductTagDAO()
+        {
+            return productTagDAO;
+        }
     }
 }
