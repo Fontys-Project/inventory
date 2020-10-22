@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>InventoryAPI</name>
+    </assembly>
+    <members>
+        <member name="M:InventoryAPI.Controllers.ProductController.Get">
+            <summary>
+            List of product definitions
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Controllers.ProductController.Get(System.Int32)">
+            <summary>
+            Get product
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Controllers.ProductController.Modify(InventoryLogic.Product.Product,System.Int32)">
+            <summary>
+            Modify a product
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Controllers.ProductController.Put(InventoryLogic.Product.Product)">
+            <summary>
+            Create a new product definition
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Controllers.ProductController.Delete(System.Int32)">
+            <summary>
+            Deletes a product definition
+            </summary>
+        </member>
+    </members>
+</doc>

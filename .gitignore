@@ -12,6 +12,7 @@
 project.assets.json
 Inventory.assets.cache
 Inventory.csproj.FileListAbsolute.txt
+obj/project.assets.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
