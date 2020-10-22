@@ -20,7 +20,7 @@ namespace InventoryAPI.Controllers
     public class ProductTagsController : ControllerBase
     {
 
-        private ProductTagsFacade tagsFacade;
+        private readonly ProductTagsFacade tagsFacade;
 
         public ProductTagsController(ProductTagsFacade tagsFacade)
         {
@@ -65,9 +65,9 @@ namespace InventoryAPI.Controllers
         /// </summary>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut]
-        public Product Put([FromBody]ProductTag tag)
+        public ProductTag Put([FromBody]ProductTag tag)
         {
-            return tagsFacade.Add(tag.Name, tag.Id);
+            return tagsFacade.Add(tag.Id, tag.Name);
         }
 
         /// <summary>

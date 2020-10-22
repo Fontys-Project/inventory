@@ -11,8 +11,8 @@ namespace InventoryDI.Database
 {
     public class DatabaseFactory : IDatabaseFactory
     {
-        private IProductDAO productDAO;
-        private IProductTagDAO productTagDAO;
+        private readonly IProductDAO productDAO;
+        private readonly IProductTagDAO productTagDAO;
 
         public DatabaseFactory(DatabaseType databaseType)
         {

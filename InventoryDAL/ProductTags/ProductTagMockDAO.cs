@@ -8,12 +8,16 @@ namespace InventoryDAL.ProductTags
 {
     public class ProductTagMockDAO : DbContext, IProductTagDAO
     {
-        private List<ProductTag> productTags;
+        private readonly List<ProductTag> productTags;
 
        public ProductTagMockDAO()
         {
-            productTags = new List<ProductTag>();
-            productTags.Add(new ProductTag(1, "Tag1"));
+            productTags = new List<ProductTag>
+            {
+                new ProductTag(1, "Clothes"),
+                new ProductTag(2, "Fruit"),
+                new ProductTag(3, "Meat")
+            };
         }
 
         public void Add(ProductTag tag)
