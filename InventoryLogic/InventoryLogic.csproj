@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Stock\" />
-    <Folder Include="ProductTag\" />
   </ItemGroup>
 
 </Project>
