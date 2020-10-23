@@ -37,9 +37,9 @@ namespace InventoryLogic.Facade
             return true;
         }
 
-        public Boolean Modify(Products.Product product, int id)
+        public Boolean Modify(Products.Product product)
         {
-            databaseFactory.GetProductDAO().Modify(product, id);
+            databaseFactory.GetProductDAO().Modify(product);
             return true;
         }
     }

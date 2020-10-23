@@ -10,6 +10,6 @@ namespace InventoryLogic.Products
         List<Product> GetAll();
         void Add(Product product);
         void Remove(int ID);
-        void Modify(Product product, int id);
+        void Modify(Product product);
     }
 }

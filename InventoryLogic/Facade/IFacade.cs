@@ -11,6 +11,6 @@ namespace InventoryLogic.Facade
         public List<Type> GetAll();
         public Type Add(Type o);
         public Boolean Remove(int id);
-        public Boolean Modify(Type obj, int id);
+        public Boolean Modify(Type obj);
     }
 }

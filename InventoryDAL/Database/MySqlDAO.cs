@@ -38,7 +38,7 @@ namespace InventoryDAL.Database
             return this.Table.Find(id);
         }
 
-        public void Modify(Type obj, int id)
+        public void Modify(Type obj)
         {
             this.dbContext.Database.EnsureCreated();
             this.dbContext.Update(obj);
