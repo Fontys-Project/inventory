@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using InventoryLogic.Product;
+using InventoryLogic.Products;
 using InventoryLogic.Facade;
 using InventoryDI.Database;
 using Microsoft.AspNetCore.Authorization;

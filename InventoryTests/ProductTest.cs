@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using InventoryLogic.Product;
+using InventoryLogic.Products;
 
 namespace InventoryTests
 {

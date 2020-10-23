@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace InventoryLogic.Product
+namespace InventoryLogic.Products
 {
     class ProductCollection
     {
