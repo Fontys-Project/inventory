@@ -5,3 +5,5 @@ solution: Inventory.sln
 script:
   - dotnet restore Inventory.sln
   - dotnet test Inventory.sln
+notifications:
+ webhooks: https://www.travisbuddy.com/
