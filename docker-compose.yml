@@ -17,7 +17,7 @@ services:
     image: ${DOCKER_REGISTRY-}inventoryapi
     build:
       context: .
-      dockerfile: Inventory/Dockerfile
+      dockerfile: InventoryAPI/Dockerfile
 
 volumes:
     dbdata:
