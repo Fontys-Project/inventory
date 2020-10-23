@@ -12,7 +12,7 @@ namespace InventoryAPI.Controllers
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("0.1")]
-    public class APIController<Type> : ControllerBase
+    public abstract class APIController<Type> : ControllerBase
     {
         private readonly IFacade<Type> facade;
 
