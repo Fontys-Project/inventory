@@ -4,29 +4,29 @@
         <name>InventoryAPI</name>
     </assembly>
     <members>
-        <member name="M:InventoryAPI.Controllers.ProductController.Get">
+        <member name="M:InventoryAPI.Controllers.APIController`1.Get">
             <summary>
-            List of product definitions
+            List of <typeparamref name="Type"/> definitions
             </summary>
         </member>
-        <member name="M:InventoryAPI.Controllers.ProductController.Get(System.Int32)">
+        <member name="M:InventoryAPI.Controllers.APIController`1.Get(System.Int32)">
             <summary>
-            Get product
+            Get <typeparamref name="Type"/>
             </summary>
         </member>
-        <member name="M:InventoryAPI.Controllers.ProductController.Modify(InventoryLogic.Product.Product,System.Int32)">
+        <member name="M:InventoryAPI.Controllers.APIController`1.Modify(`0,System.Int32)">
             <summary>
-            Modify a product
+            Modify a <typeparamref name="Type"/>
             </summary>
         </member>
-        <member name="M:InventoryAPI.Controllers.ProductController.Put(InventoryLogic.Product.Product)">
+        <member name="M:InventoryAPI.Controllers.APIController`1.Put(`0)">
             <summary>
-            Create a new product definition
+            Create a new <typeparamref name="Type"/> definition
             </summary>
         </member>
-        <member name="M:InventoryAPI.Controllers.ProductController.Delete(System.Int32)">
+        <member name="M:InventoryAPI.Controllers.APIController`1.Delete(System.Int32)">
             <summary>
-            Deletes a product definition
+            Deletes a <typeparamref name="Type"/> definition
             </summary>
         </member>
     </members>

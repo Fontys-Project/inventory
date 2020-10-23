@@ -9,6 +9,7 @@ using InventoryLogic.Facade;
 using InventoryDI.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using InventoryLogic.ProductTags;
 
 namespace InventoryAPI.Controllers
 {
@@ -16,10 +17,10 @@ namespace InventoryAPI.Controllers
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("0.1")]
-    public class ProductController : APIController<Product>
+    public class ProductTagsController : APIController<ProductTag>
     {
-        public ProductController(ProductFacade productFacade) 
-            : base(productFacade)
+        public ProductTagsController(ProductTagsFacade tagsFacade)
+            : base(tagsFacade)
         {
         }
     }

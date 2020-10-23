@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using InventoryLogic.Product;
+using InventoryLogic.Products;
 
 namespace InventoryLogic.Facade
 {
-    public class ProductFacade
+    public class ProductFacade : IFacade<Products.Product>
     {
-
         private readonly IDatabaseFactory databaseFactory;
 
         public ProductFacade(IDatabaseFactory databaseFactory)
@@ -15,36 +14,33 @@ namespace InventoryLogic.Facade
             this.databaseFactory = databaseFactory;
         }
 
-        public Product.Product GetProduct(int id)
+        public Products.Product Get(int id)
         {
-            return databaseFactory.GetProductDAO().GetProduct(id);
+            return databaseFactory.GetProductDAO().Get(id);
         }
 
 
-        public List<Product.Product> GetProducts()
+        public List<Products.Product> GetAll()
         {
-            return databaseFactory.GetProductDAO().GetAllProducts();
+            return databaseFactory.GetProductDAO().GetAll();
         } 
         
-        public Product.Product AddProduct(string name, int id, decimal price,string sku )
+        public Products.Product Add(Products.Product product)
         {
-            Product.Product product = new Product.Product(id, name, price, sku);
-            databaseFactory.GetProductDAO().AddProduct(product);
+            databaseFactory.GetProductDAO().Add(product);
             return product;
         }
 
-        public Boolean RemoveProduct(int id)
+        public Boolean Remove(int id)
         {
-            databaseFactory.GetProductDAO().RemoveProduct(id);
+            databaseFactory.GetProductDAO().Remove(id);
             return true;
         }
 
-        public Boolean ModifyProduct(Product.Product product)
+        public Boolean Modify(Products.Product product, int id)
         {
-            databaseFactory.GetProductDAO().ModifyProduct(product);
+            databaseFactory.GetProductDAO().Modify(product, id);
             return true;
-
         }
-
     }
 }

@@ -2,28 +2,24 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace InventoryLogic.Products
+namespace InventoryLogic.ProductTags
 {
-    public class Product
+    public class ProductTag
     {
         
         public int Id { get; }
         public string Name { get; set; }
-        public decimal Price { get; set; }
-        public string Sku { get; set; }
 
         // Constructor used by .net API framwork
-        public Product()
+        public ProductTag()
         {
 
         }
 
-        public Product(int id, string name, decimal price, string sku)
+        public ProductTag(int id, string name)
         {
             Id = id;
             Name = name;
-            Price = price;
-            Sku = sku;
         }
     }
 
