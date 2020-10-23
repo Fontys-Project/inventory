@@ -1,0 +1,9 @@
+language: csharp
+mono: none
+dotnet: 3.1.1
+solution: Inventory.sln
+script:
+  - dotnet restore Inventory.sln
+  - dotnet test Inventory.sln
+notifications:
+ webhooks: https://www.travisbuddy.com/
