@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using InventoryLogic.Product;
+using InventoryLogic.Products;
 
 namespace InventoryLogic.Facade
 {
-    public class ProductFacade : IFacade<Product.Product>
+    public class ProductFacade : IFacade<Products.Product>
     {
         private readonly IDatabaseFactory databaseFactory;
 
@@ -14,32 +14,32 @@ namespace InventoryLogic.Facade
             this.databaseFactory = databaseFactory;
         }
 
-        public Product.Product Get(int id)
+        public Products.Product Get(int id)
         {
-            return databaseFactory.GetProductDAO().GetProduct(id);
+            return databaseFactory.GetProductDAO().Get(id);
         }
 
 
-        public List<Product.Product> GetAll()
+        public List<Products.Product> GetAll()
         {
-            return databaseFactory.GetProductDAO().GetAllProducts();
+            return databaseFactory.GetProductDAO().GetAll();
         } 
         
-        public Product.Product Add(Product.Product product)
+        public Products.Product Add(Products.Product product)
         {
-            databaseFactory.GetProductDAO().AddProduct(product);
+            databaseFactory.GetProductDAO().Add(product);
             return product;
         }
 
         public Boolean Remove(int id)
         {
-            databaseFactory.GetProductDAO().RemoveProduct(id);
+            databaseFactory.GetProductDAO().Remove(id);
             return true;
         }
 
-        public Boolean Modify(Product.Product product, int id)
+        public Boolean Modify(Products.Product product, int id)
         {
-            databaseFactory.GetProductDAO().ModifyProduct(product, id);
+            databaseFactory.GetProductDAO().Modify(product, id);
             return true;
         }
     }

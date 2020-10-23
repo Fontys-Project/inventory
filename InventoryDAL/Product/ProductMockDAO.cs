@@ -1,36 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using InventoryLogic.Product;
+using InventoryLogic.Products;
 
-namespace InventoryDAL.Product
+namespace InventoryDAL.Products
 {
 
     public class ProductMockDAO : IProductDAO
     {
 
-        private List<InventoryLogic.Product.Product> products;
+        private readonly List<Product> products;
 
         public ProductMockDAO()
         {
-            products = new List<InventoryLogic.Product.Product>();
-            products.Add(new InventoryLogic.Product.Product(1, "Mondkapje", 100, Environment.GetEnvironmentVariable("TEST")));
+            products = new List<Product>
+            {
+                new Product(1, "Mondkapje", 100, Environment.GetEnvironmentVariable("TEST"))
+            };
         }
 
 
-        public void AddProduct(InventoryLogic.Product.Product product)
+        public void Add(Product product)
         {
             products.Add(product);
         }
 
-        public List<InventoryLogic.Product.Product> GetAllProducts()
+        public List<Product> GetAll()
         {
             return products;
         }
 
-        public InventoryLogic.Product.Product GetProduct(int ID)
+        public Product Get(int ID)
         {
-            foreach(InventoryLogic.Product.Product product in products)
+            foreach(Product product in products)
             {
                 if (product.Id == ID)
                     return product;
@@ -39,12 +41,12 @@ namespace InventoryDAL.Product
             return null;
         }
 
-        public void ModifyProduct(InventoryLogic.Product.Product product, int id)
+        public void Modify(Product product, int id)
         {
             throw new NotImplementedException();
         }
 
-        public void RemoveProduct(int ID)
+        public void Remove(int ID)
         {
             throw new NotImplementedException();
         }
