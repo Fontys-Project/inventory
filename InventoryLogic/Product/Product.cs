@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using InventoryLogic.Stocks;
 
 namespace InventoryLogic.Products
 {
@@ -12,8 +13,11 @@ namespace InventoryLogic.Products
         public decimal Price { get; set; }
         public string Sku { get; set; }
 
-        // Constructor used by .net API framwork
-        public Product()
+        
+        public List<Stock> Stocks { get; set; }
+
+    // Constructor used by .net API framwork
+    public Product()
         {
 
         }

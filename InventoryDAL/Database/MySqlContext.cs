@@ -19,11 +19,12 @@ namespace InventoryDAL.Database
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<InventoryLogic.Products.Product>(entity =>
+            modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.Sku).IsRequired();
+                //entity.HasMany(e => e.Stocks).WithOne().HasForeignKey(s => s.ProductId);
             });
 
             modelBuilder.Entity<ProductTag>(entity =>
@@ -32,10 +33,12 @@ namespace InventoryDAL.Database
                 entity.Property(e => e.Name).IsRequired();
             });
 
-            modelBuilder.Entity<InventoryLogic.Stocks.Stock>(entity =>
+            modelBuilder.Entity<Stock>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.Productname).IsRequired();
+
+                entity.HasOne(e => e.Product).WithMany().HasForeignKey(p => p.ProductId);
+                
                 entity.Property(e => e.Amount).IsRequired();
                 entity.Property(e => e.Today).IsRequired();
             });

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using InventoryLogic.Products;
 
@@ -9,7 +10,9 @@ namespace InventoryLogic.Stocks
     {
 
         public int Id { get; }
-        public string Productname { get; set; }
+
+        public int ProductId { get; set; }
+        public Product Product { get; set; }
 
         public int Amount { get; set; }
 
@@ -21,10 +24,10 @@ namespace InventoryLogic.Stocks
 
         }
 
-        public Stock(int id, string productname, int amount)
+        public Stock(int id, Product product, int amount)
         {
             Id = id;
-            Productname = productname;
+            Product = product;
             Amount = amount;
             Today = DateTime.Today;
         }

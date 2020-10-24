@@ -14,9 +14,9 @@ namespace InventoryDAL.Stocks
         {
             stocks = new List<Stock>
             {
-                new Stock(1, "Mondkapje", 25),
-                new Stock(2, "Televisie",15),
-                new Stock(3, "Appel", 10),
+                new Stock(1, new Product(1,"ff",1,"f"), 25),
+                new Stock(2, new Product(1,"ff",1,"f"), 15),
+                new Stock(3, new Product(1,"ff",1,"f"), 10),
             };
         }
 
