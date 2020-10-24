@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using InventoryLogic.Products;
 using InventoryLogic.ProductTags;
+using InventoryLogic.Stocks;
 
 namespace InventoryDAL.Database
 {
@@ -28,6 +30,14 @@ namespace InventoryDAL.Database
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired();
+            });
+
+            modelBuilder.Entity<InventoryLogic.Stocks.Stock>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Productname).IsRequired();
+                entity.Property(e => e.Amount).IsRequired();
+                entity.Property(e => e.Today).IsRequired();
             });
         }
     }

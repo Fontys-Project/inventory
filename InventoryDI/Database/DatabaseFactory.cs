@@ -7,6 +7,8 @@ using InventoryLogic.Facade;
 using InventoryDAL.ProductTags;
 using InventoryLogic.ProductTags;
 using InventoryDAL.Database;
+using InventoryDAL.Stocks;
+using InventoryLogic.Stocks;
 
 namespace InventoryDI.Database
 {
@@ -14,6 +16,7 @@ namespace InventoryDI.Database
     {
         private readonly IProductDAO productDAO;
         private readonly IProductTagDAO productTagDAO;
+        private readonly IStockDAO stockDAO;
 
         public DatabaseFactory(DatabaseType databaseType)
         {
@@ -22,11 +25,13 @@ namespace InventoryDI.Database
                 case DatabaseType.MOCK: 
                     productDAO = new ProductMockDAO();
                     productTagDAO = new ProductTagMockDAO();
+                    stockDAO = new StockMockDAO();
                     break;
                 case DatabaseType.MYSQL:
                     var context = new MySqlContext();
                     productDAO = new ProductMySqlDAO(context);
                     productTagDAO = new ProductTagMySqlDAO(context);
+                    stockDAO = new StockMySqlDAO(context);
                     break;
             }
         }
@@ -39,6 +44,11 @@ namespace InventoryDI.Database
         public IProductTagDAO GetProductTagDAO()
         {
             return productTagDAO;
+        }
+
+        public IStockDAO GetStockDAO()
+        {
+            return stockDAO;
         }
     }
 }

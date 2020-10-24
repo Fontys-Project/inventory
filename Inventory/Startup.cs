@@ -50,6 +50,7 @@ namespace Inventory
 
             services.AddSingleton<ProductFacade>();
             services.AddSingleton<ProductTagsFacade>();
+            services.AddSingleton<StockFacade>();
             services.AddSingleton<IDatabaseFactory, DatabaseFactory>(x => new DatabaseFactory(DatabaseType.MYSQL));
 
             services.AddApiVersioning(x =>
