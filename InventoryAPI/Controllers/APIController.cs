@@ -46,9 +46,9 @@ namespace InventoryAPI.Controllers
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("{id}")]
-        public Boolean Modify([FromBody] Type obj, int id)
+        public Boolean Modify([FromBody] Type obj)
         {
-            return facade.Modify(obj, id);
+            return facade.Modify(obj);
         }
 
 
