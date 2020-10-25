@@ -8,6 +8,6 @@ namespace InventoryLogic.Stocks
         List<Stock> GetAll();
         void Add(Stock stock);
         void Remove(int id);
-        void Modify(Stock stock, int id);
+        void Modify(Stock stock);
     }
 }

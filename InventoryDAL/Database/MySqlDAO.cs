@@ -1,8 +1,6 @@
-﻿using InventoryLogic.Products;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using InventoryDAL.Database;
 
 namespace InventoryDAL.Database
 {

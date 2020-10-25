@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using InventoryLogic.Products;
 
 namespace InventoryLogic.Facade
 {

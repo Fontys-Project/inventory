@@ -29,15 +29,15 @@ namespace Inventory
         {
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
-                    options.SerializerSettings.ReferenceLoopHandling = 
+                    options.SerializerSettings.ReferenceLoopHandling =
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
 
             services.AddAuthentication(o =>
-            {
-                o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
+                {
+                    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o =>
                      {
                          o.TokenValidationParameters = new TokenValidationParameters
@@ -58,11 +58,11 @@ namespace Inventory
             services.AddSingleton<IDatabaseFactory, DatabaseFactory>(x => new DatabaseFactory(DatabaseType.MYSQL));
 
             services.AddApiVersioning(x =>
-            {
-                x.DefaultApiVersion = new ApiVersion(0, 1);
-                x.AssumeDefaultVersionWhenUnspecified = true;
-                x.ReportApiVersions = true;
-            });
+                {
+                    x.DefaultApiVersion = new ApiVersion(0, 1);
+                    x.AssumeDefaultVersionWhenUnspecified = true;
+                    x.ReportApiVersions = true;
+                });
             services.AddVersionedApiExplorer(options =>
                 {
                     options.GroupNameFormat = "VVVV";
@@ -86,12 +86,11 @@ namespace Inventory
                     }
                 );
                 config.PostProcess = document =>
-                {
-
-                    document.Info.Version = "0.1";
-                    document.Info.Title = "Inventory Microservice API";
-                    document.Info.Description = "API Documentation";
-                };
+                    {
+                        document.Info.Version = "0.1";
+                        document.Info.Title = "Inventory Microservice API";
+                        document.Info.Description = "API Documentation";
+                    };
             });
         }
 
@@ -109,9 +108,9 @@ namespace Inventory
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+                {
+                    endpoints.MapControllers();
+                });
         }
     }
 }

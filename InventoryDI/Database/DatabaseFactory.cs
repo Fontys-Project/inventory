@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using InventoryLogic.Facade;
 using InventoryLogic.Products;
-using InventoryDAL.Products;
-using InventoryLogic.Facade;
-using InventoryDAL.ProductTags;
-using InventoryLogic.ProductTags;
-using InventoryDAL.Database;
-using InventoryDAL.Stocks;
+using InventoryLogic.Tags;
 using InventoryLogic.Stocks;
+using InventoryDAL.Database;
+using InventoryDAL.Products;
+using InventoryDAL.ProductTags;
+using InventoryDAL.Stocks;
 
 namespace InventoryDI.Database
 {
     public class DatabaseFactory : IDatabaseFactory
     {
         private readonly IProductDAO productDAO;
-        private readonly IProductTagDAO productTagDAO;
+        private readonly ITagDAO tagDAO;
         private readonly IStockDAO stockDAO;
 
         public DatabaseFactory(DatabaseType databaseType)
@@ -24,13 +21,13 @@ namespace InventoryDI.Database
             {
                 case DatabaseType.MOCK: 
                     productDAO = new ProductMockDAO();
-                    productTagDAO = new ProductTagMockDAO();
+                    tagDAO = new TagMockDAO();
                     stockDAO = new StockMockDAO();
                     break;
                 case DatabaseType.MYSQL:
                     var context = new MySqlContext();
                     productDAO = new ProductMySqlDAO(context);
-                    productTagDAO = new ProductTagMySqlDAO(context);
+                    tagDAO = new TagMySQLDAO(context);
                     stockDAO = new StockMySqlDAO(context);
                     break;
             }
@@ -41,9 +38,9 @@ namespace InventoryDI.Database
             return productDAO;
         }
 
-        public IProductTagDAO GetProductTagDAO()
+        public ITagDAO GetTagDAO()
         {
-            return productTagDAO;
+            return tagDAO;
         }
 
         public IStockDAO GetStockDAO()

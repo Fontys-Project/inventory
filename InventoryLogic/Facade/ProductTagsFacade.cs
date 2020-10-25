@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using InventoryLogic.Products;
-using InventoryLogic.ProductTags;
+using InventoryLogic.Tags;
 
 namespace InventoryLogic.Facade
 {
-    public class ProductTagsFacade : IFacade<ProductTag>
+    public class ProductTagsFacade : IFacade<Tag>
     {
         private readonly IDatabaseFactory databaseFactory;
 
@@ -15,31 +13,31 @@ namespace InventoryLogic.Facade
             this.databaseFactory = databaseFactory;
         }
 
-        public ProductTag Get(int id)
+        public Tag Get(int id)
         {
-            return databaseFactory.GetProductTagDAO().Get(id);
+            return databaseFactory.GetTagDAO().Get(id);
         }
 
-        public List<ProductTag> GetAll()
+        public List<Tag> GetAll()
         {
-            return databaseFactory.GetProductTagDAO().GetAll();
+            return databaseFactory.GetTagDAO().GetAll();
         } 
         
-        public ProductTag Add(ProductTag tag)
+        public Tag Add(Tag tag)
         {
-            databaseFactory.GetProductTagDAO().Add(tag);
+            databaseFactory.GetTagDAO().Add(tag);
             return tag;
         }
 
         public Boolean Remove(int id)
         {
-            databaseFactory.GetProductTagDAO().Remove(id);
+            databaseFactory.GetTagDAO().Remove(id);
             return true;
         }
 
-        public Boolean Modify(ProductTag tag)
+        public Boolean Modify(Tag tag)
         {
-            databaseFactory.GetProductTagDAO().Modify(tag);
+            databaseFactory.GetTagDAO().Modify(tag);
             return true;
         }
     }

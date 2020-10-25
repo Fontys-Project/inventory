@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 using InventoryLogic.Products;
-using InventoryLogic.ProductTags;
+using InventoryLogic.Tags;
 using InventoryLogic.Stocks;
 
 namespace InventoryDAL.Database
@@ -31,7 +29,7 @@ namespace InventoryDAL.Database
                 //entity.HasMany(e => e.Stocks).WithOne().HasForeignKey(s => s.ProductId);
             });
 
-            modelBuilder.Entity<ProductTag>(entity =>
+            modelBuilder.Entity<Tag>(entity =>
             {
                 entity.HasKey(t => t.Id);
                 entity.Property(t => t.Name).IsRequired();
@@ -43,7 +41,7 @@ namespace InventoryDAL.Database
             {
                 entity.HasKey(s => s.Id);
                 entity.Property(s => s.Amount).IsRequired();
-                entity.Property(s => s.Today).IsRequired();
+                entity.Property(s => s.Date).IsRequired();
                 entity.HasOne(s => s.Product)
                         .WithMany()
                         .HasForeignKey(p => p.ProductId);

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using InventoryLogic.Stocks;
 using InventoryLogic.Facade;
+using InventoryLogic.Tags;
 
 namespace InventoryAPI.Controllers
 {
@@ -8,10 +8,10 @@ namespace InventoryAPI.Controllers
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("0.1")]
-    public class StockController : APIController<Stock>
+    public class TagsController : APIController<Tag>
     {
-        public StockController(StockFacade stockFacade)
-            : base(stockFacade)
+        public TagsController(ProductTagsFacade tagsFacade)
+            : base(tagsFacade)
         {
         }
     }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using InventoryLogic.Products;
-using InventoryLogic.ProductTags;
+﻿using InventoryLogic.Products;
+using InventoryLogic.Tags;
 using InventoryLogic.Stocks;
 
 namespace InventoryLogic.Facade
@@ -10,8 +7,7 @@ namespace InventoryLogic.Facade
     public interface IDatabaseFactory
     {
         public IProductDAO GetProductDAO();
-        public IProductTagDAO GetProductTagDAO();
-
+        public ITagDAO GetTagDAO();
         public IStockDAO GetStockDAO();
     }
 }

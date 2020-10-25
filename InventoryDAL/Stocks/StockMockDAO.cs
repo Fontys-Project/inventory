@@ -40,7 +40,7 @@ namespace InventoryDAL.Stocks
             return null;
         }
 
-        public void Modify(Stock stock, int id)
+        public void Modify(Stock stock)
         {
             throw new NotImplementedException();
         }
