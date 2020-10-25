@@ -27,26 +27,29 @@ namespace Inventory
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 
             services.AddAuthentication(o =>
             {
                 o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,o =>
-                    {
-                        o.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuer = false,
-                            ValidateAudience = false,
-                            ValidateIssuerSigningKey = true,
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("qwertyuiopasdfghjklzxcvbnm123456")),
-                            ValidateLifetime = false,
-                            RequireExpirationTime = false,
-                            RequireSignedTokens = true
-                        };
-                    });
+                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o =>
+                     {
+                         o.TokenValidationParameters = new TokenValidationParameters
+                         {
+                             ValidateIssuer = false,
+                             ValidateAudience = false,
+                             ValidateIssuerSigningKey = true,
+                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("qwertyuiopasdfghjklzxcvbnm123456")),
+                             ValidateLifetime = false,
+                             RequireExpirationTime = false,
+                             RequireSignedTokens = true
+                         };
+                     });
 
             services.AddSingleton<ProductFacade>();
             services.AddSingleton<ProductTagsFacade>();

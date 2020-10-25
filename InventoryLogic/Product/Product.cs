@@ -13,7 +13,7 @@ namespace InventoryLogic.Products
         public decimal Price { get; set; }
         public string Sku { get; set; }
         public int? TagId { get; set; }
-        public ProductTag? Tag { get; set; }
+        public ProductTag Tag { get; set; }
 
         // Constructor used by .net API framwork
         public Product()
