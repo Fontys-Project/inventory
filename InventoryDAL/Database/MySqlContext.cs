@@ -12,7 +12,8 @@ namespace InventoryDAL.Database
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // use docker composer mysql credentials (safe to store in code)
-            optionsBuilder.UseMySQL("server=db;port=3306;userid=dbuser;password=dbuserpassword;database=accountowner;");
+            optionsBuilder.UseMySQL(
+                "server=db;port=3306;userid=dbuser;password=dbuserpassword;database=accountowner;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,9 +28,6 @@ namespace InventoryDAL.Database
                 entity.HasOne(p => p.Tag)
                         .WithMany(t => t.Products)
                         .HasForeignKey(p => p.TagId);
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired();
-                entity.Property(e => e.Sku).IsRequired();
                 //entity.HasMany(e => e.Stocks).WithOne().HasForeignKey(s => s.ProductId);
             });
 
@@ -43,12 +41,12 @@ namespace InventoryDAL.Database
 
             modelBuilder.Entity<Stock>(entity =>
             {
-                entity.HasKey(e => e.Id);
-
-                entity.HasOne(e => e.Product).WithMany().HasForeignKey(p => p.ProductId);
-                
-                entity.Property(e => e.Amount).IsRequired();
-                entity.Property(e => e.Today).IsRequired();
+                entity.HasKey(s => s.Id);
+                entity.Property(s => s.Amount).IsRequired();
+                entity.Property(s => s.Today).IsRequired();
+                entity.HasOne(s => s.Product)
+                        .WithMany()
+                        .HasForeignKey(p => p.ProductId);
             });
         }
     }
