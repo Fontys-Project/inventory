@@ -14,7 +14,7 @@
             Get <typeparamref name="Type"/>
             </summary>
         </member>
-        <member name="M:InventoryAPI.Controllers.APIController`1.Modify(`0,System.Int32)">
+        <member name="M:InventoryAPI.Controllers.APIController`1.Modify(`0)">
             <summary>
             Modify a <typeparamref name="Type"/>
             </summary>

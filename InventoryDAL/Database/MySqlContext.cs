@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using InventoryLogic.ProductTags;
+using InventoryLogic.Products;
 
 namespace InventoryDAL.Database
 {
@@ -17,17 +18,22 @@ namespace InventoryDAL.Database
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<InventoryLogic.Products.Product>(entity =>
+            modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.Sku).IsRequired();
+                entity.HasOne(p => p.Tag)
+                        .WithMany(t => t.Products)
+                        .HasForeignKey(p => p.TagId);
             });
 
             modelBuilder.Entity<ProductTag>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired();
+                entity.HasMany(t => t.Products)
+                        .WithOne(p => p.Tag);
             });
         }
     }
