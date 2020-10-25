@@ -20,9 +20,9 @@ namespace InventoryDAL.Database
 
             modelBuilder.Entity<Product>(entity =>
             {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired();
-                entity.Property(e => e.Sku).IsRequired();
+                entity.HasKey(p => p.Id);
+                entity.Property(p => p.Name).IsRequired();
+                entity.Property(p => p.Sku).IsRequired();
                 entity.HasOne(p => p.Tag)
                         .WithMany(t => t.Products)
                         .HasForeignKey(p => p.TagId);
@@ -30,8 +30,8 @@ namespace InventoryDAL.Database
 
             modelBuilder.Entity<ProductTag>(entity =>
             {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired();
+                entity.HasKey(t => t.Id);
+                entity.Property(t => t.Name).IsRequired();
                 entity.HasMany(t => t.Products)
                         .WithOne(p => p.Tag);
             });
