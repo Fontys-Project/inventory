@@ -9,7 +9,7 @@ namespace InventoryLogic.ProductTags
     {
         public int Id { get; }
         public string Name { get; set; }
-        public List<Product>? Products { get; set; }
+        public List<Product> Products { get; set; }
 
         // Constructor used by .net API framwork
         public ProductTag()
