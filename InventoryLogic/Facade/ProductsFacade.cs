@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace InventoryLogic.Facade
 {
-    public class ProductFacade : IFacade<Product>
+    public class ProductsFacade : IFacade<Product>
     {
         private readonly IDatabaseFactory databaseFactory;
 
-        public ProductFacade(IDatabaseFactory databaseFactory)
+        public ProductsFacade(IDatabaseFactory databaseFactory)
         {
             this.databaseFactory = databaseFactory;
         }

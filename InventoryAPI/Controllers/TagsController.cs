@@ -5,7 +5,7 @@ namespace InventoryAPI.Controllers
 {
     public class TagsController : APIController<Tag>
     {
-        public TagsController(ProductTagsFacade tagsFacade)
+        public TagsController(TagsFacade tagsFacade)
             : base(tagsFacade)
         {
         }

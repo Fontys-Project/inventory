@@ -23,7 +23,7 @@ namespace InventoryAPI.Controllers
         /// List of <typeparamref name="Type"/> definitions
         /// </summary>
         [HttpGet]
-        public IEnumerable<Type> Get()
+        public IEnumerable<Type> GetAll()
         {
             return facade.GetAll();
         }

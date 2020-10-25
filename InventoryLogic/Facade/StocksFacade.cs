@@ -4,11 +4,11 @@ using InventoryLogic.Stocks;
 
 namespace InventoryLogic.Facade
 {
-    public class StockFacade : IFacade<Stock>
+    public class StocksFacade : IFacade<Stock>
     {
         private readonly IDatabaseFactory databaseFactory;
 
-        public StockFacade(IDatabaseFactory databaseFactory)
+        public StocksFacade(IDatabaseFactory databaseFactory)
         {
             this.databaseFactory = databaseFactory;
         }

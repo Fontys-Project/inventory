@@ -3,9 +3,9 @@ using InventoryLogic.Facade;
 
 namespace InventoryAPI.Controllers
 {
-    public class ProductController : APIController<Product>
+    public class ProductsController : APIController<Product>
     {
-        public ProductController(ProductFacade productFacade) 
+        public ProductsController(ProductsFacade productFacade) 
             : base(productFacade)
         {
         }

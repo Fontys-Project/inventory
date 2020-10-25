@@ -4,11 +4,11 @@ using InventoryLogic.Tags;
 
 namespace InventoryLogic.Facade
 {
-    public class ProductTagsFacade : IFacade<Tag>
+    public class TagsFacade : IFacade<Tag>
     {
         private readonly IDatabaseFactory databaseFactory;
 
-        public ProductTagsFacade(IDatabaseFactory databaseFactory)
+        public TagsFacade(IDatabaseFactory databaseFactory)
         {
             this.databaseFactory = databaseFactory;
         }
