@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using InventoryLogic.Stocks;
 
 namespace InventoryLogic.Products
 {
@@ -15,8 +16,11 @@ namespace InventoryLogic.Products
         public int? TagId { get; set; }
         public ProductTag Tag { get; set; }
 
-        // Constructor used by .net API framwork
-        public Product()
+        
+        public List<Stock> Stocks { get; set; }
+
+    // Constructor used by .net API framwork
+    public Product()
         {
 
         }
