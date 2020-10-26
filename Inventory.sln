@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryTests", "Inventory
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{F7D4A4D3-D0E7-4D90-89D5-A42B2E69D3C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryLogicTests", "InventoryLogicTests\InventoryLogicTests.csproj", "{CA55002E-6155-48D6-89AF-992BC69DC42B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{F7D4A4D3-D0E7-4D90-89D5-A42B2E69D3C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7D4A4D3-D0E7-4D90-89D5-A42B2E69D3C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7D4A4D3-D0E7-4D90-89D5-A42B2E69D3C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA55002E-6155-48D6-89AF-992BC69DC42B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA55002E-6155-48D6-89AF-992BC69DC42B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA55002E-6155-48D6-89AF-992BC69DC42B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA55002E-6155-48D6-89AF-992BC69DC42B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
