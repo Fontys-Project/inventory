@@ -12,11 +12,11 @@ namespace InventoryAPI.Controllers
     [ApiVersion("0.1")]
     public abstract class CrudController<Type> : ControllerBase
     {
-        protected readonly CrudFacade<Type> facade;
+        protected readonly ICrudFacade<Type> crudFacade;
 
-        public CrudController(CrudFacade<Type> facade)
+        public CrudController(ICrudFacade<Type> crudFacade)
         {
-            this.facade = facade;
+            this.crudFacade = crudFacade;
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace InventoryAPI.Controllers
         [HttpGet]
         public IEnumerable<Type> GetAll()
         {
-            return facade.GetAll();
+            return crudFacade.GetAll();
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace InventoryAPI.Controllers
         [Route("{id}")]
         public Type Get(int id)
         {
-            return facade.Get(id);
+            return crudFacade.Get(id);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace InventoryAPI.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public Boolean Modify([FromBody] Type obj)
         {
-            return facade.Modify(obj);
+            return crudFacade.Modify(obj);
         }
 
 
@@ -56,7 +56,7 @@ namespace InventoryAPI.Controllers
         [HttpPut]
         public Type Put([FromBody] Type obj)
         {
-            return facade.Add(obj);
+            return crudFacade.Add(obj);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace InventoryAPI.Controllers
         [Route("{id}")]
         public Boolean Delete(int id)
         {
-            return facade.Remove(id);
+            return crudFacade.Remove(id);
         }
     }
 }

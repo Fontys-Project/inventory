@@ -9,9 +9,12 @@ namespace InventoryAPI.Controllers
 {
     public class TagsController : CrudController<Tag>
     {
+        private TagsFacade tagsFacade;
+        
         public TagsController(TagsFacade tagsFacade)
-            : base(tagsFacade)
+            : base((ICrudFacade<Tag>)tagsFacade)
         {
+            this.tagsFacade = tagsFacade;
         }
 
         /// <summary>
@@ -22,7 +25,7 @@ namespace InventoryAPI.Controllers
         [Route("{productId}")]
         public Boolean ApplyTag(int productId, int tagId)
         {
-            return facade.ApplyTag(productId, tagId);
+            return tagsFacade.ApplyTag(productId, tagId);
         }
     }
 }

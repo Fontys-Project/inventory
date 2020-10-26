@@ -5,8 +5,8 @@ namespace InventoryAPI.Controllers
 {
     public class ProductsController : CrudController<Product>
     {
-        public ProductsController(ProductsFacade productFacade) 
-            : base(productFacade)
+        public ProductsController(ProductsFacade productsFacade)
+            : base((ICrudFacade<Product>)productsFacade)
         {
         }
     }

@@ -5,8 +5,8 @@ namespace InventoryAPI.Controllers
 {
     public class StocksController : CrudController<Stock>
     {
-        public StocksController(StocksFacade stockFacade)
-            : base(stockFacade)
+        public StocksController(StocksFacade stocksFacade)
+           : base((ICrudFacade<Stock>)stocksFacade)
         {
         }
     }
