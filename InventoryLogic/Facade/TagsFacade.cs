@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace InventoryLogic.Facade
 {
-    public class TagsFacade : CrudFacade<Product>
+    public class TagsFacade : CrudFacade<Tag>
     {
         public TagsFacade(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
