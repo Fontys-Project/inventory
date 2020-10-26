@@ -1,13 +1,13 @@
-﻿using InventoryLogic.Products;
+﻿using InventoryLogic.ProductTagJoins;
 using System.Collections.Generic;
 
 namespace InventoryLogic.Tags
 {
     public class Tag
     {
-        public int Id { get; }
+        public int Id { get; set; }
         public string Name { get; set; }
-        public List<Product> Products { get; set; }
+        public List<ProductTagJoin> ProductTagJoins { get; set; }
 
         // Constructor used by .net API framwork
         public Tag()

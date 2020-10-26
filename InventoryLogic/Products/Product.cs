@@ -1,5 +1,5 @@
-﻿using InventoryLogic.Tags;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using InventoryLogic.ProductTagJoins;
 using InventoryLogic.Stocks;
 
 namespace InventoryLogic.Products
@@ -10,8 +10,7 @@ namespace InventoryLogic.Products
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string Sku { get; set; }
-        public int? TagId { get; set; }
-        public Tag Tag { get; set; }
+        public List<ProductTagJoin> ProductTagJoins { get; set; }
         public List<Stock> Stocks { get; set; }
 
         // Constructor used by .net API framwork
