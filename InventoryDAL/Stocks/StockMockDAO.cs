@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using System;
 using InventoryLogic.Stocks;
 using InventoryLogic.Products;
+using InventoryLogic.Facade;
 
 namespace InventoryDAL.Stocks
 {
-    public class StockMockDAO : DbContext, IStockDAO
+    public class StockMockDAO : ICrudDAO<Stock>
     {
         private readonly List<Stock> stocks;
 

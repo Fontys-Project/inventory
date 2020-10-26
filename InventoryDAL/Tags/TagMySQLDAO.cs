@@ -3,7 +3,7 @@ using InventoryDAL.Database;
 
 namespace InventoryDAL.ProductTags
 {
-    public class TagMySQLDAO : MySqlDAO<Tag>, ITagDAO
+    public class TagMySQLDAO : MySqlDAO<Tag>
     {
         public TagMySQLDAO(MySqlContext context)
             : base(context)

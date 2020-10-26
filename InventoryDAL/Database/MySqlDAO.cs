@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using InventoryLogic.Facade;
 
 namespace InventoryDAL.Database
 {
-    public abstract class MySqlDAO<T> where T : class
+    public abstract class MySqlDAO<T> : ICrudDAO<T> where T : class
     {
         private readonly MySqlContext dbContext;
         private DbSet<T> Table { get; set; }

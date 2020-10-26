@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 using InventoryLogic.Tags;
 using System;
+using InventoryLogic.Facade;
 
 namespace InventoryDAL.ProductTags
 {
-    public class TagMockDAO : DbContext, ITagDAO
+    public class TagMockDAO : ICrudDAO<Tag>
     {
         private readonly List<Tag> tags;
 

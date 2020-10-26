@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using InventoryLogic.Facade;
 using InventoryLogic.Products;
+using System;
+using System.Collections.Generic;
 
 namespace InventoryDAL.Products
 {
 
-    public class ProductMockDAO : IProductDAO
+    public class ProductMockDAO : ICrudDAO<Product>
     {
         private readonly List<Product> products;
 
