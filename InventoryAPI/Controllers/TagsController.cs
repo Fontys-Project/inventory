@@ -9,7 +9,7 @@ namespace InventoryAPI.Controllers
 {
     public class TagsController : CrudController<Tag>
     {
-        private TagsFacade tagsFacade;
+        private readonly TagsFacade tagsFacade;
         
         public TagsController(TagsFacade tagsFacade)
             : base((ICrudFacade<Tag>)tagsFacade)
