@@ -4,39 +4,39 @@ using System.Threading.Tasks;
 
 namespace InventoryDAL.Database
 {
-    public abstract class MySqlDAO<Type> where Type : class
+    public abstract class MySqlDAO<T> where T : class
     {
         private readonly MySqlContext dbContext;
-        private DbSet<Type> Table { get; set; }
+        private DbSet<T> Table { get; set; }
 
         public MySqlDAO(MySqlContext context)
         {
             this.dbContext = context;
-            this.Table = context.Set<Type>();
+            this.Table = context.Set<T>();
         }
 
-        public void Add(Type obj)
+        public void Add(T obj)
         {
             this.dbContext.Database.EnsureCreated();
             this.Table.Add(obj);
             this.dbContext.SaveChangesAsync();
         }
 
-        public List<Type> GetAll()
+        public List<T> GetAll()
         {
             this.dbContext.Database.EnsureCreated();
-            Task<List<Type>> lst = this.Table.ToListAsync();
+            Task<List<T>> lst = this.Table.ToListAsync();
             lst.Wait(); // TODO: beter async uitwerken?
             return lst.Result;
         }
 
-        public Type Get(int id)
+        public T Get(int id)
         {
             this.dbContext.Database.EnsureCreated();
             return this.Table.Find(id);
         }
 
-        public void Modify(Type obj)
+        public void Modify(T obj)
         {
             this.dbContext.Database.EnsureCreated();
             this.dbContext.Update(obj);
