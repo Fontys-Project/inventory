@@ -19,8 +19,8 @@ namespace InventoryTests
             String name = product.Name;
 
             // Assert
-            
-            Assert.AreEqual<String>("testname", name,"Error in retrieving product name");
+
+            Assert.AreEqual<String>("testname", name, "Error in retrieving product name");
 
         }
     }
