@@ -33,6 +33,7 @@ namespace InventoryDAL.Database
             {
                 entity.HasKey(t => t.Id);
                 entity.Property(t => t.Name).IsRequired();
+                entity.HasIndex(t => t.Name).IsUnique();
                 entity.HasMany(t => t.Products)
                         .WithOne(p => p.Tag);
             });
