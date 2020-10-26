@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace InventoryLogic.Facade
 {
-    public class CrudFacade<T>
+    public class CrudFacade<T> : ICrudFacade<T>
     {
-        private readonly IDatabaseFactory databaseFactory;
+        protected readonly IDatabaseFactory databaseFactory;
 
         public CrudFacade(IDatabaseFactory databaseFactory)
         {
@@ -36,7 +36,7 @@ namespace InventoryLogic.Facade
 
         public Boolean Modify(T obj)
         {
-            databaseFactory.GetCrudDAO<T>().Modify(oj);
+            databaseFactory.GetCrudDAO<T>().Modify(obj);
             return true;
         }
     }
