@@ -2,6 +2,7 @@
 using InventoryLogic.Products;
 using InventoryLogic.Tags;
 using InventoryLogic.Stocks;
+using InventoryLogic.ProductTagJoins;
 
 namespace InventoryDAL.Database
 {
@@ -23,19 +24,9 @@ namespace InventoryDAL.Database
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Name).IsRequired();
                 entity.Property(p => p.Sku).IsRequired();
-                entity.HasOne(p => p.Tag)
-                        .WithMany(t => t.Products)
-                        .HasForeignKey(p => p.TagId);
-                //entity.HasMany(e => e.Stocks).WithOne().HasForeignKey(s => s.ProductId);
-            });
-
-            modelBuilder.Entity<Tag>(entity =>
-            {
-                entity.HasKey(t => t.Id);
-                entity.Property(t => t.Name).IsRequired();
-                entity.HasIndex(t => t.Name).IsUnique();
-                entity.HasMany(t => t.Products)
-                        .WithOne(p => p.Tag);
+                entity.HasMany(e => e.Stocks)
+                      .WithOne()
+                      .HasForeignKey(s => s.ProductId);
             });
 
             modelBuilder.Entity<Stock>(entity =>
@@ -43,9 +34,27 @@ namespace InventoryDAL.Database
                 entity.HasKey(s => s.Id);
                 entity.Property(s => s.Amount).IsRequired();
                 entity.Property(s => s.Date).IsRequired();
-                entity.HasOne(s => s.Product)
-                        .WithMany()
-                        .HasForeignKey(p => p.ProductId);
+                //entity.HasOne(s => s.Product)
+                //      .WithMany()
+                //      .HasForeignKey(p => p.ProductId);
+            });
+
+            modelBuilder.Entity<Tag>(entity =>
+            {
+                entity.HasKey(t => t.Id);
+                entity.Property(t => t.Name).IsRequired();
+                entity.HasIndex(t => t.Name).IsUnique();
+            });
+
+            modelBuilder.Entity<ProductTagJoin>(entity =>
+            {
+              entity.HasKey(j => new { j.ProductId, j.TagId });
+              entity.HasOne(j => j.Product)
+                    .WithMany(p => p.ProductTagJoins)
+                    .HasForeignKey(j => j.ProductId);
+              entity.HasOne(j => j.Tag)
+                    .WithMany(t => t.ProductTagJoins)
+                    .HasForeignKey(j => j.TagId);
             });
         }
     }
