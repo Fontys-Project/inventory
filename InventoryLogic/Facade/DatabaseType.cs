@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace InventoryLogic.Facade
+﻿namespace InventoryLogic.Facade
 {
     public enum DatabaseType
     {

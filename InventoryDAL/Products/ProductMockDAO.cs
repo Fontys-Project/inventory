@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using InventoryLogic.Crud;
 using InventoryLogic.Products;
+using System;
+using System.Collections.Generic;
 
 namespace InventoryDAL.Products
 {
 
-    public class ProductMockDAO : IProductDAO
+    public class ProductMockDAO : ICrudDAO<Product>
     {
-
         private readonly List<Product> products;
 
         public ProductMockDAO()
@@ -18,7 +17,6 @@ namespace InventoryDAL.Products
                 new Product(1, "Mondkapje", 100, Environment.GetEnvironmentVariable("TEST"))
             };
         }
-
 
         public void Add(Product product)
         {

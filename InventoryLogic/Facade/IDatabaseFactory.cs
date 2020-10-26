@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using InventoryLogic.Products;
-using InventoryLogic.ProductTags;
+﻿using InventoryLogic.Products;
+using InventoryLogic.Tags;
+using InventoryLogic.Stocks;
+using InventoryLogic.Crud;
+using InventoryLogic.ProductTagJoins;
 
 namespace InventoryLogic.Facade
 {
     public interface IDatabaseFactory
     {
-        public IProductDAO GetProductDAO();
-        public IProductTagDAO GetProductTagDAO();
+        public ICrudDAO<Product> ProductDAO { get; }
+        public ICrudDAO<Tag> TagDAO { get; }
+        public ICrudDAO<Stock> StockDAO { get; }
+        public ICrudDAO<T> GetCrudDAO<T>();
+        public IProductTagJoinDAO ProductTagJoinDAO { get; }
     }
 }

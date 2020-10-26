@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using InventoryLogic.ProductTagJoins;
+using InventoryLogic.Stocks;
 
 namespace InventoryLogic.Products
 {
     public class Product
     {
-        
         public int Id { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string Sku { get; set; }
+        public List<ProductTagJoin> ProductTagJoins { get; set; }
+        public List<Stock> Stocks { get; set; }
 
         // Constructor used by .net API framwork
         public Product()
@@ -26,7 +27,4 @@ namespace InventoryLogic.Products
             Sku = sku;
         }
     }
-
-
-
 }

@@ -1,44 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using InventoryLogic.Facade;
 using InventoryLogic.Products;
-using InventoryDAL.Products;
-using InventoryLogic.Facade;
-using InventoryDAL.ProductTags;
-using InventoryLogic.ProductTags;
+using InventoryLogic.Tags;
+using InventoryLogic.Stocks;
 using InventoryDAL.Database;
+using InventoryDAL.Products;
+using InventoryDAL.ProductTags;
+using InventoryDAL.Stocks;
+using InventoryDAL.ProductTagJoins;
+using InventoryLogic.Crud;
+using InventoryLogic.ProductTagJoins;
 
 namespace InventoryDI.Database
 {
     public class DatabaseFactory : IDatabaseFactory
     {
-        private readonly IProductDAO productDAO;
-        private readonly IProductTagDAO productTagDAO;
+        public ICrudDAO<Product> ProductDAO { get; }
+        public ICrudDAO<Stock> StockDAO { get; }
+        public ICrudDAO<Tag> TagDAO { get; }
+
+        public IProductTagJoinDAO ProductTagJoinDAO { get; }
 
         public DatabaseFactory(DatabaseType databaseType)
         {
             switch(databaseType)
             {
                 case DatabaseType.MOCK: 
-                    productDAO = new ProductMockDAO();
-                    productTagDAO = new ProductTagMockDAO();
+                    ProductDAO = new ProductMockDAO();
+                    TagDAO = new TagMockDAO();
+                    StockDAO = new StockMockDAO();
                     break;
                 case DatabaseType.MYSQL:
                     var context = new MySqlContext();
-                    productDAO = new ProductMySqlDAO(context);
-                    productTagDAO = new ProductTagMySqlDAO(context);
+                    ProductDAO = new ProductMySQLDAO(context);
+                    StockDAO = new StockMySqlDAO(context);
+                    TagDAO = new TagMySQLDAO(context);
+                    ProductTagJoinDAO = new ProductTagJoinMySQLDAO(context);
                     break;
             }
         }
 
-        public IProductDAO GetProductDAO()
+        public ICrudDAO<T> GetCrudDAO<T>()
         {
-            return productDAO;
-        }
+            // Just for crud actions. If you add more actions to your DAO 
+            // you will need to change property type and call it directly
 
-        public IProductTagDAO GetProductTagDAO()
-        {
-            return productTagDAO;
+            if (typeof(T) == typeof(Product))
+                return (ICrudDAO<T>)ProductDAO;
+            if (typeof(T) == typeof(Stock))
+                return (ICrudDAO<T>)StockDAO;
+            if (typeof(T) == typeof(Tag))
+                return (ICrudDAO<T>)TagDAO;
+            return null;
         }
     }
 }

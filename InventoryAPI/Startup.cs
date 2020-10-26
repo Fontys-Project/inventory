@@ -27,37 +27,42 @@ namespace Inventory
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling =
+                        Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
 
             services.AddAuthentication(o =>
-            {
-                o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,o =>
-                    {
-                        o.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuer = false,
-                            ValidateAudience = false,
-                            ValidateIssuerSigningKey = true,
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("qwertyuiopasdfghjklzxcvbnm123456")),
-                            ValidateLifetime = false,
-                            RequireExpirationTime = false,
-                            RequireSignedTokens = true
-                        };
-                    });
+                {
+                    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o =>
+                     {
+                         o.TokenValidationParameters = new TokenValidationParameters
+                         {
+                             ValidateIssuer = false,
+                             ValidateAudience = false,
+                             ValidateIssuerSigningKey = true,
+                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("qwertyuiopasdfghjklzxcvbnm123456")),
+                             ValidateLifetime = false,
+                             RequireExpirationTime = false,
+                             RequireSignedTokens = true
+                         };
+                     });
 
-            services.AddSingleton<ProductFacade>();
-            services.AddSingleton<ProductTagsFacade>();
+            services.AddSingleton<ProductsFacade>();
+            services.AddSingleton<TagsFacade>();
+            services.AddSingleton<StocksFacade>();
             services.AddSingleton<IDatabaseFactory, DatabaseFactory>(x => new DatabaseFactory(DatabaseType.MYSQL));
 
             services.AddApiVersioning(x =>
-            {
-                x.DefaultApiVersion = new ApiVersion(0, 1);
-                x.AssumeDefaultVersionWhenUnspecified = true;
-                x.ReportApiVersions = true;
-            });
+                {
+                    x.DefaultApiVersion = new ApiVersion(0, 1);
+                    x.AssumeDefaultVersionWhenUnspecified = true;
+                    x.ReportApiVersions = true;
+                });
             services.AddVersionedApiExplorer(options =>
                 {
                     options.GroupNameFormat = "VVVV";
@@ -81,12 +86,11 @@ namespace Inventory
                     }
                 );
                 config.PostProcess = document =>
-                {
-
-                    document.Info.Version = "0.1";
-                    document.Info.Title = "Inventory Microservice API";
-                    document.Info.Description = "API Documentation";
-                };
+                    {
+                        document.Info.Version = "0.1";
+                        document.Info.Title = "Inventory Microservice API";
+                        document.Info.Description = "API Documentation";
+                    };
             });
         }
 
@@ -104,9 +108,9 @@ namespace Inventory
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+                {
+                    endpoints.MapControllers();
+                });
         }
     }
 }

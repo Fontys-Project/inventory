@@ -1,11 +1,12 @@
 ﻿using InventoryLogic.Products;
 using InventoryDAL.Database;
+using InventoryLogic.Facade;
 
 namespace InventoryDAL.Products
 {
-    public class ProductMySqlDAO : MySqlDAO<Product>, IProductDAO
+    public class ProductMySQLDAO : MySqlDAO<Product>
     {
-        public ProductMySqlDAO(MySqlContext context)
+        public ProductMySQLDAO(MySqlContext context)
             : base(context)
         {
 

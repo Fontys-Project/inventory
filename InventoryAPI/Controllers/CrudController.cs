@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using InventoryLogic.Facade;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -12,43 +10,42 @@ namespace InventoryAPI.Controllers
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("0.1")]
-    public abstract class APIController<Type> : ControllerBase
+    public abstract class CrudController<Type> : ControllerBase
     {
-        private readonly IFacade<Type> facade;
+        protected readonly ICrudFacade<Type> crudFacade;
 
-        public APIController(IFacade<Type> facade)
+        public CrudController(ICrudFacade<Type> crudFacade)
         {
-            this.facade = facade;
+            this.crudFacade = crudFacade;
         }
 
         /// <summary>
-        /// List of <typeparamref name="Type"/> definitions
+        /// List of all <typeparamref name="Type"/> definitions
         /// </summary>
         [HttpGet]
-        public IEnumerable<Type> Get()
+        public IEnumerable<Type> GetAll()
         {
-            return facade.GetAll();
+            return crudFacade.GetAll();
         }
 
         /// <summary>
-        /// Get <typeparamref name="Type"/>
+        /// Get a specified <typeparamref name="Type"/> definition
         /// </summary>
         [HttpGet]
         [Route("{id}")]
         public Type Get(int id)
         {
-            return facade.Get(id);
+            return crudFacade.Get(id);
         }
 
         /// <summary>
-        /// Modify a <typeparamref name="Type"/>
+        /// Modify a <typeparamref name="Type"/> definition
         /// </summary>
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Route("{id}")]
         public Boolean Modify([FromBody] Type obj)
         {
-            return facade.Modify(obj);
+            return crudFacade.Modify(obj);
         }
 
 
@@ -59,18 +56,18 @@ namespace InventoryAPI.Controllers
         [HttpPut]
         public Type Put([FromBody] Type obj)
         {
-            return facade.Add(obj);
+            return crudFacade.Add(obj);
         }
 
         /// <summary>
-        /// Deletes a <typeparamref name="Type"/> definition
+        /// Delete a <typeparamref name="Type"/> definition
         /// </summary>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpDelete]
         [Route("{id}")]
         public Boolean Delete(int id)
         {
-            return facade.Remove(id);
+            return crudFacade.Remove(id);
         }
     }
 }
