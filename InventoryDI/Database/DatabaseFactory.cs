@@ -6,8 +6,9 @@ using InventoryDAL.Database;
 using InventoryDAL.Products;
 using InventoryDAL.ProductTags;
 using InventoryDAL.Stocks;
-using InventoryLogic.ProductTagJoins;
 using InventoryDAL.ProductTagJoins;
+using InventoryLogic.Crud;
+using InventoryLogic.ProductTagJoins;
 
 namespace InventoryDI.Database
 {
@@ -16,7 +17,8 @@ namespace InventoryDI.Database
         public ICrudDAO<Product> ProductDAO { get; }
         public ICrudDAO<Stock> StockDAO { get; }
         public ICrudDAO<Tag> TagDAO { get; }
-        public ICrudDAO<ProductTagJoin> ProductTagJoinDAO { get; }
+
+        public IProductTagJoinDAO ProductTagJoinDAO { get; }
 
         public DatabaseFactory(DatabaseType databaseType)
         {
@@ -39,14 +41,15 @@ namespace InventoryDI.Database
 
         public ICrudDAO<T> GetCrudDAO<T>()
         {
+            // Just for crud actions. If you add more actions to your DAO 
+            // you will need to change property type and call it directly
+
             if (typeof(T) == typeof(Product))
                 return (ICrudDAO<T>)ProductDAO;
             if (typeof(T) == typeof(Stock))
                 return (ICrudDAO<T>)StockDAO;
             if (typeof(T) == typeof(Tag))
                 return (ICrudDAO<T>)TagDAO;
-            if (typeof(T) == typeof(ProductTagJoin))
-                return (ICrudDAO<T>)ProductTagJoinDAO;
             return null;
         }
     }

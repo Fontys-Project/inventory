@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using InventoryLogic.Facade;
+using InventoryLogic.Crud;
 
 namespace InventoryDAL.Database
 {
     public abstract class MySqlDAO<T> : ICrudDAO<T> where T : class
     {
-        private readonly MySqlContext dbContext;
-        private DbSet<T> Table { get; set; }
+        protected readonly MySqlContext dbContext;
+        protected DbSet<T> Table { get; set; }
 
         public MySqlDAO(MySqlContext context)
         {

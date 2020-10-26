@@ -1,4 +1,4 @@
-﻿using InventoryLogic.Facade;
+﻿using InventoryLogic.Crud;
 using InventoryLogic.Products;
 using System;
 using System.Collections.Generic;

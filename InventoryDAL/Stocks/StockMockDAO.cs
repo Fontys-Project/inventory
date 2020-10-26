@@ -2,7 +2,7 @@
 using System;
 using InventoryLogic.Stocks;
 using InventoryLogic.Products;
-using InventoryLogic.Facade;
+using InventoryLogic.Crud;
 
 namespace InventoryDAL.Stocks
 {

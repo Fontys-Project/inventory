@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using InventoryLogic.Tags;
 using System;
-using InventoryLogic.Facade;
+using InventoryLogic.Crud;
 
 namespace InventoryDAL.ProductTags
 {

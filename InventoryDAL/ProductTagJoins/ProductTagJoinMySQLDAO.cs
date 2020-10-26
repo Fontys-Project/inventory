@@ -1,6 +1,4 @@
-﻿using InventoryLogic.Products;
-using InventoryDAL.Database;
-using InventoryLogic.Facade;
+﻿using InventoryDAL.Database;
 using InventoryLogic.ProductTagJoins;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -9,22 +7,15 @@ using System.Linq;
 
 namespace InventoryDAL.ProductTagJoins
 {
-    public class ProductTagJoinMySQLDAO : ICrudDAO<ProductTagJoin>
+    public class ProductTagJoinMySQLDAO : IProductTagJoinDAO
     {
-        private readonly MySqlContext dbContext;
-        private DbSet<ProductTagJoin> Table { get; set; }
+        protected readonly MySqlContext dbContext;
+        protected DbSet<ProductTagJoin> Table { get; set; }
 
         public ProductTagJoinMySQLDAO(MySqlContext context)
         {
             this.dbContext = context;
             this.Table = context.Set<ProductTagJoin>();
-        }
-
-        public void Add(ProductTagJoin obj)
-        {
-            this.dbContext.Database.EnsureCreated();
-            this.Table.Add(obj);
-            this.dbContext.SaveChangesAsync();
         }
 
         public List<ProductTagJoin> GetAll()
@@ -35,15 +26,17 @@ namespace InventoryDAL.ProductTagJoins
             return lst.Result;
         }
 
-        public ProductTagJoin Get(int id)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public ProductTagJoin Get(int productId, int tagId)
         {
             this.dbContext.Database.EnsureCreated();
             return this.Table.Where(j => j.ProductId == productId && j.TagId == tagId).FirstOrDefault();
+        }
+
+        public void Add(ProductTagJoin obj)
+        {
+            this.dbContext.Database.EnsureCreated();
+            this.Table.Add(obj);
+            this.dbContext.SaveChangesAsync();
         }
 
         public void Modify(ProductTagJoin obj)
@@ -51,11 +44,6 @@ namespace InventoryDAL.ProductTagJoins
             this.dbContext.Database.EnsureCreated();
             this.dbContext.Update(obj);
             this.dbContext.SaveChangesAsync();
-        }
-
-        public void Remove(int id)
-        {
-            throw new System.NotImplementedException();
         }
 
         public void Remove(int productId, int tagId)

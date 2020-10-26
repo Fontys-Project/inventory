@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace InventoryLogic.Facade
+namespace InventoryLogic.Crud
 {
     public interface ICrudDAO<T>
     {
+        // used by factory
+
         T Get(int id);
         List<T> GetAll();
         void Add(T obj);
