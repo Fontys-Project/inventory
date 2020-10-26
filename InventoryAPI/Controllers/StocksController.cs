@@ -3,7 +3,7 @@ using InventoryLogic.Facade;
 
 namespace InventoryAPI.Controllers
 {
-    public class StocksController : APIController<Stock>
+    public class StocksController : CrudController<Stock>
     {
         public StocksController(StocksFacade stockFacade)
             : base(stockFacade)

@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using InventoryLogic.Facade;
+using System.Collections.Generic;
 
 namespace InventoryLogic.Tags
 {
-    public interface ITagDAO
+    public interface ITagDAO : ICrudDAO<Tag>
     {
         Tag Get(int id);
         List<Tag> GetAll();

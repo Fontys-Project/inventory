@@ -3,7 +3,7 @@ using InventoryLogic.Facade;
 
 namespace InventoryAPI.Controllers
 {
-    public class ProductsController : APIController<Product>
+    public class ProductsController : CrudController<Product>
     {
         public ProductsController(ProductsFacade productFacade) 
             : base(productFacade)

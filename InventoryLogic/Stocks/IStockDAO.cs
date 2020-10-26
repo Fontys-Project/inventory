@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using InventoryLogic.Facade;
+using System.Collections.Generic;
 
 namespace InventoryLogic.Stocks
 {
-    public interface IStockDAO
+    public interface IStockDAO : ICrudDAO<Stock>
     { 
         Stock Get(int id);
         List<Stock> GetAll();

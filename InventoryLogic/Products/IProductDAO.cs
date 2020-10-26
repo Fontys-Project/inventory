@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using InventoryLogic.Facade;
+using System.Collections.Generic;
 
 namespace InventoryLogic.Products
 {
-    public interface IProductDAO
+    public interface IProductDAO : ICrudDAO<Product>
     {
         Product Get(int ID);
         List<Product> GetAll();

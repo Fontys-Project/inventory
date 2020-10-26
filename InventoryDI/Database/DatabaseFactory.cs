@@ -11,41 +11,37 @@ namespace InventoryDI.Database
 {
     public class DatabaseFactory : IDatabaseFactory
     {
-        private readonly IProductDAO productDAO;
-        private readonly ITagDAO tagDAO;
-        private readonly IStockDAO stockDAO;
+        public ICrudDAO<Product> ProductDAO { get; }
+        public ICrudDAO<Tag> TagDAO { get; }
+        public ICrudDAO<Stock> StockDAO { get; }
 
         public DatabaseFactory(DatabaseType databaseType)
         {
             switch(databaseType)
             {
                 case DatabaseType.MOCK: 
-                    productDAO = new ProductMockDAO();
-                    tagDAO = new TagMockDAO();
-                    stockDAO = new StockMockDAO();
+                    ProductDAO = new ProductMockDAO();
+                    TagDAO = new TagMockDAO();
+                    StockDAO = new StockMockDAO();
                     break;
                 case DatabaseType.MYSQL:
                     var context = new MySqlContext();
-                    productDAO = new ProductMySqlDAO(context);
-                    tagDAO = new TagMySQLDAO(context);
-                    stockDAO = new StockMySqlDAO(context);
+                    ProductDAO = new ProductMySqlDAO(context);
+                    TagDAO = new TagMySQLDAO(context);
+                    StockDAO = new StockMySqlDAO(context);
                     break;
             }
         }
 
-        public IProductDAO GetProductDAO()
+        public ICrudDAO<T> GetCrudDAO<T>()
         {
-            return productDAO;
-        }
-
-        public ITagDAO GetTagDAO()
-        {
-            return tagDAO;
-        }
-
-        public IStockDAO GetStockDAO()
-        {
-            return stockDAO;
+            if (typeof(T) == typeof(Product))
+                return (ICrudDAO<T>)ProductDAO;
+            if (typeof(T) == typeof(Tag))
+                return (ICrudDAO<T>)TagDAO;
+            if (typeof(T) == typeof(Stock))
+                return (ICrudDAO<T>)StockDAO;
+            return null;
         }
     }
 }

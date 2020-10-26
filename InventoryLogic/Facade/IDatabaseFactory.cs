@@ -6,8 +6,9 @@ namespace InventoryLogic.Facade
 {
     public interface IDatabaseFactory
     {
-        public IProductDAO GetProductDAO();
-        public ITagDAO GetTagDAO();
-        public IStockDAO GetStockDAO();
+        public IProductDAO ProductDAO { get; }
+        public ITagDAO TagDAO { get; }
+        public IStockDAO StockDAO { get; }
+        public ICrudDAO<T> GetCrudDAO<T>();
     }
 }

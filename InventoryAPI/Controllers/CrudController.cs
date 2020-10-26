@@ -10,17 +10,17 @@ namespace InventoryAPI.Controllers
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("0.1")]
-    public abstract class APIController<Type> : ControllerBase
+    public abstract class CrudController<Type> : ControllerBase
     {
-        private readonly IFacade<Type> facade;
+        protected readonly CrudFacade<Type> facade;
 
-        public APIController(IFacade<Type> facade)
+        public CrudController(CrudFacade<Type> facade)
         {
             this.facade = facade;
         }
 
         /// <summary>
-        /// List of <typeparamref name="Type"/> definitions
+        /// List of all <typeparamref name="Type"/> definitions
         /// </summary>
         [HttpGet]
         public IEnumerable<Type> GetAll()
@@ -29,7 +29,7 @@ namespace InventoryAPI.Controllers
         }
 
         /// <summary>
-        /// Get <typeparamref name="Type"/>
+        /// Get a specified <typeparamref name="Type"/> definition
         /// </summary>
         [HttpGet]
         [Route("{id}")]
@@ -39,11 +39,10 @@ namespace InventoryAPI.Controllers
         }
 
         /// <summary>
-        /// Modify a <typeparamref name="Type"/>
+        /// Modify a <typeparamref name="Type"/> definition
         /// </summary>
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Route("{id}")]
         public Boolean Modify([FromBody] Type obj)
         {
             return facade.Modify(obj);
@@ -61,7 +60,7 @@ namespace InventoryAPI.Controllers
         }
 
         /// <summary>
-        /// Deletes a <typeparamref name="Type"/> definition
+        /// Delete a <typeparamref name="Type"/> definition
         /// </summary>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpDelete]
