@@ -9,7 +9,7 @@ using InventoryLogic.ProductTagJoins;
 namespace InventoryLogic.Tags.Tests
 {
     [TestClass()]
-    public class TagTests
+    public class TagComponentTests
     {
         [TestMethod()]
         public void CreateTag()
