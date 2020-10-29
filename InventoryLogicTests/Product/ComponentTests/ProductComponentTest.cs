@@ -10,7 +10,6 @@ namespace InventoryLogic.Products.Tests
     [TestClass]
     public class ProductComponentTest
     {
-
         [TestMethod("Product_Stocks_Returns Stock")]
         [TestCategory("Component Tests")]
         [Priority(10)]

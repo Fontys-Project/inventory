@@ -78,13 +78,14 @@ namespace InventoryLogic.Tags.Tests
         public void GetProductTagJoinsShouldReturnProductTagJoins()
         {
             var mock = new Mock<ProductTagJoin>();
-            var expected = mock.Object;
+            mock.Setup(j => j.ProductId).Returns(1);
+            var mockProduct = mock.Object;
             Tag tag = new Tag();
 
-            tag.ProductTagJoins.Add(expected);
+            tag.ProductTagJoins.Add(mockProduct);
             var actual = tag.ProductTagJoins[0];
 
-            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(mockProduct, actual);
         }
     }
 }
