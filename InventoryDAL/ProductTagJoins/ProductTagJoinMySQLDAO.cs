@@ -4,18 +4,24 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.Storage;
+using InventoryLogic.Facade;
+using InventoryLogic.Crud;
 
 namespace InventoryDAL.ProductTagJoins
 {
-    public class ProductTagJoinMySQLDAO : IProductTagJoinDAO
+    public class ProductTagJoinMySQLDAO 
     {
         protected readonly MySqlContext dbContext;
         protected DbSet<ProductTagJoin> Table { get; set; }
 
-        public ProductTagJoinMySQLDAO(MySqlContext context)
+        private IDatabaseFactory databaseFactory;
+
+        public ProductTagJoinMySQLDAO(MySqlContext context, IDatabaseFactory databaseFactory)
         {
             this.dbContext = context;
             this.Table = context.Set<ProductTagJoin>();
+            this.databaseFactory = databaseFactory;
         }
 
         public List<ProductTagJoin> GetAll()

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using Moq;
 using InventoryLogic.ProductTagJoins;
+using InventoryLogic.Products;
 
 namespace InventoryLogic.Tags.Tests
 {
@@ -15,11 +16,11 @@ namespace InventoryLogic.Tags.Tests
         [Priority(10)]
         public void GetProductTagJoinsShouldReturnProductTagJoins()
         {
-            var expected = new ProductTagJoin();
+            var expected = new Product();
             Tag tag = new Tag();
 
-            tag.ProductTagJoins.Add(expected);
-            var actual = tag.ProductTagJoins[0];
+            tag.Products.Add(expected);
+            var actual = tag.Products[0];
 
             Assert.AreEqual(expected, actual);
         }

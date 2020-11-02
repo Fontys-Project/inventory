@@ -1,13 +1,14 @@
-﻿using InventoryLogic.ProductTagJoins;
+﻿using InventoryLogic.Facade;
+using InventoryLogic.Products;
 using System.Collections.Generic;
 
 namespace InventoryLogic.Tags
 {
-    public class Tag
+    public class Tag : ITag, IDataAssignable<TagDTO>, IHasUniqueObjectId
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<ProductTagJoin> ProductTagJoins { get; set; }
+        public List<Product> Products { get; set; }
 
         // Constructor used by .net API framwork
         public Tag()
@@ -19,6 +20,20 @@ namespace InventoryLogic.Tags
         {
             Id = id;
             Name = name;
+        }
+
+        public void ConvertFromDTO(TagDTO tagDTO)
+        {
+            this.Id = tagDTO.Id;
+            this.Name = tagDTO.Name;
+            this.Products = tagDTO.Products;
+        }
+
+        public void ConvertToDTO(TagDTO tagDTO)
+        {
+            tagDTO.Id = this.Id;
+            tagDTO.Name = this.Name;
+            tagDTO.Products = this.Products;
         }
     }
 }

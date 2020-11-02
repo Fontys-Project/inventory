@@ -6,6 +6,7 @@ using InventoryLogic.Products;
 using InventoryLogic.ProductTagJoins;
 using InventoryLogic.Stocks;
 using Moq;
+using InventoryLogic.Tags;
 
 namespace InventoryLogic.Products.Tests
 {
@@ -14,13 +15,13 @@ namespace InventoryLogic.Products.Tests
     {
 
         private Mock<Stock> stockMock;
-        private Mock<ProductTagJoin> tagMock;
+        private Mock<Tag> tagMock;
 
         [TestInitialize]
         public void Setup()
         {
             stockMock = new Mock<Stock>();
-            tagMock = new Mock<ProductTagJoin>();
+            tagMock = new Mock<Tag>();
 
         }
 
@@ -97,15 +98,15 @@ namespace InventoryLogic.Products.Tests
         {
             // Arrange
             Product product = new Product(1, "testname", 1, "");
-            ProductTagJoin expected = tagMock.Object;
-            tagMock.Setup(s => s.Product)
-                .Returns(product);
-
+            Tag expected = tagMock.Object;
+            //tagMock.Setup(s => s.)
+            //    .Returns(product);
+            
             // Act
-            product.ProductTagJoins.Add(tagMock.Object);
-            ProductTagJoin actual = product.ProductTagJoins[0];
+            product.Tags.Add(tagMock.Object);
+            Tag actual = product.Tags[0];
             // Assert
-            Assert.AreEqual<ProductTagJoin>(expected, actual, "Error in retrieving mocked tag");
+            Assert.AreEqual<Tag>(expected, actual, "Error in retrieving mocked tag");
         }
 
 

@@ -12,6 +12,6 @@ namespace InventoryLogic.Facade
         public ICrudDAO<Tag> TagDAO { get; }
         public ICrudDAO<Stock> StockDAO { get; }
         public ICrudDAO<T> GetCrudDAO<T>();
-        public IProductTagJoinDAO ProductTagJoinDAO { get; }
+        //public ICrudDAO<ProductTagJoin> ProductTagJoinDAO { get; }
     }
 }

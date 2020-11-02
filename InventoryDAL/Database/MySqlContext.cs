@@ -3,6 +3,10 @@ using InventoryLogic.Products;
 using InventoryLogic.Tags;
 using InventoryLogic.Stocks;
 using InventoryLogic.ProductTagJoins;
+using InventoryDAL.Tags;
+using InventoryDAL.ProductTagJoins;
+using InventoryDAL.Products;
+using InventoryDAL.Stocks;
 
 namespace InventoryDAL.Database
 {
@@ -19,7 +23,7 @@ namespace InventoryDAL.Database
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Product>(entity =>
+            modelBuilder.Entity<ProductEntity>(entity =>
             {
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Name).IsRequired();
@@ -29,7 +33,7 @@ namespace InventoryDAL.Database
                       .HasForeignKey(s => s.ProductId);
             });
 
-            modelBuilder.Entity<Stock>(entity =>
+            modelBuilder.Entity<StockEntity>(entity =>
             {
                 entity.HasKey(s => s.Id);
                 entity.Property(s => s.Amount).IsRequired();
@@ -39,21 +43,21 @@ namespace InventoryDAL.Database
                 //      .HasForeignKey(p => p.ProductId);
             });
 
-            modelBuilder.Entity<Tag>(entity =>
+            modelBuilder.Entity<TagEntity>(entity =>
             {
                 entity.HasKey(t => t.Id);
                 entity.Property(t => t.Name).IsRequired();
                 entity.HasIndex(t => t.Name).IsUnique();
             });
 
-            modelBuilder.Entity<ProductTagJoin>(entity =>
+            modelBuilder.Entity<ProductTagJoinEntity>(entity =>
             {
               entity.HasKey(j => new { j.ProductId, j.TagId });
-              entity.HasOne(j => j.Product)
+              entity.HasOne(j => j.ProductEntity)
                     .WithMany(p => p.ProductTagJoins)
                     .HasForeignKey(j => j.ProductId);
-              entity.HasOne(j => j.Tag)
-                    .WithMany(t => t.ProductTagJoins)
+              entity.HasOne(j => j.TagEntity)
+                    .WithMany(t => t.ProductTagJoinEntities)
                     .HasForeignKey(j => j.TagId);
             });
         }

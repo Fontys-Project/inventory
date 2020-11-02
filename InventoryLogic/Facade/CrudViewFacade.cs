@@ -4,7 +4,7 @@ using System.Text;
 
 namespace InventoryLogic.Facade
 {
-    public class CrudViewFacade<T, V> : ICrudFacade<V> where T : IDataAssignable<V>, new() where V : IHasUniqueObjectId,new()
+    public class CrudViewFacade<DomainModel, DataTransferObject> : ICrudFacade<DataTransferObject> where DomainModel : IDataAssignable<DataTransferObject>, new() where DataTransferObject : IHasUniqueObjectId,new()
     {
         protected readonly IDatabaseFactory databaseFactory;
 
@@ -13,54 +13,54 @@ namespace InventoryLogic.Facade
             this.databaseFactory = databaseFactory;
         }
 
-        public List<V> GetAll()
+        public List<DataTransferObject> GetAll()
         {
-            List<V> newViews = new List<V>();
-            List<T> records = databaseFactory.GetCrudDAO<T>().GetAll();
+            List<DataTransferObject> newViews = new List<DataTransferObject>();
+            List<DomainModel> records = databaseFactory.GetCrudDAO<DomainModel>().GetAll();
 
-            foreach(T record in records)
+            foreach(DomainModel record in records)
             {
-                V newView = new V();
-                record.TransferDataToView(newView);
+                DataTransferObject newView = new DataTransferObject();
+                record.ConvertToDTO(newView);
                 newViews.Add(newView);
             }
 
             return newViews;
         }
 
-        public V Get(int id)
+        public DataTransferObject Get(int id)
         {
-            V newView = new V();
-            T obj = databaseFactory.GetCrudDAO<T>().Get(id);
-            obj.TransferDataToView(newView);
+            DataTransferObject newView = new DataTransferObject();
+            DomainModel obj = databaseFactory.GetCrudDAO<DomainModel>().Get(id);
+            obj.ConvertToDTO(newView);
 
             return newView;
         }
 
-        public V Add(V obj)
+        public DataTransferObject Add(DataTransferObject obj)
         {
-            T newObj = new T();
+            DomainModel newObj = new DomainModel();
 
-            newObj.TransferDataFromView(obj);
+            newObj.ConvertFromDTO(obj);
             
-            databaseFactory.GetCrudDAO<T>().Add(newObj);
-            newObj.TransferDataToView(obj);
+            databaseFactory.GetCrudDAO<DomainModel>().Add(newObj);
+            newObj.ConvertToDTO(obj);
 
             return obj;
         }
 
         public Boolean Remove(int id)
         {
-            databaseFactory.GetCrudDAO<T>().Remove(id);
+            databaseFactory.GetCrudDAO<DomainModel>().Remove(id);
             return true;
         }
 
-        public Boolean Modify(V obj)
+        public Boolean Modify(DataTransferObject obj)
         {
-            T objToEdit = databaseFactory.GetCrudDAO<T>().Get(obj.Id);
-            objToEdit.TransferDataFromView(obj);
+            DomainModel objToEdit = databaseFactory.GetCrudDAO<DomainModel>().Get(obj.Id);
+            objToEdit.ConvertFromDTO(obj);
 
-            databaseFactory.GetCrudDAO<T>().Modify(objToEdit);
+            databaseFactory.GetCrudDAO<DomainModel>().Modify(objToEdit);
             return true;
         }
     }

@@ -18,7 +18,7 @@ namespace InventoryDI.Database
         public ICrudDAO<Stock> StockDAO { get; }
         public ICrudDAO<Tag> TagDAO { get; }
 
-        public IProductTagJoinDAO ProductTagJoinDAO { get; }
+        //public ICrudDAO<ProductTagJoin> ProductTagJoinDAO { get; }
 
         public DatabaseFactory(DatabaseType databaseType)
         {
@@ -26,15 +26,15 @@ namespace InventoryDI.Database
             {
                 case DatabaseType.MOCK: 
                     ProductDAO = new ProductMockDAO();
-                    TagDAO = new TagMockDAO();
+                    //TagDAO = new TagMockDAO();
                     StockDAO = new StockMockDAO();
                     break;
                 case DatabaseType.MYSQL:
                     var context = new MySqlContext();
-                    ProductDAO = new ProductMySQLDAO(context);
-                    StockDAO = new StockMySqlDAO(context);
-                    TagDAO = new TagMySQLDAO(context);
-                    ProductTagJoinDAO = new ProductTagJoinMySQLDAO(context);
+                    ProductDAO = new ProductMySQLDAO(context,this);
+                    StockDAO = new StockMySqlDAO(context,this);
+                    TagDAO = new TagMySQLDAO(context,this);
+                    //ProductTagJoinDAO = new ProductTagJoinMySQLDAO(context,this);
                     break;
             }
         }

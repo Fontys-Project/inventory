@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ProductTagJoins\NewFile1.txt" />
+    <None Remove="Tags\NewFile1.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\InventoryLogic\InventoryLogic.csproj" />
   </ItemGroup>
 

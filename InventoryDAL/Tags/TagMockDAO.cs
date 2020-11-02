@@ -3,7 +3,7 @@ using InventoryLogic.Tags;
 using System;
 using InventoryLogic.Crud;
 
-namespace InventoryDAL.ProductTags
+namespace InventoryDAL.Tags
 {
     public class TagMockDAO : ICrudDAO<Tag>
     {

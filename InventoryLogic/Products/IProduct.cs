@@ -13,7 +13,7 @@ namespace InventoryLogic.Products
         public string Name { get;  }
         public decimal Price { get;  }
         public string Sku { get;  }
-        public List<ProductTagJoin> ProductTagJoins { get; }
+        public List<Tag> Tags { get; }
         public List<Stock> Stocks { get; }
 
 

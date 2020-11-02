@@ -2,45 +2,69 @@
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using InventoryLogic.Crud;
+using InventoryLogic.Facade;
 
 namespace InventoryDAL.Database
 {
-    public abstract class MySqlDAO<T> : ICrudDAO<T> where T : class
+    public abstract class MySqlDAO<DomainModel, EntityType> : ICrudDAO<DomainModel> where EntityType : class, IDomainModelAssignable<DomainModel>, new() where DomainModel : IHasUniqueObjectId, new()
     {
-        protected readonly MySqlContext dbContext;
-        protected DbSet<T> Table { get; set; }
+        public readonly MySqlContext dbContext;
+        public DbSet<EntityType> Table { get; private set; }
 
-        public MySqlDAO(MySqlContext context)
+        private IDatabaseFactory databaseFactory { get; set; }
+
+        public MySqlDAO(MySqlContext context, IDatabaseFactory databaseFactory)
         {
             this.dbContext = context;
-            this.Table = context.Set<T>();
+            this.Table = context.Set<EntityType>();
+            this.databaseFactory = databaseFactory;
         }
 
-        public void Add(T obj)
+        public void Add(DomainModel obj)
         {
+            EntityType entity = new EntityType();
+            entity.ConvertFromDomainModel(obj,databaseFactory);
+            
             this.dbContext.Database.EnsureCreated();
-            this.Table.Add(obj);
+            this.Table.Add(entity);
             this.dbContext.SaveChangesAsync();
+            entity.ConvertToDomainModel(obj,databaseFactory);
         }
 
-        public List<T> GetAll()
+        public List<DomainModel> GetAll()
         {
+            List<DomainModel> domainObjs = new List<DomainModel>();
+
             this.dbContext.Database.EnsureCreated();
-            Task<List<T>> lst = this.Table.ToListAsync();
+            Task<List<EntityType>> lst = this.Table.ToListAsync();
             lst.Wait(); // TODO: beter async uitwerken?
-            return lst.Result;
+            foreach(EntityType entity in lst.Result)
+            {
+                DomainModel newDomainObj = new DomainModel();
+                entity.ConvertToDomainModel(newDomainObj,databaseFactory);
+                domainObjs.Add(newDomainObj);
+            }
+
+            return domainObjs;
         }
 
-        public T Get(int id)
+        public DomainModel Get(int id)
         {
+            DomainModel model = new DomainModel();
             this.dbContext.Database.EnsureCreated();
-            return this.Table.Find(id);
+            this.Table.Find(id).ConvertToDomainModel(model,databaseFactory);
+           
+            return model;
         }
 
-        public void Modify(T obj)
+        public void Modify(DomainModel obj)
         {
+            EntityType entity = this.Table.Find(obj.Id);
+
+            entity.ConvertFromDomainModel(obj,databaseFactory);
+
             this.dbContext.Database.EnsureCreated();
-            this.dbContext.Update(obj);
+            this.dbContext.Update(entity);
             this.dbContext.SaveChangesAsync();
         }
 

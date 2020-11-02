@@ -7,7 +7,7 @@ namespace InventoryLogic.Facade
 {
     public interface IDataAssignable<V>
     {
-        public void TransferDataFromView(V fromView);
-        public void TransferDataToView(V toView);
+        public void ConvertFromDTO(V fromDTO);
+        public void ConvertToDTO(V toDTO);
     }
 }
