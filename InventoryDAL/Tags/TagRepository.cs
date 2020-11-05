@@ -1,74 +1,50 @@
 ﻿using InventoryLogic.Crud;
+using InventoryLogic.Facade;
 using InventoryLogic.Tags;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace InventoryDAL.Tags
 {
     class TagRepository : ICrudRepository<Tag>
     {
-        public DbSet<EntityType> Table { get; private set; }
+        private readonly ITagEntityDAO tagEntityDAO;
+        private readonly ITagConverter tagConverter;
 
-        public TagRepository(ITagEntityDAO tagDAO)
+        public TagRepository(ITagEntityDAO tagEntityDAO, ITagConverter tagConverter)
         {
-            this.dbContext = context;
-            this.Table = context.Set<EntityType>();
+            this.tagEntityDAO = tagEntityDAO;
+            this.tagConverter = tagConverter;
         }
 
-        public void Add(DomainModel obj)
+        public void Add(Tag tag)
         {
-            EntityType entity = new EntityType();
-            entity.ConvertFromDomainModel(obj, databaseFactory);
-
-            this.dbContext.Database.EnsureCreated();
-            this.Table.Add(entity);
-            this.dbContext.SaveChangesAsync();
-            entity.ConvertToDomainModel(obj, databaseFactory);
+            tagEntityDAO.Add(tagConverter.ConvertToTagEntity(tag));
         }
 
-        public List<DomainModel> GetAll()
+        public List<Tag> GetAll()
         {
-            List<DomainModel> domainObjs = new List<DomainModel>();
-
-            this.dbContext.Database.EnsureCreated();
-            Task<List<EntityType>> lst = this.Table.ToListAsync();
-            lst.Wait(); // TODO: beter async uitwerken?
-            foreach (EntityType entity in lst.Result)
-            {
-                DomainModel newDomainObj = new DomainModel();
-                entity.ConvertToDomainModel(newDomainObj, databaseFactory);
-                domainObjs.Add(newDomainObj);
-            }
-
-            return domainObjs;
+            return tagEntityDAO.GetAll()
+                .Select(entity => tagConverter.ConvertToTag(entity)).ToList();
         }
 
-        public DomainModel Get(int id)
+        public Tag Get(int id)
         {
-            DomainModel model = new DomainModel();
-            this.dbContext.Database.EnsureCreated();
-            this.Table.Find(id).ConvertToDomainModel(model, databaseFactory);
-
-            return model;
+            TagEntity entity = tagEntityDAO.Get(id);
+            return tagConverter.ConvertToTag(entity);
         }
 
-        public void Modify(DomainModel obj)
+        public void Modify(Tag tag)
         {
-            EntityType entity = this.Table.Find(obj.Id);
-
-            entity.ConvertFromDomainModel(obj, databaseFactory);
-
-            this.dbContext.Database.EnsureCreated();
-            this.dbContext.Update(entity);
-            this.dbContext.SaveChangesAsync();
+            TagEntity entity = tagConverter.ConvertToTagEntity(tag);
+            tagEntityDAO.Modify(entity);
         }
 
         public void Remove(int id)
         {
-            this.dbContext.Database.EnsureCreated();
-            this.Table.Remove(this.Table.Find(id));
-            this.dbContext.SaveChangesAsync();
+            tagEntityDAO.Remove(id);
         }
     }
 }

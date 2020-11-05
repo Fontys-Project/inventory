@@ -7,13 +7,14 @@ using System;
 
 namespace InventoryDAL.Tags
 {
-    public class TagConverter
+    public class TagConverter : ITagConverter
     {
         private readonly IDomainFactory domainFactory;
         private readonly IDAOFactory daoFactory;
         private readonly IConverterFactory converterFactory;
 
-        public TagConverter(IDomainFactory domainFactory, IDAOFactory daoFactory, IConverterFactory converterFactory) {
+        public TagConverter(IDomainFactory domainFactory, IDAOFactory daoFactory, IConverterFactory converterFactory)
+        {
             this.domainFactory = domainFactory;
             this.daoFactory = daoFactory;
             this.converterFactory = converterFactory;
