@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using InventoryLogic.Facade;
 using InventoryLogic.Products;
-using InventoryLogic.ProductTagJoins;
+using InventoryLogic.ProductTag;
 using InventoryLogic.Stocks;
 using InventoryLogic.Tags;
 

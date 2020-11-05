@@ -1,4 +1,4 @@
-﻿using InventoryLogic.ProductTagJoins;
+﻿using InventoryLogic.ProductTag;
 using InventoryLogic.Stocks;
 using InventoryLogic.Tags;
 using System;

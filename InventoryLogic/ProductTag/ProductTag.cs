@@ -1,9 +1,9 @@
 ﻿using InventoryLogic.Products;
 using InventoryLogic.Tags;
 
-namespace InventoryLogic.ProductTagJoins
+namespace InventoryLogic.ProductTag
 {
-    public class ProductTagJoin
+    public class ProductTag
     {
         public int ProductId { get; set; }
         public Product Product { get; set; }

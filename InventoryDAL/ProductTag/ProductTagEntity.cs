@@ -1,10 +1,12 @@
 ﻿using InventoryDAL.Products;
 using InventoryDAL.Tags;
 
-namespace InventoryDAL.ProductTagJoins
+namespace InventoryDAL.ProductTag
 {
-    public class ProductTagJoinEntity
+    public class ProductTagEntity
     {
+        public int Id { get; set; }
+
         public int ProductId { get; set; }
         public ProductEntity ProductEntity { get; set; }
 

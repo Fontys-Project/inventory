@@ -4,7 +4,7 @@ namespace InventoryLogic.Facade
 {
     public class StocksFacade : CrudFacade<Stock>
     {
-        public StocksFacade(IDatabaseFactory databaseFactory)
+        public StocksFacade(IDAOFactory databaseFactory)
             : base(databaseFactory)
         {
         }

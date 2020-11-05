@@ -1,4 +1,6 @@
-﻿namespace InventoryLogic.Tags
+﻿using InventoryLogic.Tags;
+
+namespace InventoryDAL.Interfaces
 {
     public interface IDomainFactory
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace InventoryLogic.Crud
+namespace InventoryDAL.Interfaces
 {
     public interface ICrudDAO<T>
     {

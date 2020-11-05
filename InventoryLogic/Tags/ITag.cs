@@ -1,5 +1,5 @@
 ﻿using InventoryLogic.Products;
-using InventoryLogic.ProductTagJoins;
+using InventoryLogic.ProductTag;
 using System.Collections.Generic;
 
 namespace InventoryLogic.Tags

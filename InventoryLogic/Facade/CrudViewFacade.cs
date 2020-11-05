@@ -6,9 +6,9 @@ namespace InventoryLogic.Facade
 {
     public class CrudViewFacade<DomainModel, DataTransferObject> : ICrudFacade<DataTransferObject> where DomainModel : IDataAssignable<DataTransferObject>, new() where DataTransferObject : IHasUniqueObjectId,new()
     {
-        protected readonly IDatabaseFactory databaseFactory;
+        protected readonly IDAOFactory databaseFactory;
 
-        public CrudViewFacade(IDatabaseFactory databaseFactory)
+        public CrudViewFacade(IDAOFactory databaseFactory)
         {
             this.databaseFactory = databaseFactory;
         }

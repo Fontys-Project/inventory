@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using InventoryLogic.Facade;
-using InventoryLogic.ProductTagJoins;
+using InventoryLogic.ProductTag;
 using InventoryLogic.Stocks;
 using InventoryLogic.Tags;
 

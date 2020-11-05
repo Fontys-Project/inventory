@@ -24,12 +24,12 @@ namespace InventoryDAL.Stocks
         }
 
 
-        public void ConvertFromDomainModel(Stock fromDomainModel, IDatabaseFactory factory)
+        public void ConvertFromDomainModel(Stock fromDomainModel, IDAOFactory factory)
         {
             throw new NotImplementedException();
         }
 
-        public void ConvertToDomainModel(Stock toDomainModel, IDatabaseFactory factory)
+        public void ConvertToDomainModel(Stock toDomainModel, IDAOFactory factory)
         {
             throw new NotImplementedException();
         }

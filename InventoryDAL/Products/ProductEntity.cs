@@ -1,6 +1,6 @@
 ﻿using InventoryDAL.Database;
-using InventoryDAL.ProductTagJoins;
-using InventoryDAL.ProductTags;
+using InventoryDAL.ProductTag;
+using InventoryDAL.ProductTag;
 using InventoryDAL.Stocks;
 using InventoryDAL.Tags;
 using InventoryLogic.Facade;
@@ -19,16 +19,16 @@ namespace InventoryDAL.Products
         public string Name { get;  set; }
         public decimal Price { get;  set; }
         public string Sku { get; set; }
-        public List<ProductTagJoinEntity> ProductTagJoins { get; set; }
-        public List<StockEntity> Stocks { get; set; }
+        public List<ProductTagEntity> ProductTagEntities { get; set; }
+        public List<StockEntity> StockEntities { get; set; }
 
         public ProductEntity()
         {
-            Stocks = new List<StockEntity>();
-            ProductTagJoins = new List<ProductTagJoinEntity>();
+            StockEntities = new List<StockEntity>();
+            ProductTagEntities = new List<ProductTagEntity>();
         }
 
-        public void ConvertFromDomainModel(Product fromDomainModel, IDatabaseFactory databaseFactory)
+        public void ConvertFromDomainModel(Product fromDomainModel, IDAOFactory databaseFactory)
         {
             Id = fromDomainModel.Id;
             Name = fromDomainModel.Name;
@@ -38,48 +38,47 @@ namespace InventoryDAL.Products
             // add newly added stock items
             fromDomainModel.Stocks.ForEach(s =>
             {
-                StockEntity stockEntity = ((StockMySqlDAO)databaseFactory.StockDAO).Table.Find(s.Id);
-                if (!Stocks.Contains(stockEntity))
-                    Stocks.Add(stockEntity);
+                StockEntity stockEntity = ((StockEntityMySQLDAO)databaseFactory.StockDAO).Table.Find(s.Id);
+                if (!StockEntities.Contains(stockEntity))
+                    StockEntities.Add(stockEntity);
             });
 
             // remove all removed stock items
-            Stocks.RemoveAll(e =>
+            StockEntities.RemoveAll(e =>
             (!fromDomainModel.Stocks.Any(ex => (e != null && ex.Id == e.Id))
             ));
 
             // add newly added tags
             fromDomainModel.Tags.ForEach(t =>
             {
-                ProductTagJoinEntity tagEntity = ((ProductMySQLDAO)databaseFactory.ProductDAO)
+                ProductTagEntity tagEntity = ((ProductEntityMySQLDAO)databaseFactory.ProductDAO)
                                 .ProductTagsTable.Where(r => (r.TagId == t.Id && r.ProductId == fromDomainModel.Id)).FirstOrDefault();
                 if(tagEntity == null)
                 {
-                    tagEntity = new ProductTagJoinEntity();
+                    tagEntity = new ProductTagEntity(); //TODO: !
                     tagEntity.ProductId = Id;
                     tagEntity.ProductEntity = this;
                     tagEntity.TagId = t.Id;
-                    tagEntity.TagEntity = ((TagMySQLDAO)databaseFactory.TagDAO).Table.Find(t.Id);
-                    ((ProductMySQLDAO)databaseFactory.ProductDAO).dbContext.Add(tagEntity);
-                    ((ProductMySQLDAO)databaseFactory.ProductDAO).dbContext.SaveChangesAsync();
-                    ProductTagJoins.Add(tagEntity);
+                    tagEntity.TagEntity = ((TagEntityMySQLDAO)databaseFactory.TagDAO).Table.Find(t.Id);
+                    ((ProductEntityMySQLDAO)databaseFactory.ProductDAO).dbContext.Add(tagEntity);
+                    ((ProductEntityMySQLDAO)databaseFactory.ProductDAO).dbContext.SaveChangesAsync();
+                    ProductTagEntities.Add(tagEntity);
                 }
-
             });
 
             //remove all removed tags
-            ProductTagJoins.ForEach(t =>
+            ProductTagEntities.ForEach(t =>
             {
                 if (!fromDomainModel.Tags.All(e => (e.Id == t.TagId)))
                 {
-                    ((ProductMySQLDAO)databaseFactory.ProductDAO).dbContext.Remove(t);
+                    ((ProductEntityMySQLDAO)databaseFactory.ProductDAO).dbContext.Remove(t);
                 }
 
             });
                 
         }
 
-        public void ConvertToDomainModel(Product toDomainModel, IDatabaseFactory databaseFactory)
+        public void ConvertToDomainModel(Product toDomainModel, IDAOFactory databaseFactory)
         {
             toDomainModel.Id = Id;
             toDomainModel.Name = Name;
@@ -87,7 +86,7 @@ namespace InventoryDAL.Products
             toDomainModel.Sku = Sku;
 
             // add stocks to domain model
-            Stocks.ForEach(s =>
+            StockEntities.ForEach(s =>
             {
                 if (!toDomainModel.Stocks.Any(e => (e.Id == s.Id) ))
                 {
@@ -98,7 +97,7 @@ namespace InventoryDAL.Products
             });
 
             // remove stocks from domain model
-            toDomainModel.Stocks.RemoveAll(e => (!Stocks.Any(s => (s.Id == e.Id) )));
+            toDomainModel.Stocks.RemoveAll(e => (!StockEntities.Any(s => (s.Id == e.Id) )));
 
         }
     }

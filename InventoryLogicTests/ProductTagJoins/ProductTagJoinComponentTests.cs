@@ -2,7 +2,7 @@
 using InventoryLogic.Tags;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace InventoryLogic.ProductTagJoins.Tests
+namespace InventoryLogic.ProductTag.Tests
 {
     [TestClass()]
     public class ProductTagJoinComponentTests
@@ -12,7 +12,7 @@ namespace InventoryLogic.ProductTagJoins.Tests
         public void GetProductShouldReturnProduct()
         {
             Product expected = new Product();
-            ProductTagJoin join = new ProductTagJoin();
+            ProductTag join = new ProductTag();
 
             join.Product = expected;
             Product actual = join.Product;
@@ -25,7 +25,7 @@ namespace InventoryLogic.ProductTagJoins.Tests
         public void GetTagShouldReturnTag()
         {
             Tag expected = new Tag();
-            ProductTagJoin join = new ProductTagJoin();
+            ProductTag join = new ProductTag();
 
             join.Tag = expected;
             Tag actual = join.Tag;

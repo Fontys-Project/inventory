@@ -5,9 +5,9 @@ namespace InventoryLogic.Facade
 {
     public class CrudFacade<T> : ICrudFacade<T>
     {
-        protected readonly IDatabaseFactory databaseFactory;
+        protected readonly IDAOFactory databaseFactory;
 
-        public CrudFacade(IDatabaseFactory databaseFactory)
+        public CrudFacade(IDAOFactory databaseFactory)
         {
             this.databaseFactory = databaseFactory;
         }

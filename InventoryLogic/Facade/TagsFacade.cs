@@ -1,5 +1,5 @@
 ﻿using InventoryLogic.Products;
-using InventoryLogic.ProductTagJoins;
+using InventoryLogic.ProductTag;
 using InventoryLogic.Tags;
 using System;
 using System.Linq;
@@ -8,7 +8,7 @@ namespace InventoryLogic.Facade
 {
     public class TagsFacade : CrudFacade<Tag>
     {
-        public TagsFacade(IDatabaseFactory databaseFactory)
+        public TagsFacade(IDAOFactory databaseFactory)
             : base(databaseFactory)
         {
         }

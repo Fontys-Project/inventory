@@ -6,7 +6,7 @@ using System.Text;
 using Moq;
 using InventoryLogic.Products;
 
-namespace InventoryLogic.ProductTagJoins.Tests
+namespace InventoryLogic.ProductTag.Tests
 {
     [TestClass()]
     public class ProductTagJoinTests
@@ -14,13 +14,13 @@ namespace InventoryLogic.ProductTagJoins.Tests
         [TestMethod()]
         public void CreateProductTagJoin()
         {
-            ProductTagJoin join = new ProductTagJoin();
+            ProductTag join = new ProductTag();
         }
 
         [TestMethod]
         public void GetProductIdShouldReturnProductId()
         {
-            ProductTagJoin join = new ProductTagJoin();
+            ProductTag join = new ProductTag();
             int expected = 245;
 
             join.ProductId = expected;
@@ -34,7 +34,7 @@ namespace InventoryLogic.ProductTagJoins.Tests
         {
             var mock = new Mock<Product>();
             Product expected = mock.Object;
-            ProductTagJoin join = new ProductTagJoin();
+            ProductTag join = new ProductTag();
 
             join.Product = expected;
             var actual = join.Product;
@@ -45,7 +45,7 @@ namespace InventoryLogic.ProductTagJoins.Tests
         [TestMethod]
         public void GetTagIdShouldReturnTagId()
         {
-            ProductTagJoin join = new ProductTagJoin();
+            ProductTag join = new ProductTag();
             int expected = 245;
 
             join.TagId = expected;
@@ -59,7 +59,7 @@ namespace InventoryLogic.ProductTagJoins.Tests
         {
             var mock = new Mock<Tag>();
             Tag expected = mock.Object;
-            ProductTagJoin join = new ProductTagJoin();
+            ProductTag join = new ProductTag();
 
             join.Tag = expected;
             Tag actual = join.Tag;

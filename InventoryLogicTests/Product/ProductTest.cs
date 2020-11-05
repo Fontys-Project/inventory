@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using InventoryLogic.Products;
-using InventoryLogic.ProductTagJoins;
+using InventoryLogic.ProductTag;
 using InventoryLogic.Stocks;
 using Moq;
 using InventoryLogic.Tags;

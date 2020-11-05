@@ -1,46 +1,52 @@
-﻿using InventoryDAL.Products;
+﻿using InventoryDAL.Interfaces;
+using InventoryDAL.Products;
+using InventoryDAL.ProductTag;
+using InventoryLogic.Products;
 using InventoryLogic.Tags;
+using System;
 
 namespace InventoryDAL.Tags
 {
     public class TagConverter
     {
         private readonly IDomainFactory domainFactory;
+        private readonly IDAOFactory daoFactory;
+        private readonly IConverterFactory converterFactory;
 
-        public TagConverter(IDomainFactory factory) {
-            this.domainFactory = factory;
-        };
+        public TagConverter(IDomainFactory domainFactory, IDAOFactory daoFactory, IConverterFactory converterFactory) {
+            this.domainFactory = domainFactory;
+            this.daoFactory = daoFactory;
+            this.converterFactory = converterFactory;
+        }
 
-        public Tag ConvertToDomainTag(TagEntity e)
+        public Tag ConvertToTag(TagEntity e)
         {
             Tag tag = domainFactory.CreateTag();
             tag.Id = e.Id;
             tag.Name = e.Name;
-            e.ProductTagJoinEntities.ForEach(j =>
+            e.ProductTagEntities.ForEach(j =>
             {
-                ProductEntity productEntity = dbFactory.ProductDAO.Get(j.ProductId);
-                tag.Products.Add(productEntity.ConvertToDomainModel());
+                ProductEntity productEntity = daoFactory.ProductEntityDAO.Get(j.ProductId);
+                Product product = converterFactory.ProductConverter.ConvertToProduct(productEntity);
+                tag.Products.Add(product);
             });
-
-            //this.ProductTagJoinEntities.ForEach(j => {
-            //    ProductEntity productEntity = factory.ProductDAO.Get(j.ProductId);
-            //    toDomainModel.Products.Add(productEntity.ConvertToDomainModel());
-            //});
-
-
-
+            return tag;
         }
 
-        public void ConvertToTagEntity(Tag tag)
+        public TagEntity ConvertToTagEntity(Tag tag)
         {
-            toDomainModel.Id = this.Id;
-            toDomainModel.Name = this.Name;
+            TagEntity tagEntity = daoFactory.TagEntityDAO.Get(tag.Id);
+            tagEntity.Id = tag.Id;
+            tagEntity.Name = tag.Name;
+            tagEntity.ProductTagEntities.Clear();
 
-            //fromDomainModel.Products.ForEach(p => {
-            //    ProductTagJoinEntity join = factory.ProductTagJoinDAO.Get(p.Id, this.Id);
-            //    this.ProductTagJoinEntities.Add(join);
-            //});
+            tag.Products.ForEach(product =>
+            {
+                ProductTagEntity prodTag = daoFactory.ProductTagEntityDAO.Get(product.Id, tag.Id);
+                tagEntity.ProductTagEntities.Add(prodTag);
+            });
 
+            return tagEntity;
         }
     }
 }

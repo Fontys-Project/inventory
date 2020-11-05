@@ -1,8 +1,9 @@
-﻿using InventoryLogic.Tags;
+﻿using InventoryDAL.Interfaces;
+using InventoryLogic.Tags;
 
 namespace InventoryDI
 {
-    class DomainFactory : IDomainFactory
+    public class DomainFactory : IDomainFactory
     {
         public Tag CreateTag()
         {

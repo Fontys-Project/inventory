@@ -5,11 +5,11 @@ using InventoryLogic.Crud;
 
 namespace InventoryDAL.Tags
 {
-    public class TagMockDAO : ICrudDAO<Tag>
+    public class TagEntityMockDAO : ITagEntityDAO
     {
         private readonly List<Tag> tags;
 
-       public TagMockDAO()
+       public TagEntityMockDAO()
         {
             tags = new List<Tag>
             {
