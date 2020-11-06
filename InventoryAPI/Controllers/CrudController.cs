@@ -54,7 +54,7 @@ namespace InventoryAPI.Controllers
         /// </summary>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut]
-        public Type Put([FromBody] Type obj)
+        public Type Add([FromBody] Type obj)
         {
             return crudFacade.Add(obj);
         }

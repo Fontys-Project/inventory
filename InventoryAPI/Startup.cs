@@ -60,8 +60,10 @@ namespace Inventory
             services.AddSingleton<StocksFacade>();
             services.AddSingleton<IDAOFactory, DAOFactory>(x => new DAOFactory(DatabaseType.MYSQL));
             services.AddSingleton<IConverterFactory, ConverterFactory>();
+            services.AddSingleton<IRepositoryFactory, RepositoryFactory>(); 
             services.AddSingleton<IDomainFactory, DomainFactory>();
-            services.AddSingleton<IRepositoryFactory, RepositoryFactory>();
+            services.AddSingleton<IEntityFactory, EntityFactory>();
+            
 
             services.AddApiVersioning(x =>
                 {

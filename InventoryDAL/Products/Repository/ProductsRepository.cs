@@ -1,4 +1,7 @@
-﻿using InventoryLogic.Interfaces;
+﻿using InventoryDAL.ProductTag;
+using InventoryDAL.Stocks;
+using InventoryDAL.Tags;
+using InventoryLogic.Interfaces;
 using InventoryLogic.Products;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +11,9 @@ namespace InventoryDAL.Products
     public class ProductsRepository : IProductsRepository
     {
         private readonly IProductEntityDAO productEntityDAO;
+        private readonly ITagEntityDAO tagEntityDAO;
+        private readonly IProductTagDAO productTagDAO;
+        private readonly IStockEntityDAO stockEntityDAO;
         private readonly IProductConverter productConverter;
 
         public ProductsRepository(IProductEntityDAO productEntityDAO, IProductConverter productConverter)
@@ -18,8 +24,11 @@ namespace InventoryDAL.Products
 
         public void Add(Product product)
         {
-            productEntityDAO.Add(productConverter.ConvertToProductEntity(product));
-        }
+            ProductEntity productEntity = productConverter.ConvertToNewProductEntity(product);
+            productEntityDAO.Add(productEntity);
+            //productEntity.StockEntities.ForEach(e => stockEntityDAO.Add(e));
+            //etc?
+\        }
 
         public List<Product> GetAll()
         {
@@ -35,7 +44,7 @@ namespace InventoryDAL.Products
 
         public void Modify(Product product)
         {
-            ProductEntity entity = productConverter.ConvertToProductEntity(product);
+            ProductEntity entity = productConverter.ConvertToExistingProductEntity(product);
             productEntityDAO.Modify(entity);
         }
 

@@ -19,7 +19,7 @@
             Modify a <typeparamref name="Type"/> definition
             </summary>
         </member>
-        <member name="M:InventoryAPI.Controllers.CrudController`1.Put(`0)">
+        <member name="M:InventoryAPI.Controllers.CrudController`1.Add(`0)">
             <summary>
             Create a new <typeparamref name="Type"/> definition
             </summary>

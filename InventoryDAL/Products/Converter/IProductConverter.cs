@@ -5,6 +5,7 @@ namespace InventoryDAL.Products
     public interface IProductConverter
     {
         Product ConvertToProduct(ProductEntity e);
-        ProductEntity ConvertToProductEntity(Product product);
+        ProductEntity ConvertToExistingProductEntity(Product product);
+        ProductEntity ConvertToNewProductEntity(Product product);
     }
 }
