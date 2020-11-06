@@ -1,8 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using InventoryLogic.Products;
-using InventoryLogic.Tags;
-using InventoryLogic.Stocks;
-using InventoryLogic.ProductTag;
 using InventoryDAL.Tags;
 using InventoryDAL.ProductTag;
 using InventoryDAL.Products;

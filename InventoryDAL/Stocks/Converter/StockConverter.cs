@@ -21,14 +21,14 @@ namespace InventoryDAL.Stocks
 
         public Stock ConvertToStock(StockEntity e)
         {
-            //Stock stock = domainFactory.CreateStock();
+            Stock stock = domainFactory.CreateStock();
 
             throw new NotImplementedException();
         }
 
         public StockEntity ConvertToStockEntity(Stock stock)
         {
-            //StockEntity entity = daoFactory.StockEntityDAO.Get(stock.Id);
+            StockEntity entity = daoFactory.StockEntityDAO.Get(stock.Id);
 
             throw new NotImplementedException();
         }
