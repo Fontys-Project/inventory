@@ -1,7 +1,8 @@
 ﻿using InventoryLogic.Stocks;
 using InventoryLogic.Facade;
+using InventoryAPI.Crud;
 
-namespace InventoryAPI.Controllers
+namespace InventoryAPI.Stocks
 {
     public class StocksController : CrudController<Stock>
     {

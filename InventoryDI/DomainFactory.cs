@@ -21,5 +21,10 @@ namespace InventoryDI
         {
             return new Tag();
         }
+
+        public ProductDTO CreateProductDTO()
+        {
+            return new ProductDTO();
+        }
     }
 }

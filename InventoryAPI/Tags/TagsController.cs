@@ -1,11 +1,12 @@
-﻿using InventoryLogic.Facade;
+﻿using InventoryAPI.Crud;
+using InventoryLogic.Facade;
 using InventoryLogic.Tags;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
-namespace InventoryAPI.Controllers
+namespace InventoryAPI.Tags
 {
     public class TagsController : CrudController<Tag>
     {

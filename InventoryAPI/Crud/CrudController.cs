@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace InventoryAPI.Controllers
+namespace InventoryAPI.Crud
 {
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]

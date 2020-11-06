@@ -48,7 +48,7 @@ namespace InventoryDAL.Database
 
             modelBuilder.Entity<ProductTagEntity>(entity =>
             {
-              entity.HasKey(j => new { j.ProductId, j.TagId });
+              entity.HasKey(j => j.Id);
               entity.HasOne(j => j.ProductEntity)
                     .WithMany(p => p.ProductTagEntities)
                     .HasForeignKey(j => j.ProductId);

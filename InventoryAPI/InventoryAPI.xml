@@ -4,32 +4,57 @@
         <name>InventoryAPI</name>
     </assembly>
     <members>
-        <member name="M:InventoryAPI.Controllers.CrudController`1.GetAll">
+        <member name="M:InventoryAPI.Crud.CrudController`1.GetAll">
             <summary>
             List of all <typeparamref name="Type"/> definitions
             </summary>
         </member>
-        <member name="M:InventoryAPI.Controllers.CrudController`1.Get(System.Int32)">
+        <member name="M:InventoryAPI.Crud.CrudController`1.Get(System.Int32)">
             <summary>
             Get a specified <typeparamref name="Type"/> definition
             </summary>
         </member>
-        <member name="M:InventoryAPI.Controllers.CrudController`1.Modify(`0)">
+        <member name="M:InventoryAPI.Crud.CrudController`1.Modify(`0)">
             <summary>
             Modify a <typeparamref name="Type"/> definition
             </summary>
         </member>
-        <member name="M:InventoryAPI.Controllers.CrudController`1.Add(`0)">
+        <member name="M:InventoryAPI.Crud.CrudController`1.Add(`0)">
             <summary>
             Create a new <typeparamref name="Type"/> definition
             </summary>
         </member>
-        <member name="M:InventoryAPI.Controllers.CrudController`1.Delete(System.Int32)">
+        <member name="M:InventoryAPI.Crud.CrudController`1.Delete(System.Int32)">
             <summary>
             Delete a <typeparamref name="Type"/> definition
             </summary>
         </member>
-        <member name="M:InventoryAPI.Controllers.TagsController.ApplyTag(System.Int32,System.Int32)">
+        <member name="M:InventoryAPI.Products.ProductsController.GetAll">
+            <summary>
+            List of all Product definitions
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Products.ProductsController.Get(System.Int32)">
+            <summary>
+            Get a specified Product definition
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Products.ProductsController.Modify(InventoryLogic.Products.ProductDTO)">
+            <summary>
+            Modify a Product definition
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Products.ProductsController.Add(InventoryAPI.Products.ViewModels.AddProductVM)">
+            <summary>
+            Create a new Product definition
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Products.ProductsController.Delete(System.Int32)">
+            <summary>
+            Delete a Product definition
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Tags.TagsController.ApplyTag(System.Int32,System.Int32)">
             <summary>
             Apply a tag to a product
             </summary>

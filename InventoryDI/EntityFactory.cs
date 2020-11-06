@@ -1,5 +1,6 @@
 ﻿using InventoryDAL.Interfaces;
 using InventoryDAL.Products;
+using InventoryDAL.ProductTag;
 using InventoryDAL.Stocks;
 using InventoryDAL.Tags;
 using System;
@@ -23,6 +24,11 @@ namespace InventoryDI
         public TagEntity CreateTagEntity()
         {
             return new TagEntity();
+        }
+
+        public ProductTagEntity CreateProductTagEntity()
+        {
+            return new ProductTagEntity();
         }
     }
 }

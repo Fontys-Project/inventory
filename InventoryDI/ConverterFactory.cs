@@ -15,7 +15,7 @@ namespace InventoryDI
         {
             this.ProductConverter = new ProductConverter(domainFactory, entityFactory, daoFactory, this);
             this.StockConverter = new StockConverter(domainFactory, daoFactory);
-            this.TagConverter = new TagConverter(domainFactory, daoFactory, this);
+            this.TagConverter = new TagConverter(domainFactory, entityFactory, daoFactory, this);
         }
     }
 }

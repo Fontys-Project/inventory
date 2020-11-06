@@ -40,7 +40,7 @@ namespace InventoryLogic.Facade
 
         public DataTransferObject Add(DataTransferObject obj)
         {
-            DomainModel newObj = new DomainModel(); // TODO: !
+            DomainModel newObj = new DomainModel(); 
 
             newObj.ConvertFromDTO(obj);
 

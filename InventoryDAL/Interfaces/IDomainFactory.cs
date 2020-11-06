@@ -9,5 +9,6 @@ namespace InventoryDAL.Interfaces
         Tag CreateTag();
         Stock CreateStock();
         Product CreateProduct();
+        ProductDTO CreateProductDTO();
     }
 }

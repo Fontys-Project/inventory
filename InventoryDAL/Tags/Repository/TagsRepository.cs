@@ -18,7 +18,7 @@ namespace InventoryDAL.Tags
 
         public void Add(Tag tag)
         {
-            tagEntityDAO.Add(tagConverter.ConvertToTagEntity(tag));
+            tagEntityDAO.Add(tagConverter.ConvertToNewTagEntity(tag));
         }
 
         public List<Tag> GetAll()
@@ -30,12 +30,13 @@ namespace InventoryDAL.Tags
         public Tag Get(int id)
         {
             TagEntity entity = tagEntityDAO.Get(id);
+            if (entity == null) throw new System.ArgumentException("TagEntity not found.");
             return tagConverter.ConvertToTag(entity);
         }
 
         public void Modify(Tag tag)
         {
-            TagEntity entity = tagConverter.ConvertToTagEntity(tag);
+            TagEntity entity = tagConverter.ConvertToExistingTagEntity(tag);
             tagEntityDAO.Modify(entity);
         }
 

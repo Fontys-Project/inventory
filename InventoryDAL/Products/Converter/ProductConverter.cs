@@ -47,8 +47,7 @@ namespace InventoryDAL.Products
                     product.Tags.Add(tag);
                 });
             }
-
-            if (e.ProductTagEntities != null)
+            if (e.StockEntities != null)
             {
                 e.StockEntities.ForEach(e =>
                 {
@@ -56,7 +55,6 @@ namespace InventoryDAL.Products
                     product.Stocks.Add(stock);
                 });
             }
-
             return product;
         }
 
@@ -68,61 +66,55 @@ namespace InventoryDAL.Products
             productEntity.Name = product.Name;
             productEntity.Price = product.Price;
             productEntity.Sku = product.Sku;
-
-            if (!(product.Tags == null || product.Tags.Count == 0))
-            {
-                throw new InvalidDataException("Cannot change tags this way");
-            }
-
-            if (!(product.Stocks == null || product.Stocks.Count == 0))
-            {
-                throw new InvalidDataException("Cannot change stocks this way");
-            }
-
-            ////Alternative below. Too much?
-            //if (product.Tags != null && productEntity.ProductTagEntities != null)
-            //{
-            //    // check if tags are different
-            //    var tagIDs1 = product.Tags.Select(t => t.Id).ToList();
-            //    var tagIDs2 = productEntity.ProductTagEntities.Select(pt => pt.TagId).ToList();
-            //    if (tagIDs1.Except(tagIDs2).ToList().Any() || tagIDs2.Except(tagIDs1).ToList().Any())
-            //        throw new InvalidDataException("Cannot change tags this way");
-            //}
-            //else if (product.Tags != null)
-            //{
-            //    throw new InvalidDataException("Cannot change tags this way");
-            //}
-            //if (product.Stocks != null && productEntity.StockEntities != null)
-            //{
-            //    // check if stocks are different
-            //    var stockIDs1 = product.Stocks.Select(s => s.Id).ToList();
-            //    var stockIDs2 = productEntity.StockEntities.Select(s => s.Id).ToList();
-            //    if (stockIDs1.Except(stockIDs2).ToList().Any() || stockIDs2.Except(stockIDs1).ToList().Any())
-            //        throw new InvalidDataException("Cannot change stocks this way");
-            //}
-            //else if (product.Stocks != null)
-            //{
-            //    throw new InvalidDataException("Cannot change stocks this way");
-            //}
-
+            TransferTagsFromAToB(product, productEntity);
+            TransferStocksFromAToB(product, productEntity);
             return productEntity;
+        }
+
+        private void TransferTagsFromAToB(Product a, ProductEntity b)
+        {
+            if (!(a.Tags == null || a.Tags.Count == 0))
+            {
+                b.ProductTagEntities = new List<ProductTagEntity>();
+                a.Tags.ForEach(tag =>
+                {
+                    ProductTagEntity e = daoFactory.ProductTagDAO.Get(a.Id, tag.Id);
+                    if (e == null)
+                    {
+                        e = entityFactory.CreateProductTagEntity();
+                        e.ProductId = a.Id;
+                        e.TagId = tag.Id;
+                    }
+                    b.ProductTagEntities.Add(e);
+                });
+            }
+        }
+
+        private void TransferStocksFromAToB(Product a, ProductEntity b)
+        {
+            if (!(a.Stocks == null || a.Stocks.Count == 0))
+            {
+                b.StockEntities = new List<StockEntity>();
+                a.Stocks.ForEach(s =>
+                {
+                    StockEntity e = daoFactory.StockEntityDAO.Get(s.Id);
+                    if (e == null) throw new InvalidDataException("Stock not found. You cannot add stocks this way.");
+                    b.StockEntities.Add(e);
+                });
+            }
         }
 
         public ProductEntity ConvertToNewProductEntity(Product product)
         {
-            if (product.Tags == null || product.Tags.Count != 0)
-                throw new InvalidDataException("You cannot attach tags this way");
-            if (product.Stocks == null || product.Stocks.Count != 0)
-                throw new InvalidDataException("You cannot attach stocks this way");
-
             ProductEntity productEntity = entityFactory.CreateProductEntity();
+            if (!(product.Tags == null || product.Tags.Count == 0))
+                throw new InvalidDataException("Cannot add tags this way. Please add tags separately.");
+            if (!(product.Stocks == null || product.Stocks.Count == 0))
+                throw new InvalidDataException("Cannot add stocks this way. Please add stocks separately.");
 
-            productEntity.Id = product.Id;
             productEntity.Name = product.Name;
             productEntity.Price = product.Price;
             productEntity.Sku = product.Sku;
-            productEntity.ProductTagEntities = new List<ProductTagEntity>();
-            productEntity.StockEntities = new List<StockEntity>();
 
             return productEntity;
         }

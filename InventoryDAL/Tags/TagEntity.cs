@@ -15,6 +15,7 @@ namespace InventoryDAL.Tags
 
         public TagEntity()
         {
+            this.ProductTagEntities = new List<ProductTagEntity>();
         }
     }
 }

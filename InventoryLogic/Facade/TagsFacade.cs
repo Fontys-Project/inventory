@@ -1,6 +1,7 @@
 ﻿using InventoryLogic.Interfaces;
 using InventoryLogic.Products;
 using InventoryLogic.Tags;
+using System;
 
 namespace InventoryLogic.Facade
 {
@@ -14,12 +15,14 @@ namespace InventoryLogic.Facade
         public bool ApplyTag(int productId, int tagId)
         {
             Product product = repoFactory.GetCrudRepository<Product>().Get(productId);
+            if (product == null) throw new ArgumentException("Product not found.");
             Tag tag = repoFactory.GetCrudRepository<Tag>().Get(tagId);
-            if (!product.Tags.Contains(tag))
-                product.Tags.Add(tag);
+            if (product == null) throw new ArgumentException("Tag not found.");
 
+            if (product.Tags.Contains(tag)) return false;
+
+            product.Tags.Add(tag);
             repoFactory.GetCrudRepository<Product>().Modify(product);
-           
             return true;
         }
     }
