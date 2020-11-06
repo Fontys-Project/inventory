@@ -12,8 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using InventoryDI;
-using InventoryDAL.Interfaces;  // TODO: DAL staat niet bij dependencies. Hoe dan? 
-using InventoryDAL.Database;    // TODO: Lokatie interfaces veranderen? Meer lagen afhankelijk ervan.
+using InventoryDAL.Interfaces;  // TODO: DAL staat niet bij dependencies (gelukkig), maar dit werkt??
+using InventoryDAL.Database;    // TODO: Waar zet je het beste de interfaces neer? (meerdere gebruiken ze)
 using InventoryLogic.Interfaces;
 
 namespace Inventory
