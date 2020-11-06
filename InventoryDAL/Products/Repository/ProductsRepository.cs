@@ -11,9 +11,6 @@ namespace InventoryDAL.Products
     public class ProductsRepository : IProductsRepository
     {
         private readonly IProductEntityDAO productEntityDAO;
-        private readonly ITagEntityDAO tagEntityDAO;
-        private readonly IProductTagDAO productTagDAO;
-        private readonly IStockEntityDAO stockEntityDAO;
         private readonly IProductConverter productConverter;
 
         public ProductsRepository(IProductEntityDAO productEntityDAO, IProductConverter productConverter)
@@ -26,9 +23,7 @@ namespace InventoryDAL.Products
         {
             ProductEntity productEntity = productConverter.ConvertToNewProductEntity(product);
             productEntityDAO.Add(productEntity);
-            //productEntity.StockEntities.ForEach(e => stockEntityDAO.Add(e));
-            //etc?
-\        }
+        }
 
         public List<Product> GetAll()
         {
