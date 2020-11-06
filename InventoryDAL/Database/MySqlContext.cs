@@ -29,7 +29,7 @@ namespace InventoryDAL.Database
                 entity.Property(p => p.Name).IsRequired();
                 entity.Property(p => p.Sku).IsRequired();
                 entity.HasMany(e => e.StockEntities)
-                      .WithOne(s => s.Product)
+                      .WithOne(s => s.ProductEntity)
                       .HasForeignKey(s => s.ProductId);
             });
 

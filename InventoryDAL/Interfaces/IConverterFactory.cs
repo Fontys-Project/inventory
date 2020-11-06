@@ -1,10 +1,13 @@
-﻿using InventoryDAL.Tags;
+﻿using InventoryDAL.Products;
+using InventoryDAL.Stocks;
+using InventoryDAL.Tags;
 
 namespace InventoryDAL.Interfaces
 {
     public interface IConverterFactory
     {
-        TagConverter TagConverter { get; }
         ProductConverter ProductConverter { get; }
+        StockConverter StockConverter { get; }
+        TagConverter TagConverter { get; }
     }
 }

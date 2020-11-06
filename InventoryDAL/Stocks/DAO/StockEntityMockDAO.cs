@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using InventoryDAL.Interfaces;
+using InventoryDAL.Products;
 
 namespace InventoryDAL.Stocks
 {
@@ -12,9 +13,24 @@ namespace InventoryDAL.Stocks
         {
             stockEntities = new List<StockEntity>
             {
-                new StockEntity(1, new ProductEntity(1,"ff",1,"f"), 25),
-                new StockEntity(2, new ProductEntity(1,"ff",1,"f"), 15),
-                new StockEntity(3, new ProductEntity(1,"ff",1,"f"), 10),
+                new StockEntity
+                {
+                    Id = 1, 
+                    ProductEntity = new ProductEntity{ Id = 1, Name = "ff", Price = 1, Sku = "f" }, 
+                    Amount = 25 
+                },
+                new StockEntity
+                {
+                    Id = 2, 
+                    ProductEntity = new ProductEntity{ Id = 1, Name = "ff", Price = 1, Sku = "f" }, 
+                    Amount = 15 
+                },
+                new StockEntity
+                {
+                    Id = 3, 
+                    ProductEntity = new ProductEntity{ Id = 1, Name = "ff", Price = 1, Sku = "f" }, 
+                    Amount = 10 
+                },
             };
         }
 

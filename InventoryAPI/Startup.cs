@@ -1,5 +1,4 @@
 using System.Linq;
-using InventoryDI.Database;
 using InventoryLogic.Facade;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +11,9 @@ using NSwag;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
+using InventoryDI;
+using InventoryDAL.Interfaces;  // TODO: DAL staat niet bij dependencies. Hoe dan? 
+using InventoryDAL.Database;    // TODO: Lokatie interfaces veranderen? Meer lagen afhankelijk ervan.
 
 namespace Inventory
 {
@@ -56,6 +58,8 @@ namespace Inventory
             services.AddSingleton<TagsFacade>();
             services.AddSingleton<StocksFacade>();
             services.AddSingleton<IDAOFactory, DAOFactory>(x => new DAOFactory(DatabaseType.MYSQL));
+            services.AddSingleton<IConverterFactory, ConverterFactory>();
+            services.AddSingleton<IDomainFactory, DomainFactory>();
 
             services.AddApiVersioning(x =>
                 {

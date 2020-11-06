@@ -13,7 +13,7 @@ namespace InventoryDAL.Products
         {
             productsEntities = new List<ProductEntity>
             {
-                new ProductEntity(1, "Mondkapje", 100, Environment.GetEnvironmentVariable("TEST"))
+                new ProductEntity{Id = 1, Name = "Mondkapje", Price = 100, Sku = Environment.GetEnvironmentVariable("TEST") }
             };
         }
 

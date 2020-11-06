@@ -1,5 +1,7 @@
 ﻿
 using InventoryDAL.Interfaces;
+using InventoryDAL.Products;
+using InventoryDAL.Tags;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,42 +10,43 @@ namespace InventoryDAL.ProductTag
 {
     public class ProductTagMockDAO : IProductTagDAO
     {
-        private readonly List<InventoryLogic.ProductTag.ProductTag> joins;
+        private readonly List<ProductTagEntity> joins;
 
         public ProductTagMockDAO()
         {
-            joins = new List<InventoryLogic.ProductTag.ProductTag>
+            joins = new List<ProductTagEntity>
             {
-                new InventoryLogic.ProductTag.ProductTag{
+                new ProductTagEntity 
+                {
                     ProductId = 1,
-                    Product = new Product(1, "name", 25, "sku"),
+                    ProductEntity = new ProductEntity{ Id = 1, Name = "name", Price = 25, Sku = "sku" },
                     TagId = 1,
-                    Tag = new Tag(1, "tagname")
+                    TagEntity = new TagEntity{ Id = 1, Name = "tagname" }
                 }
             };
         }
 
-        public void Add(InventoryLogic.ProductTag.ProductTag join)
+        public void Add(ProductTagEntity join)
         {
             joins.Add(join);
         }
 
-        public List<InventoryLogic.ProductTag.ProductTag> GetAll()
+        public List<ProductTagEntity> GetAll()
         {
             return joins;
         }
 
-        public InventoryLogic.ProductTag.ProductTag Get(int joinId)
+        public ProductTagEntity Get(int joinId)
         {
             throw new NotImplementedException();
         }
 
-        public InventoryLogic.ProductTag.ProductTag Get(int productId, int tagId)
+        public ProductTagEntity Get(int productId, int tagId)
         {
             return joins.Where(j => j.ProductId == productId && j.TagId == tagId).First();
         }
 
-        public void Modify(InventoryLogic.ProductTag.ProductTag join)
+        public void Modify(ProductTagEntity join)
         {
             throw new NotImplementedException();
         }

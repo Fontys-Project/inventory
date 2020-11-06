@@ -1,45 +1,43 @@
 ﻿using System.Collections.Generic;
-using InventoryLogic.Tags;
 using System;
-using InventoryLogic.Crud;
 
 namespace InventoryDAL.Tags
 {
     public class TagEntityMockDAO : ITagEntityDAO
     {
-        private readonly List<Tag> tags;
+        private readonly List<TagEntity> tagEntities;
 
        public TagEntityMockDAO()
         {
-            tags = new List<Tag>
+            tagEntities = new List<TagEntity>
             {
-                new Tag(1, "Clothes"),
-                new Tag(2, "Fruit"),
-                new Tag(3, "Meat")
+                new TagEntity{ Id = 1, Name = "Clothes" },
+                new TagEntity{ Id = 2, Name = "Fruit" },
+                new TagEntity{ Id = 3, Name = "Meat" }
             };
         }
 
-        public void Add(Tag tag)
+        public void Add(TagEntity entity)
         {
-            this.tags.Add(tag);
+            this.tagEntities.Add(entity);
         }
 
-        public List<Tag> GetAll()
+        public List<TagEntity> GetAll()
         {
-            return this.tags;
+            return this.tagEntities;
         }
 
-        public Tag Get(int id)
+        public TagEntity Get(int id)
         {
-            foreach (Tag tag in this.tags)
+            foreach (TagEntity entity in this.tagEntities)
             {
-                if (tag.Id == id)
-                    return tag;
+                if (entity.Id == id)
+                    return entity;
             }
             return null;
         }
 
-        public void Modify(Tag tag)
+        public void Modify(TagEntity entity)
         {
             throw new NotImplementedException();
         }

@@ -8,12 +8,11 @@ using System.Text;
 
 namespace InventoryDAL.Stocks
 {
-    public class StockEntity : IDomainModelAssignable<Stock>
+    public class StockEntity
     {
-
         public int Id { get; set; }
         public int ProductId { get; set; }
-        public ProductEntity Product { get; set; }
+        public ProductEntity ProductEntity { get; set; }
         public int Amount { get; set; }
         public DateTime Date { get; set; }
 
@@ -21,17 +20,6 @@ namespace InventoryDAL.Stocks
         public StockEntity()
         {
 
-        }
-
-
-        public void ConvertFromDomainModel(Stock fromDomainModel, IDAOFactory factory)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ConvertToDomainModel(Stock toDomainModel, IDAOFactory factory)
-        {
-            throw new NotImplementedException();
         }
     }
 }
