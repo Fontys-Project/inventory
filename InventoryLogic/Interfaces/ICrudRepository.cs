@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace InventoryLogic.Crud
+namespace InventoryLogic.Interfaces
 {
     public interface ICrudRepository<T>
     {
-        // used by factory
+        // used by facade
 
         T Get(int id);
         List<T> GetAll();

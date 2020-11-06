@@ -1,4 +1,5 @@
 ﻿using InventoryLogic.Facade;
+using InventoryLogic.Interfaces;
 using InventoryLogic.Stocks;
 using InventoryLogic.Tags;
 using System;

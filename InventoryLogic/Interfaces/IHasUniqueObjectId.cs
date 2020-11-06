@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace InventoryLogic.Facade
+namespace InventoryLogic.Interfaces
 {
     public interface IHasUniqueObjectId
     {

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using InventoryLogic.Facade;
-using InventoryLogic.ProductTag;
+using InventoryLogic.Interfaces;
 using InventoryLogic.Stocks;
 using InventoryLogic.Tags;
 

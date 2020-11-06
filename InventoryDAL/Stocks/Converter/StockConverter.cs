@@ -12,25 +12,23 @@ namespace InventoryDAL.Stocks
     {
         private readonly IDomainFactory domainFactory;
         private readonly IDAOFactory daoFactory;
-        private readonly IConverterFactory converterFactory;
 
-        public StockConverter(IDomainFactory domainFactory, IDAOFactory daoFactory, IConverterFactory converterFactory)
+        public StockConverter(IDomainFactory domainFactory, IDAOFactory daoFactory)
         {
             this.domainFactory = domainFactory;
             this.daoFactory = daoFactory;
-            this.converterFactory = converterFactory;
         }
 
         public Stock ConvertToStock(StockEntity e)
         {
-            Stock stock = domainFactory.CreateStock();
+            //Stock stock = domainFactory.CreateStock();
 
             throw new NotImplementedException();
         }
 
         public StockEntity ConvertToStockEntity(Stock stock)
         {
-            StockEntity entity = daoFactory.StockEntityDAO.Get(stock.Id);
+            //StockEntity entity = daoFactory.StockEntityDAO.Get(stock.Id);
 
             throw new NotImplementedException();
         }

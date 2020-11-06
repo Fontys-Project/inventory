@@ -1,24 +1,25 @@
-﻿using System;
+﻿using InventoryLogic.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace InventoryLogic.Facade
 {
-    public class CrudViewFacade<DomainModel, DataTransferObject> : ICrudFacade<DataTransferObject> where DomainModel : IDataAssignable<DataTransferObject>, new() where DataTransferObject : IHasUniqueObjectId,new()
+    public class CrudDTOFacade<DomainModel, DataTransferObject> : ICrudFacade<DataTransferObject> where DomainModel : IDataAssignable<DataTransferObject>, new() where DataTransferObject : IHasUniqueObjectId, new()
     {
-        protected readonly IDAOFactory databaseFactory;
+        protected readonly IRepositoryFactory repoFactory;
 
-        public CrudViewFacade(IDAOFactory databaseFactory)
+        public CrudDTOFacade(IRepositoryFactory repoFactory)
         {
-            this.databaseFactory = databaseFactory;
+            this.repoFactory = repoFactory;
         }
 
         public List<DataTransferObject> GetAll()
         {
             List<DataTransferObject> newViews = new List<DataTransferObject>();
-            List<DomainModel> records = databaseFactory.GetCrudDAO<DomainModel>().GetAll();
+            List<DomainModel> records = repoFactory.GetCrudRepository<DomainModel>().GetAll();
 
-            foreach(DomainModel record in records)
+            foreach (DomainModel record in records)
             {
                 DataTransferObject newView = new DataTransferObject();
                 record.ConvertToDTO(newView);
@@ -31,7 +32,7 @@ namespace InventoryLogic.Facade
         public DataTransferObject Get(int id)
         {
             DataTransferObject newView = new DataTransferObject();
-            DomainModel obj = databaseFactory.GetCrudDAO<DomainModel>().Get(id);
+            DomainModel obj = repoFactory.GetCrudRepository<DomainModel>().Get(id);
             obj.ConvertToDTO(newView);
 
             return newView;
@@ -42,8 +43,8 @@ namespace InventoryLogic.Facade
             DomainModel newObj = new DomainModel();
 
             newObj.ConvertFromDTO(obj);
-            
-            databaseFactory.GetCrudDAO<DomainModel>().Add(newObj);
+
+            repoFactory.GetCrudRepository<DomainModel>().Add(newObj);
             newObj.ConvertToDTO(obj);
 
             return obj;
@@ -51,16 +52,16 @@ namespace InventoryLogic.Facade
 
         public Boolean Remove(int id)
         {
-            databaseFactory.GetCrudDAO<DomainModel>().Remove(id);
+            repoFactory.GetCrudRepository<DomainModel>().Remove(id);
             return true;
         }
 
         public Boolean Modify(DataTransferObject obj)
         {
-            DomainModel objToEdit = databaseFactory.GetCrudDAO<DomainModel>().Get(obj.Id);
+            DomainModel objToEdit = repoFactory.GetCrudRepository<DomainModel>().Get(obj.Id);
             objToEdit.ConvertFromDTO(obj);
 
-            databaseFactory.GetCrudDAO<DomainModel>().Modify(objToEdit);
+            repoFactory.GetCrudRepository<DomainModel>().Modify(objToEdit);
             return true;
         }
     }

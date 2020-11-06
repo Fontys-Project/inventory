@@ -1,16 +1,16 @@
-﻿using InventoryLogic.Crud;
+﻿using InventoryLogic.Interfaces;
 using InventoryLogic.Products;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace InventoryDAL.Products
 {
-    class ProductRepository : ICrudRepository<Product>
+    public class ProductsRepository : IProductsRepository
     {
         private readonly IProductEntityDAO productEntityDAO;
         private readonly IProductConverter productConverter;
 
-        public ProductRepository(IProductEntityDAO productEntityDAO, IProductConverter productConverter)
+        public ProductsRepository(IProductEntityDAO productEntityDAO, IProductConverter productConverter)
         {
             this.productEntityDAO = productEntityDAO;
             this.productConverter = productConverter;

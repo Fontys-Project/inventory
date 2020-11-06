@@ -1,17 +1,16 @@
-﻿using InventoryLogic.Crud;
+﻿using InventoryLogic.Interfaces;
 using InventoryLogic.Stocks;
-using InventoryLogic.Tags;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace InventoryDAL.Stocks
 {
-    class StockRepository : ICrudRepository<Stock>
+    public class StocksRepository : IStocksRepository
     {
         private readonly IStockEntityDAO stockEntityDAO;
         private readonly IStockConverter stockConverter;
 
-        public StockRepository(IStockEntityDAO stockEntityDAO, IStockConverter stockConverter)
+        public StocksRepository(IStockEntityDAO stockEntityDAO, IStockConverter stockConverter)
         {
             this.stockEntityDAO = stockEntityDAO;
             this.stockConverter = stockConverter;

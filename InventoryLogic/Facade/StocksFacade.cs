@@ -1,11 +1,12 @@
-﻿using InventoryLogic.Stocks;
+﻿using InventoryLogic.Interfaces;
+using InventoryLogic.Stocks;
 
 namespace InventoryLogic.Facade
 {
     public class StocksFacade : CrudFacade<Stock>
     {
-        public StocksFacade(IDAOFactory databaseFactory)
-            : base(databaseFactory)
+        public StocksFacade(IRepositoryFactory repoFactory)
+            : base(repoFactory)
         {
         }
     }

@@ -1,19 +1,16 @@
-﻿using InventoryLogic.Crud;
-using InventoryLogic.Facade;
+﻿using InventoryLogic.Interfaces;
 using InventoryLogic.Tags;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace InventoryDAL.Tags
 {
-    class TagRepository : ICrudRepository<Tag>
+    public class TagsRepository : ITagsRepository
     {
         private readonly ITagEntityDAO tagEntityDAO;
         private readonly ITagConverter tagConverter;
 
-        public TagRepository(ITagEntityDAO tagEntityDAO, ITagConverter tagConverter)
+        public TagsRepository(ITagEntityDAO tagEntityDAO, ITagConverter tagConverter)
         {
             this.tagEntityDAO = tagEntityDAO;
             this.tagConverter = tagConverter;

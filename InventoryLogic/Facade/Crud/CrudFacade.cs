@@ -1,42 +1,43 @@
-﻿using System;
+﻿using InventoryLogic.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace InventoryLogic.Facade
 {
     public class CrudFacade<T> : ICrudFacade<T>
     {
-        protected readonly IDAOFactory databaseFactory;
+        protected readonly IRepositoryFactory repoFactory;
 
-        public CrudFacade(IDAOFactory databaseFactory)
+        public CrudFacade(IRepositoryFactory repoFactory)
         {
-            this.databaseFactory = databaseFactory;
+            this.repoFactory = repoFactory;
         }
 
         public List<T> GetAll()
         {
-            return databaseFactory.GetCrudDAO<T>().GetAll();
+            return repoFactory.GetCrudRepository<T>().GetAll();
         }
 
         public T Get(int id)
         {
-            return databaseFactory.GetCrudDAO<T>().Get(id);
+            return repoFactory.GetCrudRepository<T>().Get(id);
         }
         
         public T Add(T obj)
         {
-            databaseFactory.GetCrudDAO<T>().Add(obj);
+            repoFactory.GetCrudRepository<T>().Add(obj);
             return obj;
         }
 
         public Boolean Remove(int id)
         {
-            databaseFactory.GetCrudDAO<T>().Remove(id);
+            repoFactory.GetCrudRepository<T>().Remove(id);
             return true;
         }
 
         public Boolean Modify(T obj)
         {
-            databaseFactory.GetCrudDAO<T>().Modify(obj);
+            repoFactory.GetCrudRepository<T>().Modify(obj);
             return true;
         }
     }

@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using InventoryLogic.Crud;
-using InventoryLogic.Facade;
 using InventoryDAL.Interfaces;
 
 namespace InventoryDAL.Database
@@ -36,7 +34,7 @@ namespace InventoryDAL.Database
         public EntityType Get(int id)
         {
             this.dbContext.Database.EnsureCreated();
-            return this.Table.Find(id)
+            return this.Table.Find(id);
         }
 
         public void Modify(EntityType e)

@@ -1,15 +1,6 @@
-﻿using InventoryDAL.Database;
-using InventoryDAL.ProductTag;
-using InventoryDAL.ProductTag;
+﻿using InventoryDAL.ProductTag;
 using InventoryDAL.Stocks;
-using InventoryDAL.Tags;
-using InventoryLogic.Facade;
-using InventoryLogic.Products;
-using InventoryLogic.Stocks;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace InventoryDAL.Products
 {

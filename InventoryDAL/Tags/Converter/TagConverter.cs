@@ -43,7 +43,7 @@ namespace InventoryDAL.Tags
 
             tag.Products.ForEach(product =>
             {
-                ProductTagEntity prodTag = daoFactory.ProductTagEntityDAO.Get(product.Id, tag.Id);
+                ProductTagEntity prodTag = daoFactory.ProductTagDAO.Get(product.Id, tag.Id);
                 tagEntity.ProductTagEntities.Add(prodTag);
             });
 

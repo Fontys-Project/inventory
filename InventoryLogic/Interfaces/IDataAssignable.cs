@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace InventoryLogic.Facade
+namespace InventoryLogic.Interfaces
 {
     public interface IDataAssignable<V>
     {
