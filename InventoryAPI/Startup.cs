@@ -14,6 +14,7 @@ using System.Text;
 using InventoryDI;
 using InventoryDAL.Interfaces;  // TODO: DAL staat niet bij dependencies. Hoe dan? 
 using InventoryDAL.Database;    // TODO: Lokatie interfaces veranderen? Meer lagen afhankelijk ervan.
+using InventoryLogic.Interfaces;
 
 namespace Inventory
 {
@@ -60,6 +61,7 @@ namespace Inventory
             services.AddSingleton<IDAOFactory, DAOFactory>(x => new DAOFactory(DatabaseType.MYSQL));
             services.AddSingleton<IConverterFactory, ConverterFactory>();
             services.AddSingleton<IDomainFactory, DomainFactory>();
+            services.AddSingleton<IRepositoryFactory, RepositoryFactory>();
 
             services.AddApiVersioning(x =>
                 {
