@@ -5,6 +5,7 @@ using InventoryDAL.Stocks;
 using InventoryLogic.Interfaces;
 using InventoryLogic.Products;
 using InventoryLogic.Stocks;
+using InventoryLogic.Tags;
 
 namespace InventoryDAL.Factories
 {
@@ -14,10 +15,6 @@ namespace InventoryDAL.Factories
         private readonly IRepositoryFactory repositoryFactory;
         private readonly IEntityFactory entityFactory; 
         private readonly IDAOFactory daoFactory;
-        
-
-        public StockBuilder StockConverter { get; }
-        public TagBuilder TagConverter { get; }
 
         public BuilderFactory(IDomainFactory domainFactory,
                               IEntityFactory entityFactory,
@@ -28,8 +25,6 @@ namespace InventoryDAL.Factories
             this.entityFactory = entityFactory;
             this.repositoryFactory = repositoryFactory;
             this.daoFactory = daoFactory;
-
-            this.TagConverter = new TagBuilder(domainFactory, entityFactory, daoFactory, this);
         }
 
         public ProductBuilder CreateProductBuilder(ProductEntity productEntity)
@@ -50,6 +45,16 @@ namespace InventoryDAL.Factories
         public StockEntityBuilder CreateStockEntityBuilder(Stock stock)
         {
             return new StockEntityBuilder(stock, this.entityFactory, this.daoFactory);
+        }
+
+        public TagBuilder CreateTagBuilder(TagEntity tagEntity)
+        {
+            return new TagBuilder(tagEntity, this.domainFactory, this.repositoryFactory);
+        }
+
+        public TagEntityBuilder CreateTagEntityBuilder(Tag tag)
+        {
+            return new TagEntityBuilder(tag, this.entityFactory, this.daoFactory);
         }
     }
 }
