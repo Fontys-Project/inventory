@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace InventoryDAL.Products
 {
-    public class ProductEntity
+    public class ProductEntity : IProductEntity
     {
-        public int Id { get;  set; }
-        public string Name { get;  set; }
-        public decimal Price { get;  set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
         public string Sku { get; set; }
         public List<ProductTagEntity> ProductTagEntities { get; set; }
         public List<StockEntity> StockEntities { get; set; }
