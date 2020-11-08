@@ -19,12 +19,6 @@ namespace InventoryDAL.Products
             this.productConverter = productConverter;
         }
 
-        public void Add(Product product)
-        {
-            ProductEntity productEntity = productConverter.ConvertToNewProductEntity(product);
-            productEntityDAO.Add(productEntity);
-        }
-
         public List<Product> GetAll()
         {
             return productEntityDAO.GetAll()
@@ -37,9 +31,15 @@ namespace InventoryDAL.Products
             return productConverter.ConvertToProduct(entity);
         }
 
+        public void Add(Product product)
+        {
+            ProductEntity productEntity = productConverter.ConvertToProductEntity(product);
+            productEntityDAO.Add(productEntity);
+        }
+
         public void Modify(Product product)
         {
-            ProductEntity entity = productConverter.ConvertToExistingProductEntity(product);
+            ProductEntity entity = productConverter.ConvertToProductEntity(product);
             productEntityDAO.Modify(entity);
         }
 
