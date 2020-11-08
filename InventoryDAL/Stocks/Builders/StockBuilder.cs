@@ -1,11 +1,9 @@
 ﻿using InventoryDAL.Interfaces;
-using InventoryDAL.Products;
-using InventoryDAL.ProductTag;
 using InventoryLogic.Interfaces;
 using InventoryLogic.Products;
 using InventoryLogic.Stocks;
-using InventoryLogic.Tags;
 using System;
+using System.IO;
 
 namespace InventoryDAL.Stocks
 {
@@ -19,7 +17,6 @@ namespace InventoryDAL.Stocks
         public Product Product { get; set; }
         public int Amount { get; set; }
         public DateTime Date { get; set; }
-
 
         public StockBuilder(StockEntity stockEntity, IDomainFactory domainFactory, IRepositoryFactory repositoryFactory)
         {
@@ -35,7 +32,9 @@ namespace InventoryDAL.Stocks
 
         private Product GetProduct(int productId)
         {
-            return repositoryFactory.GetCrudRepository<Product>().Get(productId);
+            Product product = repositoryFactory.GetCrudRepository<Product>().Get(productId);
+            if (product == null) throw new InvalidDataException("Product not found. Please first create the product.");
+            return product;
         }
 
         public Stock Build()
