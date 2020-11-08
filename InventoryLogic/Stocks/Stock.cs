@@ -4,7 +4,7 @@ using InventoryLogic.Products;
 
 namespace InventoryLogic.Stocks
 {
-    public class Stock : IDataAssignable<StockDTO>, IHasUniqueObjectId
+    public class Stock : IStock, IDataAssignable<StockDTO>, IHasUniqueObjectId
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
@@ -33,7 +33,7 @@ namespace InventoryLogic.Stocks
             Product = fromView.Product;
             Amount = fromView.Amount;
             Date = fromView.Date;
-            
+
 
         }
 
