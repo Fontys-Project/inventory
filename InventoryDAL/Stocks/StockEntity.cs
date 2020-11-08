@@ -8,7 +8,7 @@ using System.Text;
 
 namespace InventoryDAL.Stocks
 {
-    public class StockEntity
+    public class StockEntity : IStockEntity
     {
         public int Id { get; set; }
         public int ProductId { get; set; }

@@ -1,13 +1,9 @@
 ﻿using System.Collections.Generic;
-using InventoryLogic.Tags;
 using InventoryDAL.ProductTag;
-using InventoryLogic.Facade;
-using InventoryDAL.Database;
-using InventoryDAL.Products;
 
 namespace InventoryDAL.Tags
 {
-    public class TagEntity
+    public class TagEntity : ITagEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
