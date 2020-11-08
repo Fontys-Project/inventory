@@ -1,7 +1,4 @@
-﻿using InventoryDAL.ProductTag;
-using InventoryDAL.Stocks;
-using InventoryDAL.Tags;
-using InventoryLogic.Interfaces;
+﻿using InventoryDAL.Interfaces;
 using InventoryLogic.Products;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,42 +7,57 @@ namespace InventoryDAL.Products
 {
     public class ProductsRepository : IProductsRepository
     {
+        private readonly IBuilderFactory builderFactory;
         private readonly IProductEntityDAO productEntityDAO;
-        private readonly IProductConverter productConverter;
 
-        public ProductsRepository(IProductEntityDAO productEntityDAO, IProductConverter productConverter)
+        public ProductsRepository(IProductEntityDAO productEntityDAO,
+                                  IBuilderFactory builderFactory)
         {
             this.productEntityDAO = productEntityDAO;
-            this.productConverter = productConverter;
+            this.builderFactory = builderFactory;
         }
 
         public List<Product> GetAll()
         {
-            return productEntityDAO.GetAll()
-                .Select(entity => productConverter.ConvertToProduct(entity)).ToList();
+            List<ProductEntity> productEntities = productEntityDAO.GetAll();
+            return productEntities
+                .Select(productEntity => BuildProduct(productEntity))
+                .ToList();
         }
 
         public Product Get(int id)
         {
-            ProductEntity entity = productEntityDAO.Get(id);
-            return productConverter.ConvertToProduct(entity);
+            ProductEntity productEntity = productEntityDAO.Get(id);
+            return BuildProduct(productEntity);
         }
 
         public void Add(Product product)
         {
-            ProductEntity productEntity = productConverter.ConvertToProductEntity(product);
+            ProductEntity productEntity = BuildProductEntity(product);
             productEntityDAO.Add(productEntity);
         }
 
         public void Modify(Product product)
         {
-            ProductEntity entity = productConverter.ConvertToProductEntity(product);
-            productEntityDAO.Modify(entity);
+            ProductEntity productEntity = BuildProductEntity(product);
+            productEntityDAO.Modify(productEntity);
         }
 
         public void Remove(int id)
         {
             productEntityDAO.Remove(id);
+        }
+
+        private Product BuildProduct(ProductEntity productEntity)
+        {
+            var productBuilder = builderFactory.CreateProductBuilder(productEntity);
+            return productBuilder.Build();
+        }
+
+        private ProductEntity BuildProductEntity(Product product)
+        {
+            var productEntityBuilder = builderFactory.CreateProductEntityBuilder(product);
+            return productEntityBuilder.Build();
         }
     }
 }
