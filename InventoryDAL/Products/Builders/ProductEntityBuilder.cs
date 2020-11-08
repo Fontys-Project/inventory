@@ -52,7 +52,9 @@ namespace InventoryDAL.Products
         private ProductTagEntity GetProductTagEntity(int productId, Tag tag)
         {
             ProductTagEntity ptEntity = daoFactory.ProductTagDAO.Get(productId, tag.Id);
-            if (ptEntity == null) throw new InvalidDataException("Tag not found. Please first create this tag.");
+            if (ptEntity == null) throw new InvalidDataException("" +
+                "Product-Tag relationship not found. " +
+                "Please apply the tag using the dedicated method."); 
             return ptEntity;
         }
 
