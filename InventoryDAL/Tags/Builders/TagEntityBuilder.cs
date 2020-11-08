@@ -1,66 +1,60 @@
 ﻿using InventoryDAL.Interfaces;
-using InventoryDAL.Products;
 using InventoryDAL.ProductTag;
 using InventoryLogic.Products;
 using InventoryLogic.Tags;
-using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace InventoryDAL.Tags
 {
-    public class TagConverter : ITagConverter
+    public class TagEntityBuilder : ITagEntityBuilder
     {
-        private readonly IDomainFactory domainFactory;
-        private readonly IEntityFactory entityFactory;
         private readonly IDAOFactory daoFactory;
-        private readonly IBuilderFactory converterFactory;
+        private readonly IEntityFactory entityFactory;
 
-        public TagConverter(IDomainFactory domainFactory, IEntityFactory entityFactory, IDAOFactory daoFactory, IBuilderFactory converterFactory)
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public List<ProductTagEntity> ProductTagEntities { get; set; }
+
+        public TagEntityBuilder(Tag tag,
+                                IEntityFactory entityFactory,
+                                IDAOFactory daoFactory)
         {
-            this.domainFactory = domainFactory;
             this.entityFactory = entityFactory;
             this.daoFactory = daoFactory;
-            this.converterFactory = converterFactory;
+
+            this.Id = tag.Id;
+            this.Name = tag.Name;
+            this.ProductTagEntities = GetProductTagEntities(tag.Id, tag.Products);
         }
 
-        public Tag ConvertToTag(TagEntity e)
+        private List<ProductTagEntity> GetProductTagEntities(int tagId, List<Product> products)
         {
-            Tag tag = domainFactory.CreateTag();
-            tag.Id = e.Id;
-            tag.Name = e.Name;
-            if (e.ProductTagEntities != null)
+            if (products == null || products.Count == 0) return null;
+            List<ProductTagEntity> newProductTagEntities = new List<ProductTagEntity>();
+            products.ForEach(product =>
             {
-                e.ProductTagEntities.ForEach(j =>
-                {
-                    ProductEntity productEntity = daoFactory.ProductEntityDAO.Get(j.ProductId);
-                    Product product = converterFactory.ProductBuilder.Build(productEntity);
-                    tag.Products.Add(product);
-                });
-            }
-            return tag;
+                ProductTagEntity ptEntity = GetProductTagEntity(tagId, product);
+                newProductTagEntities.Add(ptEntity);
+            });
+            return newProductTagEntities;
         }
 
-        public TagEntity ConvertToNewTagEntity(Tag tag)
+        private ProductTagEntity GetProductTagEntity(int tagId, Product product)
         {
-            TagEntity tagEntity = entityFactory.CreateTagEntity();
-            return Map(tag, tagEntity);
+            ProductTagEntity ptEntity = daoFactory.ProductTagDAO.Get(product.Id, tagId);
+            if (ptEntity == null) throw new InvalidDataException("" +
+                "Product-Tag relationship not found. " +
+                "Please apply the tag using the dedicated method.");
+            return ptEntity;
         }
 
-        public TagEntity ConvertToExistingTagEntity(Tag tag)
+        public TagEntity Build()
         {
-            TagEntity tagEntity = daoFactory.TagEntityDAO.Get(tag.Id);
-            if (tagEntity == null) throw new InvalidDataException("TagEntity by that id not found");
-            return Map(tag, tagEntity);
-        }
-
-        private TagEntity Map(Tag tag, TagEntity tagEntity)
-        {
-            if (!(tag.Products == null || tag.Products.Count == 0))
-                throw new InvalidDataException("Cannot change products this way");
-
-            tagEntity.Id = tag.Id;
-            tagEntity.Name = tag.Name;
-
+            TagEntity tagEntity = daoFactory.TagEntityDAO.Get(this.Id);
+            if (tagEntity == null) tagEntity = entityFactory.CreateTagEntity();
+            tagEntity.Name = this.Name;
+            tagEntity.ProductTagEntities = this.ProductTagEntities;
             return tagEntity;
         }
     }

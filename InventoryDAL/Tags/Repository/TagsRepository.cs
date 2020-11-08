@@ -1,4 +1,4 @@
-﻿using InventoryLogic.Interfaces;
+﻿using InventoryDAL.Interfaces;
 using InventoryLogic.Tags;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,42 +7,56 @@ namespace InventoryDAL.Tags
 {
     public class TagsRepository : ITagsRepository
     {
+        private readonly IBuilderFactory builderFactory; 
         private readonly ITagEntityDAO tagEntityDAO;
-        private readonly ITagBuilder tagConverter;
 
-        public TagsRepository(ITagEntityDAO tagEntityDAO, ITagBuilder tagConverter)
+        public TagsRepository(ITagEntityDAO tagEntityDAO, IBuilderFactory builderFactory)
         {
+            this.builderFactory = builderFactory; 
             this.tagEntityDAO = tagEntityDAO;
-            this.tagConverter = tagConverter;
-        }
-
-        public void Add(Tag tag)
-        {
-            tagEntityDAO.Add(tagConverter.ConvertToNewTagEntity(tag));
         }
 
         public List<Tag> GetAll()
         {
-            return tagEntityDAO.GetAll()
-                .Select(entity => tagConverter.ConvertToTag(entity)).ToList();
+            List<TagEntity> tagEntities = tagEntityDAO.GetAll();
+            return tagEntities
+                .Select(tagEntity => BuildTag(tagEntity))
+                .ToList();
         }
 
         public Tag Get(int id)
         {
-            TagEntity entity = tagEntityDAO.Get(id);
-            if (entity == null) throw new System.ArgumentException("TagEntity not found.");
-            return tagConverter.ConvertToTag(entity);
+            TagEntity tagEntity = tagEntityDAO.Get(id);
+            return BuildTag(tagEntity);
+        }
+
+        public void Add(Tag tag)
+        {
+            TagEntity tagEntity = BuildTagEntity(tag);
+            tagEntityDAO.Add(tagEntity);
         }
 
         public void Modify(Tag tag)
         {
-            TagEntity entity = tagConverter.ConvertToExistingTagEntity(tag);
-            tagEntityDAO.Modify(entity);
+            TagEntity tagEntity = BuildTagEntity(tag);
+            tagEntityDAO.Modify(tagEntity);
         }
 
         public void Remove(int id)
         {
             tagEntityDAO.Remove(id);
+        }
+
+        private Tag BuildTag(TagEntity tagEntity)
+        {
+            var tagBuilder = builderFactory.CreateTagBuilder(tagEntity);
+            return tagBuilder.Build();
+        }
+
+        private TagEntity BuildTagEntity(Tag tag)
+        {
+            var tagEntityBuilder = builderFactory.CreateTagEntityBuilder(tag);
+            return tagEntityBuilder.Build();
         }
     }
 }
