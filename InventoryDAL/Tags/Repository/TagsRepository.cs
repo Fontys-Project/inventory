@@ -8,9 +8,9 @@ namespace InventoryDAL.Tags
     public class TagsRepository : ITagsRepository
     {
         private readonly ITagEntityDAO tagEntityDAO;
-        private readonly ITagConverter tagConverter;
+        private readonly ITagBuilder tagConverter;
 
-        public TagsRepository(ITagEntityDAO tagEntityDAO, ITagConverter tagConverter)
+        public TagsRepository(ITagEntityDAO tagEntityDAO, ITagBuilder tagConverter)
         {
             this.tagEntityDAO = tagEntityDAO;
             this.tagConverter = tagConverter;

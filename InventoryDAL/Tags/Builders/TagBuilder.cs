@@ -8,14 +8,14 @@ using System.IO;
 
 namespace InventoryDAL.Tags
 {
-    public class TagConverter : ITagConverter
+    public class TagBuilder : ITagBuilder
     {
         private readonly IDomainFactory domainFactory;
         private readonly IEntityFactory entityFactory;
         private readonly IDAOFactory daoFactory;
-        private readonly IConverterFactory converterFactory;
+        private readonly IBuilderFactory converterFactory;
 
-        public TagConverter(IDomainFactory domainFactory, IEntityFactory entityFactory, IDAOFactory daoFactory, IConverterFactory converterFactory)
+        public TagBuilder(IDomainFactory domainFactory, IEntityFactory entityFactory, IDAOFactory daoFactory, IBuilderFactory converterFactory)
         {
             this.domainFactory = domainFactory;
             this.entityFactory = entityFactory;
@@ -33,7 +33,7 @@ namespace InventoryDAL.Tags
                 e.ProductTagEntities.ForEach(j =>
                 {
                     ProductEntity productEntity = daoFactory.ProductEntityDAO.Get(j.ProductId);
-                    Product product = converterFactory.ProductConverter.ConvertToProduct(productEntity);
+                    Product product = converterFactory.ProductBuilder.Build(productEntity);
                     tag.Products.Add(product);
                 });
             }

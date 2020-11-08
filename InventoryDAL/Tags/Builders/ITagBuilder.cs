@@ -2,7 +2,7 @@
 
 namespace InventoryDAL.Tags
 {
-    public interface ITagConverter
+    public interface ITagBuilder
     {
         Tag ConvertToTag(TagEntity e);
         TagEntity ConvertToNewTagEntity(Tag tag);

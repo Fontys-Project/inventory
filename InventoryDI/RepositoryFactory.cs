@@ -15,9 +15,9 @@ namespace InventoryDI
         public IStocksRepository StocksRepository { get; }
         public ITagsRepository TagsRepository { get; }
 
-        public RepositoryFactory(IDAOFactory daoFactory, IConverterFactory converterFactory)
+        public RepositoryFactory(IDAOFactory daoFactory, IBuilderFactory converterFactory)
         {
-            ProductsRepository = new ProductsRepository(daoFactory.ProductEntityDAO, converterFactory.ProductConverter);
+            ProductsRepository = new ProductsRepository(TODO, converterFactory.ProductBuilder, daoFactory.ProductEntityDAO);
             StocksRepository = new StocksRepository(daoFactory.StockEntityDAO, converterFactory.StockConverter);
             TagsRepository = new TagsRepository(daoFactory.TagEntityDAO, converterFactory.TagConverter);
         }
