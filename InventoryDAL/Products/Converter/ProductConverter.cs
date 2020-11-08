@@ -1,17 +1,14 @@
 ﻿using InventoryDAL.Interfaces;
-using InventoryDAL.Products;
 using InventoryDAL.ProductTag;
 using InventoryDAL.Stocks;
 using InventoryDAL.Tags;
+using InventoryLogic.Interfaces;
 using InventoryLogic.Products;
 using InventoryLogic.Stocks;
 using InventoryLogic.Tags;
-using Org.BouncyCastle.Security;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace InventoryDAL.Products
 {
@@ -20,14 +17,20 @@ namespace InventoryDAL.Products
         private readonly IDomainFactory domainFactory;
         private readonly IDAOFactory daoFactory;
         private readonly IConverterFactory converterFactory;
+        private readonly IRepositoryFactory repositoryFactory;
         private readonly IEntityFactory entityFactory;
 
-        public ProductConverter(IDomainFactory domainFactory, IEntityFactory entityFactory, IDAOFactory daoFactory, IConverterFactory converterFactory)
+        public ProductConverter(IDomainFactory domainFactory,
+                                IEntityFactory entityFactory,
+                                IDAOFactory daoFactory,
+                                IConverterFactory converterFactory,
+                                IRepositoryFactory repositoryFactory)
         {
             this.domainFactory = domainFactory;
             this.entityFactory = entityFactory;
             this.daoFactory = daoFactory;
             this.converterFactory = converterFactory;
+            this.repositoryFactory = repositoryFactory;
         }
 
         public Product ConvertToProduct(ProductEntity e)
@@ -37,86 +40,84 @@ namespace InventoryDAL.Products
             product.Name = e.Name;
             product.Price = e.Price;
             product.Sku = e.Sku;
-
-            if (e.ProductTagEntities != null)
-            {
-                e.ProductTagEntities.ForEach(prodTag =>
-                {
-                    TagEntity tagEntity = daoFactory.TagEntityDAO.Get(prodTag.TagId);
-                    Tag tag = converterFactory.TagConverter.ConvertToTag(tagEntity);
-                    product.Tags.Add(tag);
-                });
-            }
-            if (e.StockEntities != null)
-            {
-                e.StockEntities.ForEach(e =>
-                {
-                    Stock stock = converterFactory.StockConverter.ConvertToStock(e);
-                    product.Stocks.Add(stock);
-                });
-            }
+            product.Tags = GetTags(e.ProductTagEntities) ?? null;
+            product.Stocks = GetStocks(e.StockEntities) ?? null;
             return product;
         }
 
-        public ProductEntity ConvertToExistingProductEntity(Product product)
+        private List<Tag> GetTags(List<ProductTagEntity> productTagEntities)
+        {
+            List<Tag> tags = new List<Tag>();
+            productTagEntities.ForEach(prodTag =>
+            {
+                Tag tag = repositoryFactory.GetCrudRepository<Tag>().Get(prodTag.TagId);
+                tags.Add(tag);
+            });
+            return tags;
+        }
+
+        private List<Stock> GetStocks(List<StockEntity> stockEntities)
+        {
+            List<Stock> stocks = new List<Stock>();
+            stockEntities.ForEach(stockEntity =>
+            {
+                Stock stock = repositoryFactory.GetCrudRepository<Stock>().Get(stockEntity.Id);
+                stocks.Add(stock);
+            });
+            return stocks;
+        }
+
+        public ProductEntity ConvertToProductEntity(Product product)
         {
             ProductEntity productEntity = daoFactory.ProductEntityDAO.Get(product.Id);
-            if (productEntity == null) throw new InvalidDataException("ProductEntity by that id not found");
+            if (productEntity == null) productEntity = entityFactory.CreateProductEntity();
 
             productEntity.Name = product.Name;
             productEntity.Price = product.Price;
             productEntity.Sku = product.Sku;
-            TransferTagsFromAToB(product, productEntity);
-            TransferStocksFromAToB(product, productEntity);
-            return productEntity;
-        }
-
-        private void TransferTagsFromAToB(Product a, ProductEntity b)
-        {
-            if (!(a.Tags == null || a.Tags.Count == 0))
-            {
-                b.ProductTagEntities = new List<ProductTagEntity>();
-                a.Tags.ForEach(tag =>
-                {
-                    ProductTagEntity e = daoFactory.ProductTagDAO.Get(a.Id, tag.Id);
-                    if (e == null)
-                    {
-                        e = entityFactory.CreateProductTagEntity();
-                        e.ProductId = a.Id;
-                        e.TagId = tag.Id;
-                    }
-                    b.ProductTagEntities.Add(e);
-                });
-            }
-        }
-
-        private void TransferStocksFromAToB(Product a, ProductEntity b)
-        {
-            if (!(a.Stocks == null || a.Stocks.Count == 0))
-            {
-                b.StockEntities = new List<StockEntity>();
-                a.Stocks.ForEach(s =>
-                {
-                    StockEntity e = daoFactory.StockEntityDAO.Get(s.Id);
-                    if (e == null) throw new InvalidDataException("Stock not found. You cannot add stocks this way.");
-                    b.StockEntities.Add(e);
-                });
-            }
-        }
-
-        public ProductEntity ConvertToNewProductEntity(Product product)
-        {
-            ProductEntity productEntity = entityFactory.CreateProductEntity();
-            if (!(product.Tags == null || product.Tags.Count == 0))
-                throw new InvalidDataException("Cannot add tags this way. Please add tags separately.");
-            if (!(product.Stocks == null || product.Stocks.Count == 0))
-                throw new InvalidDataException("Cannot add stocks this way. Please add stocks separately.");
-
-            productEntity.Name = product.Name;
-            productEntity.Price = product.Price;
-            productEntity.Sku = product.Sku;
+            productEntity.ProductTagEntities = GetProductTagEntities(product.Id, product.Tags);
+            productEntity.StockEntities = GetStockEntities(product.Stocks);
 
             return productEntity;
+        }
+
+        private List<ProductTagEntity> GetProductTagEntities(int productId, List<Tag> tags)
+        {
+            if (tags == null || tags.Count == 0) return null;
+            List<ProductTagEntity> newProductTagEntities = new List<ProductTagEntity>();
+            tags.ForEach(tag =>
+            {
+                ProductTagEntity ptEntity = GetProductTagEntity(productId, tag);
+                newProductTagEntities.Add(ptEntity);
+            });
+            return newProductTagEntities;
+        }
+
+        private ProductTagEntity GetProductTagEntity(int productId, Tag tag)
+        {
+            ProductTagEntity ptEntity = daoFactory.ProductTagDAO.Get(productId, tag.Id);
+            if (ptEntity == null) ptEntity = CreateProductTagEntity(productId, tag);
+            return ptEntity;
+        }
+
+        private ProductTagEntity CreateProductTagEntity(int productId, Tag tag)
+        {
+            ProductTagEntity ptEntity = entityFactory.CreateProductTagEntity();
+            ptEntity.ProductId = productId;
+            ptEntity.TagId = tag.Id;
+            return ptEntity;
+        }
+
+        private List<StockEntity> GetStockEntities(List<Stock> stocks)
+        {
+            if (stocks == null || stocks.Count == 0) return null;
+            var stockEntities = new List<StockEntity>();
+            stocks.ForEach(stock =>
+            {
+                StockEntity stockEntity = converterFactory.StockConverter.ConvertToStockEntity(stock);
+                stockEntities.Add(stockEntity);
+            });
+            return stockEntities;
         }
     }
 }
