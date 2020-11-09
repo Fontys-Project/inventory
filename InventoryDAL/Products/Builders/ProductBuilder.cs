@@ -27,15 +27,15 @@ namespace InventoryDAL.Products
                               IDomainFactory domainFactory,
                               IRepositoryFactory repositoryFactory)
         {
+            this.domainFactory = domainFactory;
+            this.repositoryFactory = repositoryFactory;
+            
             this.Id = productEntity.Id;
             this.Name = productEntity.Name;
             this.Price = productEntity.Price;
             this.Sku = productEntity.Sku;
             this.Tags = GetTags(productEntity.ProductTagEntities);
             this.Stocks = GetStocks(productEntity.StockEntities);
-            
-            this.domainFactory = domainFactory;
-            this.repositoryFactory = repositoryFactory;
         }
 
         private List<Tag> GetTags(List<ProductTagEntity> productTagEntities)

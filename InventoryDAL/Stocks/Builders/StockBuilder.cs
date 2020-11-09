@@ -20,14 +20,14 @@ namespace InventoryDAL.Stocks
 
         public StockBuilder(StockEntity stockEntity, IDomainFactory domainFactory, IRepositoryFactory repositoryFactory)
         {
+            this.domainFactory = domainFactory;
+            this.repositoryFactory = repositoryFactory;
+            
             this.Id = stockEntity.Id;
             this.ProductId = stockEntity.ProductId;
             this.Date = stockEntity.Date;
             this.Amount = stockEntity.Amount;
             this.Product = GetProduct(stockEntity.ProductId);
-
-            this.domainFactory = domainFactory;
-            this.repositoryFactory = repositoryFactory;
         }
 
         private Product GetProduct(int productId)

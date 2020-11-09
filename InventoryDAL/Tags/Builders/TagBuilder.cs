@@ -21,12 +21,12 @@ namespace InventoryDAL.Tags
 
         public TagBuilder(TagEntity tagEntity, IDomainFactory domainFactory, IRepositoryFactory repositoryFactory)
         {
+            this.domainFactory = domainFactory;
+            this.repositoryFactory = repositoryFactory;
+            
             this.Id = tagEntity.Id;
             this.Name = tagEntity.Name;
             this.Products = GetProducts(tagEntity.ProductTagEntities);
-
-            this.domainFactory = domainFactory;
-            this.repositoryFactory = repositoryFactory;
         }
 
         private List<Product> GetProducts(List<ProductTagEntity> productTagEntities)

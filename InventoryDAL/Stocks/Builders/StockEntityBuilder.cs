@@ -22,14 +22,14 @@ namespace InventoryDAL.Stocks
 
         public StockEntityBuilder(Stock stock, IEntityFactory entityFactory, IDAOFactory daoFactory)
         {
+            this.entityFactory = entityFactory;
+            this.daoFactory = daoFactory;
+            
             this.Id = stock.Id;
             this.ProductId = stock.ProductId;
             this.Amount = stock.Amount;
             this.Date = stock.Date;
             this.ProductEntity = GetProductEntity(stock.ProductId);
-
-            this.entityFactory = entityFactory;
-            this.daoFactory = daoFactory;
         }
 
         private ProductEntity GetProductEntity(int productId)

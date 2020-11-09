@@ -44,8 +44,8 @@ namespace InventoryLogic.Facade
 
             newObj.ConvertFromDTO(obj);
 
-            repoFactory.GetCrudRepository<DomainModel>().Add(newObj);
-            newObj.ConvertToDTO(obj);
+            DomainModel domainModel = repoFactory.GetCrudRepository<DomainModel>().Add(newObj);
+            domainModel.ConvertToDTO(obj);
 
             return obj;
         }
