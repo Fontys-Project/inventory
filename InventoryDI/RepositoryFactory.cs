@@ -22,7 +22,7 @@ namespace InventoryDI
             var daoFactory = new DAOFactory(DatabaseType.MYSQL);
             var builderFactory = new BuilderFactory(new DomainFactory(),
                                                     new EntityFactory(),
-                                                    this,
+                                                    this, 
                                                     daoFactory);
 
             ProductsRepository = new ProductsRepository(daoFactory.ProductEntityDAO, builderFactory);
