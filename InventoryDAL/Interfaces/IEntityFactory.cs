@@ -10,6 +10,6 @@ namespace InventoryDAL.Interfaces
         TagEntity CreateTagEntity();
         StockEntity CreateStockEntity();
         ProductEntity CreateProductEntity();
-        ProductTagEntity CreateProductTagEntity();
+        ProductTagEntity CreateProductTagEntity(int productId, int tagId, IDAOFactory daoFactory);
     }
 }

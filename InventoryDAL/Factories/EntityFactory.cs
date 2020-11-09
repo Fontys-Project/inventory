@@ -23,9 +23,9 @@ namespace InventoryDAL.Factories
             return new TagEntity();
         }
 
-        public ProductTagEntity CreateProductTagEntity()
+        public ProductTagEntity CreateProductTagEntity(int productId, int tagId, IDAOFactory daoFactory)
         {
-            return new ProductTagEntity();
+            return new ProductTagEntity(productId, tagId, daoFactory);
         }
     }
 }
