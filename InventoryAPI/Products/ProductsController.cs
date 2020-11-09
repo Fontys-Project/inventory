@@ -1,6 +1,6 @@
 ﻿using InventoryLogic.Products;
 using InventoryLogic.Facade;
-using InventoryAPI.Products.ViewModels;
+using InventoryAPI.Products.ApiModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -15,12 +15,10 @@ namespace InventoryAPI.Products
     public class ProductsController : ControllerBase
     {
         private readonly ProductsFacade productsFacade;
-        private readonly IDomainFactory domainFactory;
 
-        public ProductsController(ProductsFacade productsFacade, IDomainFactory domainFactory)
+        public ProductsController(ProductsFacade productsFacade)
         {
             this.productsFacade = productsFacade;
-            this.domainFactory = domainFactory;
         }
 
         /// <summary>
@@ -47,9 +45,9 @@ namespace InventoryAPI.Products
         /// </summary>
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public bool Modify([FromBody] ProductDTO obj)
+        public bool Modify([FromBody] ProductDTO productDTO)
         {
-            return productsFacade.Modify(obj);
+            return productsFacade.Modify(productDTO);
         }
 
         /// <summary>
@@ -57,13 +55,15 @@ namespace InventoryAPI.Products
         /// </summary>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut]
-        public ProductDTO Add([FromBody] AddProductVM vm)
+        public ProductDTO Add([FromBody] AddProductAM vm)
         {
-            ProductDTO product = domainFactory.CreateProductDTO();
-            product.Name = vm.Name;
-            product.Price = vm.Price;
-            product.Sku = vm.Sku;
-            return productsFacade.Add(product);
+            ProductDTO productDto = new ProductDTO // TODO: is newing ok?
+            {
+                Name = vm.Name,
+                Price = vm.Price,
+                Sku = vm.Sku
+            }; 
+            return productsFacade.Add(productDto);
         }
 
         /// <summary>
