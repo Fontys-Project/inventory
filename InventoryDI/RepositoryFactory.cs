@@ -1,4 +1,6 @@
-﻿using InventoryDAL.Interfaces;
+﻿using InventoryDAL.Database;
+using InventoryDAL.Factories;
+using InventoryDAL.Interfaces;
 using InventoryDAL.Products;
 using InventoryDAL.Stocks;
 using InventoryDAL.Tags;
@@ -15,11 +17,17 @@ namespace InventoryDI
         public IStocksRepository StocksRepository { get; }
         public ITagsRepository TagsRepository { get; }
 
-        public RepositoryFactory(IDAOFactory daoFactory, IBuilderFactory converterFactory)
+        public RepositoryFactory()
         {
-            ProductsRepository = new ProductsRepository(TODO, converterFactory.ProductBuilder, daoFactory.ProductEntityDAO);
-            StocksRepository = new StocksRepository(daoFactory.StockEntityDAO, converterFactory.StockConverter);
-            TagsRepository = new TagsRepository(daoFactory.TagEntityDAO, converterFactory.TagConverter);
+            var daoFactory = new DAOFactory(DatabaseType.MYSQL);
+            var builderFactory = new BuilderFactory(new DomainFactory(),
+                                                    new EntityFactory(),
+                                                    this,
+                                                    daoFactory);
+
+            ProductsRepository = new ProductsRepository(daoFactory.ProductEntityDAO, builderFactory);
+            StocksRepository = new StocksRepository(daoFactory.StockEntityDAO, builderFactory);
+            TagsRepository = new TagsRepository(daoFactory.TagEntityDAO, builderFactory);
         }
 
         public ICrudRepository<T> GetCrudRepository<T>()

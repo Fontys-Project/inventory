@@ -12,10 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using InventoryDI;
-using InventoryDAL.Interfaces;  // TODO: DAL staat niet bij dependencies (snap ik), maar dit werkt??
-using InventoryDAL.Database;    // TODO: Waar zet je het beste de interfaces neer? (meerdere gebruiken ze)
 using InventoryLogic.Interfaces;
-using InventoryDAL.Factories;
 
 namespace Inventory
 {
@@ -59,12 +56,7 @@ namespace Inventory
             services.AddSingleton<ProductsFacade>();
             services.AddSingleton<TagsFacade>();
             services.AddSingleton<StocksFacade>();
-            services.AddSingleton<IDAOFactory, DAOFactory>(x => new DAOFactory(DatabaseType.MYSQL));
-            services.AddSingleton<IBuilderFactory, BuilderFactory>();
-            services.AddSingleton<IRepositoryFactory, RepositoryFactory>(); 
-            services.AddSingleton<IDomainFactory, DomainFactory>();
-            services.AddSingleton<IEntityFactory, EntityFactory>();
-            
+            services.AddSingleton<IRepositoryFactory, RepositoryFactory>();             
 
             services.AddApiVersioning(x =>
                 {
