@@ -17,9 +17,10 @@ namespace InventoryDAL.Products
             };
         }
 
-        public void Add(ProductEntity product)
+        public ProductEntity Add(ProductEntity product)
         {
             productsEntities.Add(product);
+            return product;
         }
 
         public List<ProductEntity> GetAll()

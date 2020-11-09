@@ -26,9 +26,10 @@ namespace InventoryDAL.ProductTag
             };
         }
 
-        public void Add(ProductTagEntity join)
+        public ProductTagEntity Add(ProductTagEntity join)
         {
             joins.Add(join);
+            return join;
         }
 
         public List<ProductTagEntity> GetAll()

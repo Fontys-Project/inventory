@@ -30,10 +30,11 @@ namespace InventoryDAL.Tags
             return BuildTag(tagEntity);
         }
 
-        public void Add(Tag tag)
+        public Tag Add(Tag tag)
         {
             TagEntity tagEntity = BuildTagEntity(tag);
-            tagEntityDAO.Add(tagEntity);
+            tagEntity = tagEntityDAO.Add(tagEntity);
+            return BuildTag(tagEntity);
         }
 
         public void Modify(Tag tag)

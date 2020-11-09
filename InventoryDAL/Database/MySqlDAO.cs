@@ -16,11 +16,12 @@ namespace InventoryDAL.Database
             this.Table = context.Set<EntityType>();
         }
 
-        public void Add(EntityType e)
+        public EntityType Add(EntityType e)
         {
             this.dbContext.Database.EnsureCreated();
             this.Table.Add(e);
             this.dbContext.SaveChangesAsync();
+            return e;
         }
 
         public List<EntityType> GetAll()

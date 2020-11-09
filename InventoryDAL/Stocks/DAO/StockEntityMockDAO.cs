@@ -34,9 +34,10 @@ namespace InventoryDAL.Stocks
             };
         }
 
-        public void Add(StockEntity stockEntity)
+        public StockEntity Add(StockEntity stockEntity)
         {
             this.stockEntities.Add(stockEntity);
+            return stockEntity;
         }
 
         public List<StockEntity> GetAll()

@@ -31,10 +31,11 @@ namespace InventoryDAL.Stocks
             return BuildStock(stockEntity);
         }
 
-        public void Add(Stock stock)
+        public Stock Add(Stock stock)
         {
             StockEntity stockEntity = BuildStockEntity(stock);
-            stockEntityDAO.Add(stockEntity);
+            stockEntity = stockEntityDAO.Add(stockEntity);
+            return BuildStock(stockEntity);
         }
 
         public void Modify(Stock stock)

@@ -25,8 +25,7 @@ namespace InventoryLogic.Facade
         
         public T Add(T obj)
         {
-            repoFactory.GetCrudRepository<T>().Add(obj);
-            return obj;
+            return repoFactory.GetCrudRepository<T>().Add(obj);
         }
 
         public Boolean Remove(int id)

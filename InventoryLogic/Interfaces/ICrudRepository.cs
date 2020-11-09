@@ -8,7 +8,7 @@ namespace InventoryLogic.Interfaces
 
         T Get(int id);
         List<T> GetAll();
-        void Add(T obj);
+        T Add(T obj);
         void Remove(int id);
         void Modify(T obj);
     }

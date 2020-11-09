@@ -31,10 +31,11 @@ namespace InventoryDAL.Products
             return BuildProduct(productEntity);
         }
 
-        public void Add(Product product)
+        public Product Add(Product product)
         {
             ProductEntity productEntity = BuildProductEntity(product);
-            productEntityDAO.Add(productEntity);
+            productEntity = productEntityDAO.Add(productEntity);
+            return BuildProduct(productEntity);
         }
 
         public void Modify(Product product)

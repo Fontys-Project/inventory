@@ -17,9 +17,10 @@ namespace InventoryDAL.Tags
             };
         }
 
-        public void Add(TagEntity entity)
+        public TagEntity Add(TagEntity entity)
         {
             this.tagEntities.Add(entity);
+            return entity;
         }
 
         public List<TagEntity> GetAll()
