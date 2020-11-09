@@ -44,7 +44,7 @@
             Modify a Product definition
             </summary>
         </member>
-        <member name="M:InventoryAPI.Products.ProductsController.Add(InventoryAPI.Products.ViewModels.AddProductVM)">
+        <member name="M:InventoryAPI.Products.ProductsController.Add(InventoryAPI.Products.ApiModels.AddProductAM)">
             <summary>
             Create a new Product definition
             </summary>
