@@ -63,13 +63,13 @@ namespace InventoryDAL.Products
             List<Stock> stocks = new List<Stock>();
             stockEntities.ForEach(stockEntity =>
             {
-                Stock stock = GetSTock(stockEntity);
+                Stock stock = GetStock(stockEntity);
                 stocks.Add(stock);
             });
             return stocks;
         }
 
-        private Stock GetSTock(StockEntity stockEntity)
+        private Stock GetStock(StockEntity stockEntity)
         {
             Stock stock = repositoryFactory.GetCrudRepository<Stock>().Get(stockEntity.Id);
             if (stock == null) throw new InvalidDataException("Stock not found. Please first create the stock.");
