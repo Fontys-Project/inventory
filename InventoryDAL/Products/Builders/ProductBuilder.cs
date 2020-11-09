@@ -31,8 +31,8 @@ namespace InventoryDAL.Products
             this.Name = productEntity.Name;
             this.Price = productEntity.Price;
             this.Sku = productEntity.Sku;
-            this.Tags = GetTags(productEntity.ProductTagEntities) ?? null;
-            this.Stocks = GetStocks(productEntity.StockEntities) ?? null;
+            this.Tags = GetTags(productEntity.ProductTagEntities);
+            this.Stocks = GetStocks(productEntity.StockEntities);
             
             this.domainFactory = domainFactory;
             this.repositoryFactory = repositoryFactory;
@@ -40,6 +40,7 @@ namespace InventoryDAL.Products
 
         private List<Tag> GetTags(List<ProductTagEntity> productTagEntities)
         {
+            if (productTagEntities == null) return new List<Tag>();
             List<Tag> tags = new List<Tag>();
             productTagEntities.ForEach(prodTag =>
             {
@@ -58,6 +59,7 @@ namespace InventoryDAL.Products
 
         private List<Stock> GetStocks(List<StockEntity> stockEntities)
         {
+            if (stockEntities == null) return new List<Stock>();
             List<Stock> stocks = new List<Stock>();
             stockEntities.ForEach(stockEntity =>
             {

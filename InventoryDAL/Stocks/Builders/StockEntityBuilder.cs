@@ -26,15 +26,15 @@ namespace InventoryDAL.Stocks
             this.ProductId = stock.ProductId;
             this.Amount = stock.Amount;
             this.Date = stock.Date;
-            this.ProductEntity = GetProductEntity(stock.Product);
+            this.ProductEntity = GetProductEntity(stock.ProductId);
 
             this.entityFactory = entityFactory;
             this.daoFactory = daoFactory;
         }
 
-        private ProductEntity GetProductEntity(Product product)
+        private ProductEntity GetProductEntity(int productId)
         {
-            ProductEntity productEntity = daoFactory.ProductEntityDAO.Get(product.Id);
+            ProductEntity productEntity = daoFactory.ProductEntityDAO.Get(productId);
             if (productEntity == null) throw new InvalidDataException("Product not found. Please first create the product.");
             return productEntity;
         }

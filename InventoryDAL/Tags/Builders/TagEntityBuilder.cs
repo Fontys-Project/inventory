@@ -30,19 +30,19 @@ namespace InventoryDAL.Tags
 
         private List<ProductTagEntity> GetProductTagEntities(int tagId, List<Product> products)
         {
-            if (products == null || products.Count == 0) return null;
+            if (products == null || products.Count == 0) return new List<ProductTagEntity>();
             List<ProductTagEntity> newProductTagEntities = new List<ProductTagEntity>();
             products.ForEach(product =>
             {
-                ProductTagEntity ptEntity = GetProductTagEntity(tagId, product);
+                ProductTagEntity ptEntity = GetProductTagEntity(product.Id, tagId);
                 newProductTagEntities.Add(ptEntity);
             });
             return newProductTagEntities;
         }
 
-        private ProductTagEntity GetProductTagEntity(int tagId, Product product)
+        private ProductTagEntity GetProductTagEntity(int productId, int tagId)
         {
-            ProductTagEntity ptEntity = daoFactory.ProductTagDAO.Get(product.Id, tagId);
+            ProductTagEntity ptEntity = daoFactory.ProductTagDAO.Get(productId, tagId);
             if (ptEntity == null) throw new InvalidDataException("" +
                 "Product-Tag relationship not found. " +
                 "Please apply the tag using the dedicated method.");

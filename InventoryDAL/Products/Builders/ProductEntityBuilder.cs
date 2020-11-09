@@ -39,19 +39,19 @@ namespace InventoryDAL.Products
 
         private List<ProductTagEntity> GetProductTagEntities(int productId, List<Tag> tags)
         {
-            if (tags == null || tags.Count == 0) return null;
+            if (tags == null || tags.Count == 0) return new List<ProductTagEntity>();
             List<ProductTagEntity> newProductTagEntities = new List<ProductTagEntity>();
             tags.ForEach(tag =>
             {
-                ProductTagEntity ptEntity = GetProductTagEntity(productId, tag);
+                ProductTagEntity ptEntity = GetProductTagEntity(productId, tag.Id);
                 newProductTagEntities.Add(ptEntity);
             });
             return newProductTagEntities;
         }
 
-        private ProductTagEntity GetProductTagEntity(int productId, Tag tag)
+        private ProductTagEntity GetProductTagEntity(int productId, int tagId)
         {
-            ProductTagEntity ptEntity = daoFactory.ProductTagDAO.Get(productId, tag.Id);
+            ProductTagEntity ptEntity = daoFactory.ProductTagDAO.Get(productId, tagId);
             if (ptEntity == null) throw new InvalidDataException("" +
                 "Product-Tag relationship not found. " +
                 "Please apply the tag using the dedicated method."); 
@@ -60,19 +60,19 @@ namespace InventoryDAL.Products
 
         private List<StockEntity> GetStockEntities(List<Stock> stocks)
         {
-            if (stocks == null || stocks.Count == 0) return null;
+            if (stocks == null || stocks.Count == 0) return new List<StockEntity>();
             var stockEntities = new List<StockEntity>();
             stocks.ForEach(stock =>
             {
-                StockEntity stockEntity = GetStockEntity(stock); 
+                StockEntity stockEntity = GetStockEntity(stock.Id); 
                 stockEntities.Add(stockEntity);
             });
             return stockEntities;
         }
 
-        private StockEntity GetStockEntity(Stock stock)
+        private StockEntity GetStockEntity(int stockId)
         {
-            StockEntity stockEntity = daoFactory.StockEntityDAO.Get(stock.Id);
+            StockEntity stockEntity = daoFactory.StockEntityDAO.Get(stockId);
             if (stockEntity == null) throw new InvalidDataException("Stock not found. Please first create this stock.");
             return stockEntity;
         }

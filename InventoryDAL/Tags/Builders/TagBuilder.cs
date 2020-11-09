@@ -23,7 +23,7 @@ namespace InventoryDAL.Tags
         {
             this.Id = tagEntity.Id;
             this.Name = tagEntity.Name;
-            this.Products = GetProducts(tagEntity.ProductTagEntities) ?? null;
+            this.Products = GetProducts(tagEntity.ProductTagEntities);
 
             this.domainFactory = domainFactory;
             this.repositoryFactory = repositoryFactory;
@@ -31,6 +31,7 @@ namespace InventoryDAL.Tags
 
         private List<Product> GetProducts(List<ProductTagEntity> productTagEntities)
         {
+            if (productTagEntities == null) return new List<Product>();
             List<Product> products = new List<Product>();
             productTagEntities.ForEach(prodTag =>
             {
