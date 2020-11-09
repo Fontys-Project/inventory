@@ -2,34 +2,40 @@
 $loginbranch = "develop"
 $inventorybranch = "IntegratieTests"
 $encryptionkey = "daarkomenwenogeenkeeropterug"
+$gitdirs = @(($env:TEMP + "/inventorysvc"),($env:TEMP + "/loginsvc"))
+$workdirs = @(($env:TEMP + "/inventorysvc"),($env:TEMP + "/loginsvc/LoginService"))
 
 if($null -eq (Get-Module -Name posh-git))
 {
   Install-Module posh-git -Scope CurrentUser -Force
 }
 Import-Module posh-git
-if((Test-Path -Path $env:TEMP/loginsvc -PathType Container))
+# remove existing temp git repo's
+foreach($dir in $gitdirs)
 {
-remove-item $env:TEMP/loginsvc -Recurse -Force
+	if((Test-Path -Path $dir -PathType Container))
+	{
+	remove-item $dir -Recurse -Force
+	}
 }
 
 # login token script
 git clone -q -b $loginbranch https://github.com/Fontys-Project/login.git $env:TEMP/loginsvc
+Write-Host "Cloned Login repo"
 git clone -q -b $inventorybranch https://github.com/Fontys-Project/inventory.git $env:TEMP/inventorysvc
+Write-Host "Cloned Inventory repo"
 
-cd $env:TEMP/loginsvc/LoginService
+foreach($dir in $workdirs)
+{
+cd $dir
 docker-compose build
 
 docker-compose up -d
 start-sleep -Seconds 20
+}
 
+# additional step LoginService
 docker-compose exec web loginapi db upgrade
-
-cd $env:TEMP/inventorysvc
-docker-compose build
-docker-compose up -d
-start-sleep -Seconds 20
-
 
 $url = "http://localhost:5000/auth/login"
 
@@ -41,19 +47,36 @@ $body = '
 '
 
 #read-host "press key to continue"
+$response = Invoke-RestMethod -Method Post -Uri $url -Body $body -ContentType "application/json" -verbose
 
-$response = Invoke-RestMethod -Method Post -Uri $url -Body $body -ContentType "application/json"
-
-# test inventory api create product
+#test inventory api create product
 write-host "token is" $response.access_token
+write-host "execute create product test"
+
+$testbody = '
+{
+  "name": "test product",
+  "price": 100,
+  "sku": "product sku test"
+}
+'
+
+$headers = @{"Authorization"=("Bearer "+$response.access_token)}
+$url = "http://localhost:5001/api/v0.1/Products"
+
+$responseProduct = Invoke-RestMethod -Method Put -Uri $url -Body $testbody -ContentType "application/json" -headers $headers -verbose
+Out-String -InputObject $responseProduct
+
+read-host "press key to stop containers"
 
 # cleanup
-
+foreach($dir in $workdirs)
+{
+cd $dir
 docker-compose down
 docker-compose rm
 docker image prune -f
 docker volume prune -f
-
+}
 
 read-host "press entry to close test"
-cd
