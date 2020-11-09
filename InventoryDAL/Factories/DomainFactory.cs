@@ -21,10 +21,5 @@ namespace InventoryDAL.Factories
         {
             return new Tag();
         }
-
-        public ProductDTO CreateProductDTO()
-        {
-            return new ProductDTO();
-        }
     }
 }
