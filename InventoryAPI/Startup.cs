@@ -33,6 +33,8 @@ namespace Inventory
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
 
+            string key = "daarkomenwenogeenkeeropterug";
+
             services.AddAuthentication(o =>
                 {
                     o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -45,7 +47,7 @@ namespace Inventory
                              ValidateIssuer = false,
                              ValidateAudience = false,
                              ValidateIssuerSigningKey = true,
-                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("qwertyuiopasdfghjklzxcvbnm123456")),
+                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
                              ValidateLifetime = false,
                              RequireExpirationTime = false,
                              RequireSignedTokens = true
