@@ -29,13 +29,6 @@ namespace InventoryDAL.Tags
             this.Name = tagEntity.Name;
         }
 
-        private Product GetProduct(ProductTagEntity prodTag)
-        {
-            Product product = repositoryFactory.GetCrudRepository<Product>().Get(prodTag.ProductId);
-            if (product == null) throw new InvalidDataException("Product not found. Please first create the product.");
-            return product;
-        }
-
         public Tag GetResult()
         {
             Tag tag = domainFactory.CreateTag();
