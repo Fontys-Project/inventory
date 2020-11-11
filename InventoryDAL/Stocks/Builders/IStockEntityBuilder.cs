@@ -4,6 +4,6 @@ namespace InventoryDAL.Stocks
 {
     public interface IStockEntityBuilder : IStockEntity
     {
-        StockEntity Build();
+        StockEntity GetResult();
     }
 }

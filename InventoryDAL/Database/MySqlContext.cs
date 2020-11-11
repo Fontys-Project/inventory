@@ -11,7 +11,9 @@ namespace InventoryDAL.Database
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // use docker composer mysql credentials (safe to store in code)
-            optionsBuilder.UseMySQL(
+            optionsBuilder
+                //.UseLazyLoadingProxies()
+                .UseMySQL(
                 "server=db;port=3306;userid=dbuser;password=dbuserpassword;database=accountowner;");
         }
 
@@ -27,6 +29,9 @@ namespace InventoryDAL.Database
                 entity.HasMany(e => e.StockEntities)
                       .WithOne(s => s.ProductEntity)
                       .HasForeignKey(s => s.ProductId);
+                entity.HasMany(e => e.ProductTagEntities)
+                      .WithOne(p => p.ProductEntity)
+                      .HasForeignKey(p => p.ProductId);
             });
 
             modelBuilder.Entity<StockEntity>(entity =>
@@ -34,9 +39,6 @@ namespace InventoryDAL.Database
                 entity.HasKey(s => s.Id);
                 entity.Property(s => s.Amount).IsRequired();
                 entity.Property(s => s.Date).IsRequired();
-                //entity.HasOne(s => s.Product)
-                //      .WithMany()
-                //      .HasForeignKey(p => p.ProductId);
             });
 
             modelBuilder.Entity<TagEntity>(entity =>
@@ -46,29 +48,17 @@ namespace InventoryDAL.Database
                 entity.HasIndex(t => t.Name).IsUnique();
             });
 
-            //modelBuilder.Entity<ProductTagEntity>(entity =>
-            //{
-            //    entity.HasKey(j => new { j.ProductId, j.TagId });
-            //    entity.HasOne(j => j.ProductEntity)
-            //          .WithMany(p => p.ProductTagEntities)
-            //          .HasForeignKey(j => j.ProductId);
-            //    entity.HasOne(j => j.TagEntity)
-            //          .WithMany(t => t.ProductTagEntities)
-            //          .HasForeignKey(j => j.TagId);
-            //});
+            modelBuilder.Entity<ProductTagEntity>(entity =>
+            {
+                entity.HasKey(t => new { t.ProductId, t.TagId });
 
-            modelBuilder.Entity<ProductTagEntity>()
-                .HasKey(t => new { t.ProductId, t.TagId });
+                entity.HasOne(pt => pt.ProductEntity)
+                    .WithMany(p => p.ProductTagEntities)
+                    .HasForeignKey(pt => pt.ProductId);
 
-            modelBuilder.Entity<ProductTagEntity>()
-                .HasOne(pt => pt.ProductEntity)
-                .WithMany(p => p.ProductTagEntities)
-                .HasForeignKey(pt => pt.ProductId);
-
-            modelBuilder.Entity<ProductTagEntity>()
-                .HasOne(pt => pt.TagEntity)
-                .WithMany(t => t.ProductTagEntities)
-                .HasForeignKey(pt => pt.TagId);
+                entity.HasOne(pt => pt.TagEntity);
+            });
+                
         }
     }
 }

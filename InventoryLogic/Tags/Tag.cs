@@ -9,7 +9,6 @@ namespace InventoryLogic.Tags
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<Product> Products { get; set; }
 
         // Constructor used by .net API framwork
         public Tag()
@@ -27,14 +26,12 @@ namespace InventoryLogic.Tags
         {
             this.Id = tagDTO.Id;
             this.Name = tagDTO.Name;
-            this.Products = tagDTO.Products;
         }
 
         public void ConvertToDTO(TagDTO tagDTO)
         {
             tagDTO.Id = this.Id;
             tagDTO.Name = this.Name;
-            tagDTO.Products = this.Products;
         }
     }
 }

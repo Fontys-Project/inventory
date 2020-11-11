@@ -15,6 +15,7 @@ namespace InventoryDAL.Products
     {
         private readonly IDomainFactory domainFactory;
         private readonly IRepositoryFactory repositoryFactory;
+        private readonly ProductEntity productEntity;
 
         public int Id { get; set; }
         public string Name { get; set; }
@@ -29,25 +30,25 @@ namespace InventoryDAL.Products
         {
             this.domainFactory = domainFactory;
             this.repositoryFactory = repositoryFactory;
+            this.productEntity = productEntity;
             
             this.Id = productEntity.Id;
             this.Name = productEntity.Name;
             this.Price = productEntity.Price;
             this.Sku = productEntity.Sku;
-            this.Tags = GetTags(productEntity.ProductTagEntities);
-            this.Stocks = GetStocks(productEntity.StockEntities);
         }
 
-        private List<Tag> GetTags(List<ProductTagEntity> productTagEntities)
+        public void BuildTags()
         {
-            if (productTagEntities == null) return new List<Tag>();
+            List<ProductTagEntity> productTagEntities = productEntity.ProductTagEntities;
+            if (productTagEntities == null) return;
             List<Tag> tags = new List<Tag>();
             productTagEntities.ForEach(prodTag =>
             {
                 Tag tag = GetTag(prodTag);
                 tags.Add(tag);
             });
-            return tags;
+            this.Tags = tags;
         }
 
         private Tag GetTag(ProductTagEntity prodTag)
@@ -57,16 +58,17 @@ namespace InventoryDAL.Products
             return tag;
         }
 
-        private List<Stock> GetStocks(List<StockEntity> stockEntities)
+        public void BuildStocks()
         {
-            if (stockEntities == null) return new List<Stock>();
+            List<StockEntity> stockEntities = productEntity.StockEntities;
+            if (stockEntities == null) return;
             List<Stock> stocks = new List<Stock>();
             stockEntities.ForEach(stockEntity =>
             {
                 Stock stock = GetStock(stockEntity);
                 stocks.Add(stock);
             });
-            return stocks;
+            this.Stocks = stocks;
         }
 
         private Stock GetStock(StockEntity stockEntity)
@@ -76,7 +78,7 @@ namespace InventoryDAL.Products
             return stock;
         }
 
-        public Product Build()
+        public Product GetResult()
         {
             Product product = domainFactory.CreateProduct();
             product.Id = this.Id;
