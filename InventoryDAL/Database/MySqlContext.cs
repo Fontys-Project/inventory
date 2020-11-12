@@ -7,7 +7,7 @@ using InventoryDAL.Stocks;
 namespace InventoryDAL.Database
 {
     public class MySqlContext : DbContext
-    {
+    {       
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // use docker composer mysql credentials (safe to store in code)
@@ -31,6 +31,7 @@ namespace InventoryDAL.Database
                 productEntity.HasMany(e => e.ProductTagEntities)
                      .WithOne(p => p.ProductEntity)
                      .HasForeignKey(p => p.ProductId);
+                productEntity.HasData(new ProductEntity() { Id = 1, Name = "testProduct1", Price = 5, Sku = "Sku1" });
             });
 
             modelBuilder.Entity<StockEntity>(stockEntity =>
@@ -38,13 +39,15 @@ namespace InventoryDAL.Database
                 stockEntity.HasKey(s => s.Id);
                 stockEntity.Property(s => s.Amount).IsRequired();
                 stockEntity.Property(s => s.Date).IsRequired();
+                stockEntity.HasData(new StockEntity() { Id = 1, ProductId = 1, Amount = 5 });
             });
 
             modelBuilder.Entity<TagEntity>(tagEntity =>
             {
                 tagEntity.HasKey(t => t.Id);
                 tagEntity.Property(t => t.Name).IsRequired();
-                //entity.HasIndex(t => t.Name).IsUnique();
+                //tagEntity.HasIndex(t => t.Name).IsUnique();
+                tagEntity.HasData(new TagEntity() { Id = 1, Name = "testTag1" });
             });
 
             modelBuilder.Entity<ProductTagEntity>(productTag =>
