@@ -19,7 +19,6 @@ namespace InventoryDAL.Stocks
         public int ProductId { get; set; }
         public int Amount { get; set; }
         public DateTime Date { get; set; }
-        public ProductEntity ProductEntity { get; set; }
 
         public StockEntityBuilder(Stock stock, IEntityFactory entityFactory, IDAOFactory daoFactory)
         {
@@ -33,12 +32,6 @@ namespace InventoryDAL.Stocks
             this.Date = stock.Date;
         }
 
-        public void BuildProductEntity()
-        {
-            ProductEntity productEntity = daoFactory.ProductEntityDAO.Get(stock.ProductId);
-            this.ProductEntity = productEntity /*?? throw new InvalidDataException("Product not found. Please first create the product.")*/;
-        }
-
         public StockEntity GetResult()
         {
             StockEntity stockEntity = daoFactory.StockEntityDAO.Get(this.Id);
@@ -46,7 +39,6 @@ namespace InventoryDAL.Stocks
             stockEntity.ProductId = this.ProductId;
             stockEntity.Amount = this.Amount;
             stockEntity.Date = this.Date;
-            stockEntity.ProductEntity = this.ProductEntity;
             return stockEntity;
         }
     }

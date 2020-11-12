@@ -8,7 +8,6 @@ namespace InventoryDAL.Stocks
         int Amount { get; set; }
         DateTime Date { get; set; }
         int Id { get; set; }
-        ProductEntity ProductEntity { get; set; }
         int ProductId { get; set; }
     }
 }

@@ -16,19 +16,16 @@ namespace InventoryDAL.Stocks
                 new StockEntity
                 {
                     Id = 1, 
-                    ProductEntity = new ProductEntity{ Id = 1, Name = "ff", Price = 1, Sku = "f" }, 
                     Amount = 25 
                 },
                 new StockEntity
                 {
                     Id = 2, 
-                    ProductEntity = new ProductEntity{ Id = 1, Name = "ff", Price = 1, Sku = "f" }, 
                     Amount = 15 
                 },
                 new StockEntity
                 {
                     Id = 3, 
-                    ProductEntity = new ProductEntity{ Id = 1, Name = "ff", Price = 1, Sku = "f" }, 
                     Amount = 10 
                 },
             };

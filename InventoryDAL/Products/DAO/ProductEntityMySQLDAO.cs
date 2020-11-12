@@ -29,7 +29,7 @@ namespace InventoryDAL.Products
         {
             this.dbContext.Database.EnsureCreated();
             Task<List<ProductEntity>> lst = this.ProductEntityTable
-                //.Include(pe => pe.ProductTagEntities)
+                .Include(pe => pe.ProductTagEntities)
                 .ToListAsync(); 
             lst.Wait();
             return lst.Result;

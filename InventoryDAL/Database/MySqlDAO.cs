@@ -27,7 +27,7 @@ namespace InventoryDAL.Database
         public List<EntityType> GetAll()
         {
             this.dbContext.Database.EnsureCreated();
-            Task<List<EntityType>> lst = this.Table.ToListAsync(); // TODO: No Tags in Product?? Swagger sometimes gives a failed to fetch.
+            Task<List<EntityType>> lst = this.Table.ToListAsync();
             lst.Wait(); 
             return lst.Result;
         }

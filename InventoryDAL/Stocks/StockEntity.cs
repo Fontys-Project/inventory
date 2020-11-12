@@ -12,7 +12,6 @@ namespace InventoryDAL.Stocks
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
-        public ProductEntity ProductEntity { get; set; }
         public int Amount { get; set; }
         public DateTime Date { get; set; }
 

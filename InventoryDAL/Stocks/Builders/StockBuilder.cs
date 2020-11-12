@@ -15,7 +15,6 @@ namespace InventoryDAL.Stocks
 
         public int Id { get; set; }
         public int ProductId { get; set; }
-        public Product Product { get; set; }
         public int Amount { get; set; }
         public DateTime Date { get; set; }
 
@@ -31,18 +30,11 @@ namespace InventoryDAL.Stocks
             this.Amount = stockEntity.Amount;
         }
 
-        public void BuildProduct()
-        {
-            Product product = repositoryFactory.GetCrudRepository<Product>().Get(stockEntity.ProductId);
-            this.Product = product ?? throw new InvalidDataException("Product not found. Please first create the product.");
-        }
-
         public Stock GetResult()
         {
             Stock stock = domainFactory.CreateStock();
             stock.Id = this.Id;
             stock.ProductId = this.ProductId;
-            stock.Product = this.Product;
             stock.Amount = this.Amount;
             stock.Date = this.Date;
             return stock;

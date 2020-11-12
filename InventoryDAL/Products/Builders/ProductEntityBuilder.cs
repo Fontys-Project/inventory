@@ -35,6 +35,8 @@ namespace InventoryDAL.Products
             this.Name = product.Name;
             this.Price = product.Price;
             this.Sku = product.Sku;
+            this.ProductTagEntities = new List<ProductTagEntity>();
+            this.StockEntities = new List<StockEntity>();
         }
 
         public void BuildProductTagEntities()

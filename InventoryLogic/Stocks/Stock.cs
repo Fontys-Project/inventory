@@ -8,7 +8,6 @@ namespace InventoryLogic.Stocks
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
-        public Product Product { get; set; }
         public int Amount { get; set; }
         public DateTime Date { get; set; }
 
@@ -21,7 +20,6 @@ namespace InventoryLogic.Stocks
         public Stock(int id, Product product, int amount)
         {
             Id = id;
-            Product = product;
             Amount = amount;
             Date = DateTime.Today;
         }
@@ -30,7 +28,6 @@ namespace InventoryLogic.Stocks
         {
             Id = fromView.Id;
             ProductId = fromView.ProductId;
-            Product = fromView.Product;
             Amount = fromView.Amount;
             Date = fromView.Date;
 
@@ -41,7 +38,6 @@ namespace InventoryLogic.Stocks
         {
             toView.Id = Id;
             toView.ProductId = ProductId;
-            toView.Product = Product;
             toView.Amount = Amount;
             toView.Date = Date;
 
