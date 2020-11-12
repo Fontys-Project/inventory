@@ -13,6 +13,8 @@ namespace InventoryDAL.Stocks
     {
         private readonly IEntityFactory entityFactory;
         private readonly IDAOFactory daoFactory;
+        private readonly Stock stock;
+
 
         public int Id { get; set; }
         public int ProductId { get; set; }
@@ -24,22 +26,22 @@ namespace InventoryDAL.Stocks
         {
             this.entityFactory = entityFactory;
             this.daoFactory = daoFactory;
-            
+            this.stock = stock;
+
+
             this.Id = stock.Id;
             this.ProductId = stock.ProductId;
             this.Amount = stock.Amount;
             this.Date = stock.Date;
-            this.ProductEntity = GetProductEntity(stock.ProductId);
         }
 
-        private ProductEntity GetProductEntity(int productId)
+        public void BuildProductEntity()
         {
-            ProductEntity productEntity = daoFactory.ProductEntityDAO.Get(productId);
-            if (productEntity == null) throw new InvalidDataException("Product not found. Please first create the product.");
-            return productEntity;
+            ProductEntity productEntity = daoFactory.ProductEntityDAO.Get(stock.ProductId);
+            this.ProductEntity = productEntity /*?? throw new InvalidDataException("Product not found. Please first create the product.")*/;
         }
 
-        public StockEntity Build()
+        public StockEntity GetResult()
         {
             StockEntity stockEntity = daoFactory.StockEntityDAO.Get(this.Id);
             if (stockEntity == null) stockEntity = entityFactory.CreateStockEntity();

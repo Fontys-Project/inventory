@@ -52,13 +52,15 @@ namespace InventoryDAL.Stocks
         private Stock BuildStock(StockEntity stockEntity)
         {
             var stockBuilder = builderFactory.CreateStockBuilder(stockEntity);
-            return stockBuilder.Build();
+            stockBuilder.BuildProduct();
+            return stockBuilder.GetResult();
         }
 
         private StockEntity BuildStockEntity(Stock stock)
         {
             var stockEntityBuilder = builderFactory.CreateStockEntityBuilder(stock);
-            return stockEntityBuilder.Build();
+            stockEntityBuilder.BuildProductEntity();
+            return stockEntityBuilder.GetResult();
         }
     }
 }

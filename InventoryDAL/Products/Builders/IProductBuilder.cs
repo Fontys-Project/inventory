@@ -4,6 +4,6 @@ namespace InventoryDAL.Products
 {
     public interface IProductBuilder : IProduct
     {
-        Product Build();
+        Product GetResult();
     }
 }

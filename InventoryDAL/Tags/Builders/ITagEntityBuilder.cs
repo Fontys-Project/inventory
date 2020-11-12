@@ -4,6 +4,6 @@ namespace InventoryDAL.Tags
 {
     public interface ITagEntityBuilder : ITagEntity
     {
-        TagEntity Build();
+        TagEntity GetResult();
     }
 }

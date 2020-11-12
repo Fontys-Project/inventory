@@ -6,6 +6,6 @@ namespace InventoryDAL.Products
 {
     public interface IProductEntityBuilder : IProductEntity
     {
-        ProductEntity Build();
+        ProductEntity GetResult();
     }
 }
