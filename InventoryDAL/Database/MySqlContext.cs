@@ -21,28 +21,28 @@ namespace InventoryDAL.Database
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ProductEntity>(entity =>
+            modelBuilder.Entity<ProductEntity>(productEntity =>
             {
-                entity.HasKey(p => p.Id);
-                entity.Property(p => p.Name).IsRequired();
-                entity.Property(p => p.Sku).IsRequired();
-                entity.HasMany(e => e.StockEntities);
-                entity.HasMany(e => e.ProductTagEntities)
+                productEntity.HasKey(p => p.Id);
+                productEntity.Property(p => p.Name).IsRequired();
+                productEntity.Property(p => p.Sku).IsRequired();
+                productEntity.HasMany(e => e.StockEntities);
+                productEntity.HasMany(e => e.ProductTagEntities)
                       .WithOne(p => p.ProductEntity)
                       .HasForeignKey(p => p.ProductId);
             });
 
-            modelBuilder.Entity<StockEntity>(entity =>
+            modelBuilder.Entity<StockEntity>(stockEntity =>
             {
-                entity.HasKey(s => s.Id);
-                entity.Property(s => s.Amount).IsRequired();
-                entity.Property(s => s.Date).IsRequired();
+                stockEntity.HasKey(s => s.Id);
+                stockEntity.Property(s => s.Amount).IsRequired();
+                stockEntity.Property(s => s.Date).IsRequired();
             });
 
-            modelBuilder.Entity<TagEntity>(entity =>
+            modelBuilder.Entity<TagEntity>(tagEntity =>
             {
-                entity.HasKey(t => t.Id);
-                entity.Property(t => t.Name).IsRequired();
+                tagEntity.HasKey(t => t.Id);
+                tagEntity.Property(t => t.Name).IsRequired();
                 //entity.HasIndex(t => t.Name).IsUnique();
             });
 
