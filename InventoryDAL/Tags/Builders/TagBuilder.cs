@@ -29,6 +29,7 @@ namespace InventoryDAL.Tags
 
             this.Id = tagEntity.Id;
             this.Name = tagEntity.Name;
+            this.Products = new List<Product>();
         }
 
         public void BuildProducts()

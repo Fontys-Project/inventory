@@ -28,6 +28,7 @@ namespace InventoryDAL.Tags
 
             this.Id = tag.Id;
             this.Name = tag.Name;
+            this.ProductTagEntities = new List<ProductTagEntity>();
         }
 
         public void BuildProductTagEntities()

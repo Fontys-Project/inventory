@@ -51,14 +51,14 @@ namespace InventoryDAL.Tags
         private Tag BuildTag(TagEntity tagEntity)
         {
             var tagBuilder = builderFactory.CreateTagBuilder(tagEntity);
-            tagBuilder.BuildProducts();
+            //tagBuilder.BuildProducts();
             return tagBuilder.GetResult();
         }
 
         private TagEntity BuildTagEntity(Tag tag)
         {
             var tagEntityBuilder = builderFactory.CreateTagEntityBuilder(tag);
-            tagEntityBuilder.BuildProductTagEntities();
+            //tagEntityBuilder.BuildProductTagEntities();
             return tagEntityBuilder.GetResult();
         }
     }
