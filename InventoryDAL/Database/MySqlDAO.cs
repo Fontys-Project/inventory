@@ -1,46 +1,47 @@
 ﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using InventoryLogic.Crud;
+using InventoryDAL.Interfaces;
 
 namespace InventoryDAL.Database
 {
-    public abstract class MySqlDAO<T> : ICrudDAO<T> where T : class
+    public abstract class MySqlDAO<EntityType> : ICrudDAO<EntityType> where EntityType : class
     {
-        protected readonly MySqlContext dbContext;
-        protected DbSet<T> Table { get; set; }
+        public readonly MySqlContext dbContext;
+        public DbSet<EntityType> Table { get; private set; }
 
         public MySqlDAO(MySqlContext context)
         {
             this.dbContext = context;
-            this.Table = context.Set<T>();
+            this.Table = context.Set<EntityType>();
         }
 
-        public void Add(T obj)
+        public EntityType Add(EntityType e)
         {
             this.dbContext.Database.EnsureCreated();
-            this.Table.Add(obj);
+            this.Table.Add(e);
             this.dbContext.SaveChangesAsync();
+            return e;
         }
 
-        public List<T> GetAll()
+        public List<EntityType> GetAll()
         {
             this.dbContext.Database.EnsureCreated();
-            Task<List<T>> lst = this.Table.ToListAsync();
-            lst.Wait(); // TODO: beter async uitwerken?
+            Task<List<EntityType>> lst = this.Table.ToListAsync(); // TODO: No Tags in Product?? Swagger sometimes gives a failed to fetch.
+            lst.Wait(); 
             return lst.Result;
         }
 
-        public T Get(int id)
+        public EntityType Get(int id)
         {
             this.dbContext.Database.EnsureCreated();
             return this.Table.Find(id);
         }
 
-        public void Modify(T obj)
+        public void Modify(EntityType e)
         {
             this.dbContext.Database.EnsureCreated();
-            this.dbContext.Update(obj);
+            this.dbContext.Update(e);
             this.dbContext.SaveChangesAsync();
         }
 

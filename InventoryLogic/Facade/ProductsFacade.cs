@@ -1,11 +1,13 @@
-﻿using InventoryLogic.Products;
+﻿using InventoryLogic.Interfaces;
+using InventoryLogic.Products;
+using System.Collections.Generic;
 
 namespace InventoryLogic.Facade
 {
-    public class ProductsFacade : CrudFacade<Product>
+    public class ProductsFacade : CrudDTOFacade<Product,ProductDTO>
     {
-        public ProductsFacade(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
+        public ProductsFacade(IRepositoryFactory repoFactory)
+            : base(repoFactory)
         {
         }
     }

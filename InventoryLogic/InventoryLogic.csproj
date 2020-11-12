@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Stocks\NewFile1.txt" />
+    <None Remove="Tags\NewFile1.txt" />
+  </ItemGroup>
+
 </Project>

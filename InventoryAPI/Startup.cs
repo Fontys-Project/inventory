@@ -1,5 +1,4 @@
 using System.Linq;
-using InventoryDI.Database;
 using InventoryLogic.Facade;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +11,8 @@ using NSwag;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
+using InventoryDI;
+using InventoryLogic.Interfaces;
 
 namespace Inventory
 {
@@ -55,7 +56,7 @@ namespace Inventory
             services.AddSingleton<ProductsFacade>();
             services.AddSingleton<TagsFacade>();
             services.AddSingleton<StocksFacade>();
-            services.AddSingleton<IDatabaseFactory, DatabaseFactory>(x => new DatabaseFactory(DatabaseType.MYSQL));
+            services.AddSingleton<IRepositoryFactory, RepositoryFactory>();             
 
             services.AddApiVersioning(x =>
                 {
