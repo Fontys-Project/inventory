@@ -11,6 +11,8 @@ using NSwag;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
+using System.Security.Cryptography;
+using System;
 using InventoryDI;
 using InventoryLogic.Interfaces;
 
@@ -41,14 +43,17 @@ namespace Inventory
                 })
                     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o =>
                      {
+                         o.IncludeErrorDetails = true;
+                         RsaSecurityKey rsa = services.BuildServiceProvider().GetRequiredService<RsaSecurityKey>();
+
                          o.TokenValidationParameters = new TokenValidationParameters
                          {
                              ValidateIssuer = false,
                              ValidateAudience = false,
                              ValidateIssuerSigningKey = true,
-                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("qwertyuiopasdfghjklzxcvbnm123456")),
+                             IssuerSigningKey = rsa,
                              ValidateLifetime = false,
-                             RequireExpirationTime = false,
+                             RequireExpirationTime = true,
                              RequireSignedTokens = true
                          };
                      });
@@ -56,7 +61,22 @@ namespace Inventory
             services.AddSingleton<ProductsFacade>();
             services.AddSingleton<TagsFacade>();
             services.AddSingleton<StocksFacade>();
+            services.AddSingleton<RsaSecurityKey>(provider => {
+                RSA rsa = RSA.Create();
+                rsa.ImportSubjectPublicKeyInfo(
+                    source: Convert.FromBase64String(@"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvKZzT8MhSEHRRecmD1kM
+oW8unUYufupt/4AV5Yd6YSR84uHjMuArp/lQx/ROrCvt5xSBB547L5oPeJECeS4h
+p7Djlsd3VyIvs+yY+e9FM72MLnaoydQLCHKz8RQF2+mr8SeM/4va6vGSTTW3F5Ay
+9LOYDsQa18yYJ+a7tc2PQJQGZYQvQ1YWerlScrcZQ1ChB5u+mALdg1VoKpW2n+bP
+6ucjGidjqUbLMPKOHQRQBuoMNTXk2fzKQmhhML9lUKw5+2RZ2jtJKBVBNprV1EDP
+yBTXutHUCV6D4esOqc35e1jZo6kQGGaWQ0rIpupv/qyXLHTz6Gi/mnvZuMQJIJZ+
+iwIDAQAB"),
+                    bytesRead: out int _);
+
+                return new RsaSecurityKey(rsa);
+            });
             services.AddSingleton<IRepositoryFactory, RepositoryFactory>();             
+
 
             services.AddApiVersioning(x =>
                 {
