@@ -15,6 +15,7 @@ namespace InventoryDAL.Products
     {
         private readonly IDomainFactory domainFactory;
         private readonly IRepositoryFactory repositoryFactory;
+        private readonly IProductEntity productEntity;
 
         public int Id { get; set; }
         public string Name { get; set; }
@@ -22,17 +23,14 @@ namespace InventoryDAL.Products
         public string Sku { get; set; }
         public List<Tag> Tags { get; set; }
         public List<Stock> Stocks { get; set; }
-        private readonly ProductEntity productEntity;
 
-
-        public ProductBuilder(ProductEntity productEntity,
+        public ProductBuilder(IProductEntity productEntity,
                               IDomainFactory domainFactory,
                               IRepositoryFactory repositoryFactory)
         {
             this.domainFactory = domainFactory;
             this.repositoryFactory = repositoryFactory;
             this.productEntity = productEntity;
-
 
             this.Id = productEntity.Id;
             this.Name = productEntity.Name;
