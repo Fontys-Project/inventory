@@ -10,8 +10,6 @@ services:
        MYSQL_PASSWORD: dbuserpassword
     volumes:
        - dbdata:/var/lib/mysql
-    ports:
-       - 3306:3306
     restart: always
   inventoryapi:
     depends_on:
@@ -20,6 +18,8 @@ services:
     build:
       context: .
       dockerfile: InventoryAPI/Dockerfile
+    ports:
+      - "5001:80"
 
 volumes:
     dbdata:
