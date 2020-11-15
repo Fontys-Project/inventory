@@ -1,10 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using InventoryLogic.Products;
-using InventoryLogic.Tags;
-using InventoryLogic.Stocks;
-using InventoryLogic.ProductTagJoins;
 using InventoryDAL.Tags;
-using InventoryDAL.ProductTagJoins;
+using InventoryDAL.ProductTag;
 using InventoryDAL.Products;
 using InventoryDAL.Stocks;
 
@@ -28,8 +24,8 @@ namespace InventoryDAL.Database
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Name).IsRequired();
                 entity.Property(p => p.Sku).IsRequired();
-                entity.HasMany(e => e.Stocks)
-                      .WithOne(s => s.Product)
+                entity.HasMany(e => e.StockEntities)
+                      .WithOne(s => s.ProductEntity)
                       .HasForeignKey(s => s.ProductId);
             });
 
@@ -50,16 +46,29 @@ namespace InventoryDAL.Database
                 entity.HasIndex(t => t.Name).IsUnique();
             });
 
-            modelBuilder.Entity<ProductTagJoinEntity>(entity =>
-            {
-              entity.HasKey(j => new { j.ProductId, j.TagId });
-              entity.HasOne(j => j.ProductEntity)
-                    .WithMany(p => p.ProductTagJoins)
-                    .HasForeignKey(j => j.ProductId);
-              entity.HasOne(j => j.TagEntity)
-                    .WithMany(t => t.ProductTagJoinEntities)
-                    .HasForeignKey(j => j.TagId);
-            });
+            //modelBuilder.Entity<ProductTagEntity>(entity =>
+            //{
+            //    entity.HasKey(j => new { j.ProductId, j.TagId });
+            //    entity.HasOne(j => j.ProductEntity)
+            //          .WithMany(p => p.ProductTagEntities)
+            //          .HasForeignKey(j => j.ProductId);
+            //    entity.HasOne(j => j.TagEntity)
+            //          .WithMany(t => t.ProductTagEntities)
+            //          .HasForeignKey(j => j.TagId);
+            //});
+
+            modelBuilder.Entity<ProductTagEntity>()
+                .HasKey(t => new { t.ProductId, t.TagId });
+
+            modelBuilder.Entity<ProductTagEntity>()
+                .HasOne(pt => pt.ProductEntity)
+                .WithMany(p => p.ProductTagEntities)
+                .HasForeignKey(pt => pt.ProductId);
+
+            modelBuilder.Entity<ProductTagEntity>()
+                .HasOne(pt => pt.TagEntity)
+                .WithMany(t => t.ProductTagEntities)
+                .HasForeignKey(pt => pt.TagId);
         }
     }
 }

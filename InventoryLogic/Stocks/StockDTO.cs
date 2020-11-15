@@ -1,9 +1,6 @@
-﻿using InventoryLogic.Facade;
-using InventoryLogic.Stocks;
-using InventoryLogic.Tags;
-using InventoryLogic.Products;
+﻿using InventoryLogic.Products;
 using System;
-using System.Collections.Generic;
+using InventoryLogic.Interfaces;
 
 namespace InventoryLogic.Stocks
 {

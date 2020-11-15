@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="ProductTagJoins\NewFile1.txt" />
+    <None Remove="ProductTag\NewFile1.txt" />
     <None Remove="Tags\NewFile1.txt" />
   </ItemGroup>
 

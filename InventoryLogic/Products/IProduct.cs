@@ -1,13 +1,10 @@
-﻿using InventoryLogic.ProductTagJoins;
-using InventoryLogic.Stocks;
+﻿using InventoryLogic.Stocks;
 using InventoryLogic.Tags;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace InventoryLogic.Products
 {
-    interface IProduct
+    public interface IProduct
     {
         public int Id { get;  }
         public string Name { get;  }
@@ -15,8 +12,5 @@ namespace InventoryLogic.Products
         public string Sku { get;  }
         public List<Tag> Tags { get; }
         public List<Stock> Stocks { get; }
-
-
-
     }
 }

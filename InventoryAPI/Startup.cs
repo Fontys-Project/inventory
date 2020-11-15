@@ -1,5 +1,4 @@
 using System.Linq;
-using InventoryDI.Database;
 using InventoryLogic.Facade;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +13,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using System.Security.Cryptography;
 using System;
+using InventoryDI;
+using InventoryLogic.Interfaces;
 
 namespace Inventory
 {
@@ -75,7 +76,7 @@ iwIDAQAB"),
 
                 return new RsaSecurityKey(rsa);
             });
-
+            services.AddSingleton<IRepositoryFactory, RepositoryFactory>();             
 
 
             services.AddApiVersioning(x =>

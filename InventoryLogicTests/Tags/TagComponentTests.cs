@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Moq;
-using InventoryLogic.ProductTagJoins;
+using InventoryLogic.ProductTag;
 using InventoryLogic.Products;
 
 namespace InventoryLogic.Tags.Tests
