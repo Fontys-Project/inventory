@@ -36,8 +36,15 @@ namespace InventoryDAL.Stocks
 
         public void BuildProduct()
         {
-            Product product = repositoryFactory.GetCrudRepository<Product>().Get(stockEntity.ProductId);
-            this.Product = product ?? throw new InvalidDataException("Product not found. Please first create the product.");
+            try
+            {
+                Product product = repositoryFactory.GetCrudRepository<Product>().Get(stockEntity.ProductId);
+                this.Product = product;
+            }
+            catch (NullReferenceException e)
+            {
+                throw new NullReferenceException("Product not found. Please first create the product.", e);
+            }
         }
 
         public Stock GetResult()

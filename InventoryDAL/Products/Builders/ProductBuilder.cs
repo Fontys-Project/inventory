@@ -42,42 +42,52 @@ namespace InventoryDAL.Products
 
         public void BuildTags()
         {
-            List<ProductTagEntity> productTagEntities = productEntity.ProductTagEntities;
+            IList<ProductTagEntity> productTagEntities = productEntity.ProductTagEntities;
             if (productTagEntities == null) return;
             List<Tag> tags = new List<Tag>();
-            productTagEntities.ForEach(prodTag =>
+            foreach (var prodTag in productTagEntities)
             {
                 Tag tag = GetTag(prodTag);
                 tags.Add(tag);
-            });
+            }
             this.Tags = tags;
         }
 
         private Tag GetTag(ProductTagEntity prodTag)
         {
-            Tag tag = repositoryFactory.GetCrudRepository<Tag>().Get(prodTag.TagId);
-            if (tag == null) throw new InvalidDataException("Tag not found. Please first create the tag.");
-            return tag;
+            try
+            {
+                Tag tag = repositoryFactory.GetCrudRepository<Tag>().Get(prodTag.TagId);
+                return tag;
+            }
+            catch (NullReferenceException e)
+            {
+                throw new NullReferenceException("Tag not found. Please first create the tag.", e);
+            }
         }
 
         public void BuildStocks()
         {
-            List<StockEntity> stockEntities = productEntity.StockEntities;
+            IList<StockEntity> stockEntities = productEntity.StockEntities;
             if (stockEntities == null) return;
             List<Stock> stocks = new List<Stock>();
-            stockEntities.ForEach(stockEntity =>
+            foreach (var stockEntity in stockEntities)
             {
                 Stock stock = GetStock(stockEntity);
                 stocks.Add(stock);
-            });
+            }
             this.Stocks = stocks;
         }
 
         private Stock GetStock(StockEntity stockEntity)
         {
-            Stock stock = repositoryFactory.GetCrudRepository<Stock>().Get(stockEntity.Id);
-            if (stock == null) throw new InvalidDataException("Stock not found. Please first create the stock.");
-            return stock;
+            try { 
+                Stock stock = repositoryFactory.GetCrudRepository<Stock>().Get(stockEntity.Id); 
+                return stock; 
+            }
+            catch (NullReferenceException e) { 
+                throw new NullReferenceException("Stock not found. Please first create the stock.", e); 
+            }
         }
 
         public Product GetResult()

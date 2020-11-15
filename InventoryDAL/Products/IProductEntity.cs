@@ -10,7 +10,7 @@ namespace InventoryDAL.Products
         string Name { get; set; }
         decimal Price { get; set; }
         string Sku { get; set; }
-        List<ProductTagEntity> ProductTagEntities { get; set; }
-        List<StockEntity> StockEntities { get; set; }
+        IList<ProductTagEntity> ProductTagEntities { get; set; }
+        IList<StockEntity> StockEntities { get; set; }
     }
 }
