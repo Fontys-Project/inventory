@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using InventoryLogic.Facade;
-using InventoryLogic.ProductTagJoins;
+using InventoryLogic.Interfaces;
 using InventoryLogic.Stocks;
 using InventoryLogic.Tags;
 
@@ -13,8 +12,8 @@ namespace InventoryLogic.Products
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string Sku { get; set; }
-        public List<Tag> Tags { get; private set; }
-        public List<Stock> Stocks { get; private set; }
+        public List<Tag> Tags { get; set; } 
+        public List<Stock> Stocks { get; set; }
 
         public Product()
         {

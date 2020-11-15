@@ -2,7 +2,7 @@
 using InventoryLogic.Stocks;
 using InventoryLogic.Tags;
 using InventoryLogic.Products;
-using InventoryLogic.ProductTagJoins;
+using InventoryLogic.ProductTag;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,7 +17,7 @@ namespace InventoryLogic.Stocks.Tests
         private Stock stock;
         private Mock<Product> productMock;
         private Mock<Stock> stockMock;
-        private List<ProductTagJoin> tagList;
+        private List<ProductTag> tagList;
         private List<Stock> stockList;
 
         [TestInitialize]
@@ -32,10 +32,10 @@ namespace InventoryLogic.Stocks.Tests
             productMock.Setup(p => p.Price).Returns(5);
             productMock.Setup(p => p.Sku).Returns("mondkapjeSKU");
 
-            var productTagJoinMock = new Mock<ProductTagJoin>();
+            var productTagJoinMock = new Mock<ProductTag>();
             var stocklistMock = new Mock<Stock>();
 
-            tagList = new List<ProductTagJoin>()
+            tagList = new List<ProductTag>()
             {
                 productTagJoinMock.Object
             };

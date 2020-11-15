@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using InventoryLogic.Facade;
+using InventoryLogic.Interfaces;
 using InventoryLogic.Products;
-using InventoryLogic.ProductTagJoins;
-using InventoryLogic.Stocks;
-using InventoryLogic.Tags;
 
 namespace InventoryLogic.Stocks
 {
-    public class Stock : IDataAssignable<StockDTO>, IHasUniqueObjectId
+    public class Stock : IStock, IDataAssignable<StockDTO>, IHasUniqueObjectId
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
@@ -37,7 +33,7 @@ namespace InventoryLogic.Stocks
             Product = fromView.Product;
             Amount = fromView.Amount;
             Date = fromView.Date;
-            
+
 
         }
 
