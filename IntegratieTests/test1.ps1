@@ -1,7 +1,6 @@
 ﻿# login branch to use
 $loginbranch = "develop"
 $inventorybranch = "IntegratieTests"
-$encryptionkey = "daarkomenwenogeenkeeropterug"
 $gitdirs = @(($env:TEMP + "/inventorysvc"),($env:TEMP + "/loginsvc"))
 $workdirs = @(($env:TEMP + "/inventorysvc"),($env:TEMP + "/loginsvc/LoginService"))
 
