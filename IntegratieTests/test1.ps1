@@ -1,6 +1,6 @@
 ﻿# login branch to use
 $loginbranch = "develop"
-$inventorybranch = "IntegratieTests"
+$inventorybranch = "DALTests"
 $gitdirs = @(($env:TEMP + "/inventorysvc"),($env:TEMP + "/loginsvc"))
 $workdirs = @(($env:TEMP + "/inventorysvc"),($env:TEMP + "/loginsvc/LoginService"))
 
