@@ -12,11 +12,11 @@ namespace InventoryLogic.Tags.Tests
     [TestClass()]
     public class TagTests
     {
-        [TestMethod()]
-        public void CreateTag()
-        {
-            Tag tag = new Tag();
-        }
+        //[TestMethod()]
+        //public void CreateTag()
+        //{
+        //    Tag tag = new Tag();
+        //}
 
         [TestMethod()]
         public void ConstructTagWithParameterName()
