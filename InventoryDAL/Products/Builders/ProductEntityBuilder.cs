@@ -21,6 +21,8 @@ namespace InventoryDAL.Products
         public string Sku { get; set; }
         public List<ProductTagEntity> ProductTagEntities { get; set; }
         public List<StockEntity> StockEntities { get; set; }
+        private readonly Product product;
+
 
         public ProductEntityBuilder(Product product,
                                     IEntityFactory entityFactory,
@@ -28,44 +30,48 @@ namespace InventoryDAL.Products
         {
             this.entityFactory = entityFactory;
             this.daoFactory = daoFactory;
+            this.product = product;
 
             this.Id = product.Id;
             this.Name = product.Name;
             this.Price = product.Price;
             this.Sku = product.Sku;
-            this.ProductTagEntities = GetProductTagEntities(product.Id, product.Tags);
-            this.StockEntities = GetStockEntities(product.Stocks);
+            this.ProductTagEntities = new List<ProductTagEntity>();
+            this.StockEntities = new List<StockEntity>();
+
         }
 
-        private List<ProductTagEntity> GetProductTagEntities(int productId, List<Tag> tags)
+        public void BuildProductTagEntities()
         {
-            if (tags == null || tags.Count == 0) return new List<ProductTagEntity>();
+            List<Tag> tags = product.Tags;
+            if (tags == null || tags.Count == 0) return;
             List<ProductTagEntity> newProductTagEntities = new List<ProductTagEntity>();
             tags.ForEach(tag =>
             {
-                ProductTagEntity ptEntity = GetProductTagEntity(productId, tag.Id);
+                ProductTagEntity ptEntity = GetProductTagEntity(product.Id, tag.Id);
                 newProductTagEntities.Add(ptEntity);
             });
-            return newProductTagEntities;
+            this.ProductTagEntities = newProductTagEntities;
         }
 
         private ProductTagEntity GetProductTagEntity(int productId, int tagId)
         {
             ProductTagEntity ptEntity = daoFactory.ProductTagDAO.Get(productId, tagId);
-            if (ptEntity == null) ptEntity = entityFactory.CreateProductTagEntity(productId, tagId, this.daoFactory); 
+            if (ptEntity == null) ptEntity = entityFactory.CreateProductTagEntity(productId, tagId, this.daoFactory);
             return ptEntity;
         }
 
-        private List<StockEntity> GetStockEntities(List<Stock> stocks)
+        public void BuildStockEntities()
         {
-            if (stocks == null || stocks.Count == 0) return new List<StockEntity>();
+            List<Stock> stocks = product.Stocks;
+            if (stocks == null || stocks.Count == 0) return;
             var stockEntities = new List<StockEntity>();
             stocks.ForEach(stock =>
             {
-                StockEntity stockEntity = GetStockEntity(stock.Id); 
+                StockEntity stockEntity = GetStockEntity(stock.Id);
                 stockEntities.Add(stockEntity);
             });
-            return stockEntities;
+            this.StockEntities = stockEntities;
         }
 
         private StockEntity GetStockEntity(int stockId)
@@ -75,10 +81,10 @@ namespace InventoryDAL.Products
             return stockEntity;
         }
 
-        public ProductEntity Build()
+        public ProductEntity GetResult()
         {
-            ProductEntity productEntity = daoFactory.ProductEntityDAO.Get(this.Id); 
-            if (productEntity == null) productEntity = entityFactory.CreateProductEntity(); 
+            ProductEntity productEntity = daoFactory.ProductEntityDAO.Get(this.Id);
+            if (productEntity == null) productEntity = entityFactory.CreateProductEntity();
             productEntity.Name = this.Name;
             productEntity.Price = this.Price;
             productEntity.Sku = this.Sku;

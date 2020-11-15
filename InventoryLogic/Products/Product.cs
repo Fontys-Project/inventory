@@ -61,7 +61,14 @@ namespace InventoryLogic.Products
 
                 toDTO.Stocks.Add(newStockDTO);
             }
-            
+            foreach (Tag tag in Tags)
+            {
+                TagDTO newTagDTO = new TagDTO();
+                tag.ConvertToDTO(newTagDTO);
+
+                toDTO.Tags.Add(newTagDTO);
+            }
+
         }
 
        

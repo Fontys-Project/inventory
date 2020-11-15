@@ -52,13 +52,17 @@ namespace InventoryDAL.Products
         private Product BuildProduct(ProductEntity productEntity)
         {
             var productBuilder = builderFactory.CreateProductBuilder(productEntity);
-            return productBuilder.Build();
+            productBuilder.BuildTags();
+            productBuilder.BuildStocks();
+            return productBuilder.GetResult();
         }
 
         private ProductEntity BuildProductEntity(Product product)
         {
             var productEntityBuilder = builderFactory.CreateProductEntityBuilder(product);
-            return productEntityBuilder.Build();
+            productEntityBuilder.BuildProductTagEntities();
+            productEntityBuilder.BuildStockEntities();
+            return productEntityBuilder.GetResult();
         }
     }
 }

@@ -14,6 +14,8 @@ namespace InventoryDAL.Tags
     {
         private readonly IDomainFactory domainFactory;
         private readonly IRepositoryFactory repositoryFactory;
+        private readonly TagEntity tagEntity;
+
 
         public int Id { get; set; }
         public string Name { get; set; }
@@ -23,22 +25,24 @@ namespace InventoryDAL.Tags
         {
             this.domainFactory = domainFactory;
             this.repositoryFactory = repositoryFactory;
-            
+            this.tagEntity = tagEntity;
+
             this.Id = tagEntity.Id;
             this.Name = tagEntity.Name;
-            this.Products = GetProducts(tagEntity.ProductTagEntities);
+            this.Products = new List<Product>();
         }
 
-        private List<Product> GetProducts(List<ProductTagEntity> productTagEntities)
+        public void BuildProducts()
         {
-            if (productTagEntities == null) return new List<Product>();
+            List<ProductTagEntity> productTagEntities = tagEntity.ProductTagEntities;
+            if (productTagEntities == null) return;
             List<Product> products = new List<Product>();
             productTagEntities.ForEach(prodTag =>
             {
                 Product product = GetProduct(prodTag);
                 products.Add(product);
             });
-            return products;
+            this.Products = products;
         }
 
         private Product GetProduct(ProductTagEntity prodTag)
@@ -48,7 +52,7 @@ namespace InventoryDAL.Tags
             return product;
         }
 
-        public Tag Build()
+        public Tag GetResult()
         {
             Tag tag = domainFactory.CreateTag();
             tag.Id = this.Id;
