@@ -61,7 +61,7 @@ namespace Inventory
             services.AddSingleton<TagsFacade>();
             services.AddSingleton<StocksFacade>();
             services.AddSingleton<IDatabaseFactory, DatabaseFactory>(x => new DatabaseFactory(DatabaseType.MYSQL));
-            services.AddTransient<RsaSecurityKey>(provider => {
+            services.AddSingleton<RsaSecurityKey>(provider => {
                 RSA rsa = RSA.Create();
                 rsa.ImportSubjectPublicKeyInfo(
                     source: Convert.FromBase64String(@"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvKZzT8MhSEHRRecmD1kM
