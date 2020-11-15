@@ -12,6 +12,8 @@ using NSwag;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
+using System.Security.Cryptography;
+using System;
 
 namespace Inventory
 {
@@ -33,7 +35,17 @@ namespace Inventory
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
 
-            string key = "daarkomenwenogeenkeeropterug";
+            string publickey =
+@"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvKZzT8MhSEHRRecmD1kM
+oW8unUYufupt/4AV5Yd6YSR84uHjMuArp/lQx/ROrCvt5xSBB547L5oPeJECeS4h
+p7Djlsd3VyIvs+yY+e9FM72MLnaoydQLCHKz8RQF2+mr8SeM/4va6vGSTTW3F5Ay
+9LOYDsQa18yYJ+a7tc2PQJQGZYQvQ1YWerlScrcZQ1ChB5u+mALdg1VoKpW2n+bP
+6ucjGidjqUbLMPKOHQRQBuoMNTXk2fzKQmhhML9lUKw5+2RZ2jtJKBVBNprV1EDP
+yBTXutHUCV6D4esOqc35e1jZo6kQGGaWQ0rIpupv/qyXLHTz6Gi/mnvZuMQJIJZ+
+iwIDAQAB";
+            var publickeybytes = Convert.FromBase64String(publickey);
+            using var rsa = RSA.Create();
+            rsa.ImportSubjectPublicKeyInfo(publickeybytes, out _);
 
             services.AddAuthentication(o =>
                 {
@@ -47,8 +59,8 @@ namespace Inventory
                              ValidateIssuer = false,
                              ValidateAudience = false,
                              ValidateIssuerSigningKey = true,
-                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
-                             ValidateLifetime = false,
+                             IssuerSigningKey = new RsaSecurityKey(rsa),
+                             ValidateLifetime = true,
                              RequireExpirationTime = false,
                              RequireSignedTokens = true
                          };
