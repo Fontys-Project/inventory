@@ -53,7 +53,7 @@ namespace InventoryAPI.Products
         /// <summary>
         /// Create a new Product definition
         /// </summary>
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_product_add")]
         [HttpPut]
         public ProductDTO Add([FromBody] AddProductAM vm)
         {

@@ -1,6 +1,6 @@
 ﻿# login branch to use
 $loginbranch = "develop"
-$inventorybranch = "IntegratieTests"
+$inventorybranch = "master"
 $gitdirs = @(($env:TEMP + "/inventorysvc"),($env:TEMP + "/loginsvc"))
 $workdirs = @(($env:TEMP + "/inventorysvc"),($env:TEMP + "/loginsvc/LoginService"))
 
@@ -45,8 +45,14 @@ $body = '
 }
 '
 
+$bodyAdmin = '
+{
+ "username": "admin@wmstest.nl",
+ "password": "WachtwoordAdmin1"
+}
+'
 #read-host "press key to continue"
-$response = Invoke-RestMethod -Method Post -Uri $url -Body $body -ContentType "application/json" -verbose
+$response = Invoke-RestMethod -Method Post -Uri $url -Body $bodyAdmin -ContentType "application/json" -verbose
 
 #test inventory api create product
 write-host "token is" $response.access_token
