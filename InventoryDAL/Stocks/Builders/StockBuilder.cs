@@ -11,7 +11,7 @@ namespace InventoryDAL.Stocks
     {
         private readonly IDomainFactory domainFactory;
         private readonly IRepositoryFactory repositoryFactory;
-        private readonly StockEntity stockEntity;
+        private readonly IStockEntity stockEntity;
 
 
         public int Id { get; set; }
@@ -21,7 +21,7 @@ namespace InventoryDAL.Stocks
         public DateTime Date { get; set; }
 
 
-        public StockBuilder(StockEntity stockEntity, IDomainFactory domainFactory, IRepositoryFactory repositoryFactory)
+        public StockBuilder(IStockEntity stockEntity, IDomainFactory domainFactory, IRepositoryFactory repositoryFactory)
         {
             this.domainFactory = domainFactory;
             this.repositoryFactory = repositoryFactory;
@@ -49,7 +49,7 @@ namespace InventoryDAL.Stocks
 
         public Stock GetResult()
         {
-            return domainFactory.CreateStock(Id, ProductId, Product, Amount, Date);
+            return domainFactory.CreateStock(Id, ProductId, Amount, Date, Product);
         }
     }
 }

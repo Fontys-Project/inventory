@@ -7,7 +7,7 @@ namespace InventoryDAL.Tags
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<ProductTagEntity> ProductTagEntities { get; set; }
+        public IList<ProductTagEntity> ProductTagEntities { get; set; }
 
         public TagEntity()
         {

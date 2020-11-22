@@ -14,14 +14,14 @@ namespace InventoryDAL.Tags
     {
         private readonly IDomainFactory domainFactory;
         private readonly IRepositoryFactory repositoryFactory;
-        private readonly TagEntity tagEntity;
+        private readonly ITagEntity tagEntity;
 
 
         public int Id { get; set; }
         public string Name { get; set; }
         public List<Product> Products { get; set; }
 
-        public TagBuilder(TagEntity tagEntity, IDomainFactory domainFactory, IRepositoryFactory repositoryFactory)
+        public TagBuilder(ITagEntity tagEntity, IDomainFactory domainFactory, IRepositoryFactory repositoryFactory)
         {
             this.domainFactory = domainFactory;
             this.repositoryFactory = repositoryFactory;
@@ -34,14 +34,14 @@ namespace InventoryDAL.Tags
 
         public void BuildProducts()
         {
-            List<ProductTagEntity> productTagEntities = tagEntity.ProductTagEntities;
+            IList<ProductTagEntity> productTagEntities = tagEntity.ProductTagEntities;
             if (productTagEntities == null) return;
             List<Product> products = new List<Product>();
-            productTagEntities.ForEach(prodTag =>
+            foreach (var prodTag in productTagEntities)
             {
                 Product product = GetProduct(prodTag);
                 products.Add(product);
-            });
+            }
             this.Products = products;
         }
 

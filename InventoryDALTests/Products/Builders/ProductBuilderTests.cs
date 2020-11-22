@@ -110,7 +110,7 @@ namespace InventoryDAL.Products.Tests
         {
             /* ARRANGE */
             int[] expected = { 111, 222, 333 };
-            SetupMockProductEntityToReturnProductTagEntities(expected);
+            SetProductTagsInMockProductEntity(expected);
             SetupMockRepositoryFactoryToReturnTags();
 
             /* ACT */
@@ -132,7 +132,7 @@ namespace InventoryDAL.Products.Tests
                                                      .Returns((int id) => new Tag(id, "TestTag"));
         }
 
-        private void SetupMockProductEntityToReturnProductTagEntities(int[] expected)
+        private void SetProductTagsInMockProductEntity(int[] expected)
         {
             IList<ProductTagEntity> productTagsList = CreateProductTags(expected);
             this.mockProductEntity.Setup(pe => pe.ProductTagEntities).Returns(productTagsList);
@@ -153,7 +153,7 @@ namespace InventoryDAL.Products.Tests
         {
             /* ARRANGE */
             int[] expected = { 111, 222, 333 };
-            SetupMockProductEntityToReturnStockEntities(expected);
+            GiveStockEntitiesToMockProductEntity(expected);
             SetupMockRepositoryFactoryToReturnStocks();
 
             /* ACT */
@@ -168,7 +168,7 @@ namespace InventoryDAL.Products.Tests
             }
         }
 
-        private void SetupMockProductEntityToReturnStockEntities(int[] expected)
+        private void GiveStockEntitiesToMockProductEntity(int[] expected)
         {
             IList<StockEntity> stockEntitiesList = CreateStockEntities(expected);
             this.mockProductEntity.Setup(pe => pe.StockEntities).Returns(stockEntitiesList);
@@ -196,8 +196,8 @@ namespace InventoryDAL.Products.Tests
         public void GetResult_ShouldReturnProduct_WithSameBasicProperties_AsProductEntity()
         {
             /* ARRANGE */
-            Product expected = new Product(100, "Name", 10.00M, "Sku");
-            SetupMockProductEntityWithExpectedProperties(expected);
+            ProductEntity expectedProps = new ProductEntity { Id = 100, Name = "Name", Price = 10.00M, Sku = "Sku" };
+            SetBasicPropertiesInMockProductEntity(expectedProps);
             SetupMockDomainFactoryToReturnProduct();
 
             /* ACT */
@@ -205,18 +205,18 @@ namespace InventoryDAL.Products.Tests
             IProduct product = builder.GetResult();
 
             /* ASSERT */
-            Assert.AreEqual(product.Id, expected.Id);
-            Assert.AreEqual(product.Name, expected.Name);
-            Assert.AreEqual(product.Price, expected.Price);
-            Assert.AreEqual(product.Sku, expected.Sku);
+            Assert.AreEqual(product.Id, expectedProps.Id);
+            Assert.AreEqual(product.Name, expectedProps.Name);
+            Assert.AreEqual(product.Price, expectedProps.Price);
+            Assert.AreEqual(product.Sku, expectedProps.Sku);
         }
 
-        private void SetupMockProductEntityWithExpectedProperties(Product expected)
+        private void SetBasicPropertiesInMockProductEntity(ProductEntity props)
         {
-            this.mockProductEntity.Object.Id = expected.Id;
-            this.mockProductEntity.Object.Name = expected.Name;
-            this.mockProductEntity.Object.Price = expected.Price;
-            this.mockProductEntity.Object.Sku = expected.Sku;
+            this.mockProductEntity.Object.Id = props.Id;
+            this.mockProductEntity.Object.Name = props.Name;
+            this.mockProductEntity.Object.Price = props.Price;
+            this.mockProductEntity.Object.Sku = props.Sku;
         }
 
         private void SetupMockDomainFactoryToReturnProduct()
@@ -229,6 +229,54 @@ namespace InventoryDAL.Products.Tests
                                                                 It.IsAny<List<Stock>>()))
                 .Returns((int id, string name, Decimal price, string sku, List<Tag> tags, List<Stock> stocks)
                     => new Product(id, name, price, sku, tags, stocks));
+        }
+
+        [TestMethod()]
+        public void GetResult_ShouldReturnProduct_WithSameStocks_AsProductEntity_WhenUsedAfter_BuildStocks()
+        {
+            /* ARRANGE */
+            ProductEntity basicProps = new ProductEntity { Id = 100, Name = "Name", Price = 10.00M, Sku = "Sku" };
+            int[] expectedStockIds = { 111, 222, 333 };
+            SetBasicPropertiesInMockProductEntity(basicProps);
+            GiveStockEntitiesToMockProductEntity(expectedStockIds);
+            SetupMockDomainFactoryToReturnProduct();
+            SetupMockRepositoryFactoryToReturnStocks();
+
+            /* ACT */
+            ProductBuilder builder = CreateProductBuilderWithMocks();
+            builder.BuildStocks();
+            IProduct product = builder.GetResult();
+
+            /* ASSERT */
+            for (int i = 0; i < expectedStockIds.Length; i++)
+            {
+                int actual = product.Stocks[i].Id;
+                Assert.AreEqual(expectedStockIds[i], actual);
+            }
+        }
+
+        [TestMethod()]
+        public void GetResult_ShouldReturnProduct_WithSameTagAssociations_AsProductEntity_WhenUsedAfter_BuildTags()
+        {
+            /* ARRANGE */
+            ProductEntity basicProps = new ProductEntity { Id = 100, Name = "Name", Price = 10.00M, Sku = "Sku" };
+            int[] expectedTagIds = { 111, 222, 333 };
+            SetBasicPropertiesInMockProductEntity(basicProps);
+            SetProductTagsInMockProductEntity(expectedTagIds);
+            SetupMockDomainFactoryToReturnProduct();
+            SetupMockRepositoryFactoryToReturnTags();
+
+            /* ACT */
+            ProductBuilder builder = CreateProductBuilderWithMocks();
+            builder.BuildTags();
+            IProduct product = builder.GetResult();
+
+            /* ASSERT */
+            for (int i = 0; i < expectedTagIds.Length; i++)
+            {
+                int actual = product.Tags[i].Id;
+                Assert.AreEqual(expectedTagIds[i], actual);
+            }
         }
     }
 }
