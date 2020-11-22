@@ -92,14 +92,7 @@ namespace InventoryDAL.Products
 
         public Product GetResult()
         {
-            Product product = domainFactory.CreateProduct();
-            product.Id = this.Id;
-            product.Name = this.Name;
-            product.Price = this.Price;
-            product.Sku = this.Sku;
-            product.Tags = this.Tags;
-            product.Stocks = this.Stocks;
-            return product;
+            return domainFactory.CreateProduct(Id, Name, Price, Sku, Tags, Stocks);
         }
     }
 }

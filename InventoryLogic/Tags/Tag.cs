@@ -11,16 +11,17 @@ namespace InventoryLogic.Tags
         public string Name { get; set; }
         public List<Product> Products { get; set; }
 
-        // Constructor used by .net API framwork
-        public Tag()
-        {
-
-        }
-
         public Tag(int id, string name)
         {
             Id = id;
             Name = name;
+        }
+
+        public Tag(int id, string name, List<Product> products)
+        {
+            Id = id;
+            Name = name;
+            Products = products;
         }
 
         public void ConvertFromDTO(TagDTO tagDTO)

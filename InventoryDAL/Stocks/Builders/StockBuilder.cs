@@ -49,13 +49,7 @@ namespace InventoryDAL.Stocks
 
         public Stock GetResult()
         {
-            Stock stock = domainFactory.CreateStock();
-            stock.Id = this.Id;
-            stock.ProductId = this.ProductId;
-            stock.Product = this.Product;
-            stock.Amount = this.Amount;
-            stock.Date = this.Date;
-            return stock;
+            return domainFactory.CreateStock(Id, ProductId, Product, Amount, Date);
         }
     }
 }

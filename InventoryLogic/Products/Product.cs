@@ -15,20 +15,24 @@ namespace InventoryLogic.Products
         public List<Tag> Tags { get; set; } 
         public List<Stock> Stocks { get; set; }
 
-        public Product()
-        {
-            Stocks = new List<Stock>();
-            Tags = new List<Tag>();
-        }
-
         public Product(int id, string name, decimal price, string sku) 
         {
             Id = id;
             Name = name;
             Price = price;
             Sku = sku;
-            Stocks = new List<Stock>();
             Tags = new List<Tag>();
+            Stocks = new List<Stock>();
+        }
+
+        public Product(int id, string name, decimal price, string sku, List<Tag> tags, List<Stock> stocks)
+        {
+            Id = id;
+            Name = name;
+            Price = price;
+            Sku = sku;
+            Tags = tags;
+            Stocks = stocks;
         }
 
         public void ConvertFromDTO(ProductDTO fromDTO)
@@ -44,7 +48,6 @@ namespace InventoryLogic.Products
                 if (!Stocks.Contains(stockModel))
                     Stocks.Add(stockModel);
             }
-
         }
 
         public void ConvertToDTO(ProductDTO toDTO)

@@ -60,11 +60,7 @@ namespace InventoryDAL.Tags
 
         public Tag GetResult()
         {
-            Tag tag = domainFactory.CreateTag();
-            tag.Id = this.Id;
-            tag.Name = this.Name;
-            tag.Products = this.Products;
-            return tag;
+            return domainFactory.CreateTag(Id, Name, Products);
         }
     }
 }
