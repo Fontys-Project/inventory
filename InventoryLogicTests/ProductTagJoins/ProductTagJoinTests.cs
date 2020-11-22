@@ -8,7 +8,7 @@ using InventoryLogic.Products;
 
 namespace InventoryLogic.ProductTag.Tests
 {
-    [TestClass()]
+  /*  [TestClass()]
     public class ProductTagJoinTests
     {
         [TestMethod()]
@@ -66,5 +66,5 @@ namespace InventoryLogic.ProductTag.Tests
 
             Assert.AreEqual(expected, actual);
         }
-    }
+    }*/
 }

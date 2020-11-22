@@ -14,61 +14,43 @@ namespace InventoryLogic.Stocks.Tests
     [TestClass()]
     public class StockTests
     {
-        private Stock stock;
-        private Mock<Product> productMock;
-        private Mock<Stock> stockMock;
-        private List<ProductTag> tagList;
-        private List<Stock> stockList;
-
         [TestInitialize]
-        public void Setup()
+        public void SetUp()
         {
-            productMock = new Mock<Product>();
-
-            // arrange
-            //
-            productMock.Setup(p => p.Id).Returns(10);
-            productMock.Setup(p => p.Name).Returns("Mondkapje");
-            productMock.Setup(p => p.Price).Returns(5);
-            productMock.Setup(p => p.Sku).Returns("mondkapjeSKU");
-
-            var productTagJoinMock = new Mock<ProductTag>();
-            var stocklistMock = new Mock<Stock>();
-
-            tagList = new List<ProductTag>()
-            {
-                productTagJoinMock.Object
-            };
-
-            stockList = new List<Stock>()
-            {
-                stocklistMock.Object
-            };
+           
         }
 
-        [TestMethod]
-
-        public void GetID()
+        [TestMethod("Stock returns Id ")]
+        [TestCategory("Unit Tests")]
+        [Priority(1)]
+        [Owner("Mark")]
+        public void GetId()
         {
             // Arrange
-            var mock = new Mock<Product>();
-            mock.Setup(p => p.Id).Returns(1);
-            Product expected = mock.Object;
-
-            Stock stock = new Stock(1, expected, 30);
-
+            Product product = new Product(1, "Mondkapje", 1, "MondkapjeTest");
+            Stock stock = new Stock(1, product, 10);
+            int expected = 1;
             // Act
             int actual = stock.Id;
-
             // Assert
-            Assert.AreEqual(expected, actual);
-
+            Assert.AreEqual<int>(expected, actual, "Id not correct");
         }
 
-        [TestMethod()]
-        public void StockTest1()
+        [TestMethod("Stock returns amount ")]
+        [TestCategory("Unit Tests")]
+        [Priority(1)]
+        [Owner("Mark")]
+        public void GetAmount()
         {
-            Assert.Fail();
+            // Arrange
+            Product product = new Product(1, "Mondkapje", 1, "MondkapjeTest");
+            Stock stock = new Stock(1, product, 10);
+            int expected = 10;
+            // Act
+            int actual = stock.Amount;
+            // Assert
+            Assert.AreEqual<int>(expected, actual, "Id not correct");
         }
     }
+        
 }
