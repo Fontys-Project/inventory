@@ -43,7 +43,7 @@ namespace InventoryLogic.Tags.Tests
         [TestMethod]
         public void GetNameShouldReturnNull()
         {
-            Tag tag = new Tag();
+            Tag tag = new Tag(999, "TagName");
             string expected = null;
 
             string actual = tag.Name;

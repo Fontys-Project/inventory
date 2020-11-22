@@ -12,10 +12,16 @@ namespace InventoryLogic.Products
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string Sku { get; set; }
-        public List<Tag> Tags { get; set; } 
+        public List<Tag> Tags { get; set; }
         public List<Stock> Stocks { get; set; }
 
-        public Product(int id, string name, decimal price, string sku) 
+        public Product() // TODO: Remove. Means updating DTOFacade.
+        { 
+            Tags = new List<Tag>();
+            Stocks = new List<Stock>();
+        }
+
+        public Product(int id, string name, decimal price, string sku)
         {
             Id = id;
             Name = name;
@@ -41,7 +47,7 @@ namespace InventoryLogic.Products
             Price = fromDTO.Price;
             Sku = fromDTO.Sku;
 
-            foreach(StockDTO stock in fromDTO.Stocks)
+            foreach (StockDTO stock in fromDTO.Stocks)
             {
                 Stock stockModel = new Stock();
                 stockModel.ConvertFromDTO(stock);
@@ -74,6 +80,6 @@ namespace InventoryLogic.Products
 
         }
 
-       
+
     }
 }

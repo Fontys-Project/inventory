@@ -16,7 +16,7 @@ namespace InventoryDAL.Factories
 
         public Stock CreateStock(int id, int productId, Product product, int amount, DateTime date)
         {
-            return new Stock(id, productId, product, amount, date);
+            return new Stock(id, productId, amount, date, product);
         }
 
         public Tag CreateTag(int id, string name, List<Product> products)

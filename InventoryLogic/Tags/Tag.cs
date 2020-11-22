@@ -11,13 +11,9 @@ namespace InventoryLogic.Tags
         public string Name { get; set; }
         public List<Product> Products { get; set; }
 
-        public Tag(int id, string name)
-        {
-            Id = id;
-            Name = name;
-        }
-
-        public Tag(int id, string name, List<Product> products)
+        public Tag() { } // TODO: Remove. Means updating DTOFacade.
+        
+        public Tag(int id, string name, List<Product> products = null)
         {
             Id = id;
             Name = name;

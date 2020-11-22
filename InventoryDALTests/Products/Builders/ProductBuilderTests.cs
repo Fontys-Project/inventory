@@ -27,7 +27,7 @@ namespace InventoryDAL.Products.Tests
             this.mockProductEntity = new Mock<IProductEntity>().SetupAllProperties();
         }
 
-        private ProductBuilder CreateProductBuilder()
+        private ProductBuilder CreateProductBuilderWithMocks()
         {
             return new ProductBuilder(mockProductEntity.Object,
                                       mockDomainFactory.Object,
@@ -40,7 +40,7 @@ namespace InventoryDAL.Products.Tests
             int expected = 123;
             mockProductEntity.Setup(pe => pe.Id).Returns(expected);
 
-            ProductBuilder builder = CreateProductBuilder();
+            ProductBuilder builder = CreateProductBuilderWithMocks();
             int actual = builder.Id;
 
             Assert.AreEqual(expected, actual);
@@ -52,7 +52,7 @@ namespace InventoryDAL.Products.Tests
             string expected = "Name123";
             mockProductEntity.Setup(pe => pe.Name).Returns(expected);
 
-            ProductBuilder builder = CreateProductBuilder();
+            ProductBuilder builder = CreateProductBuilderWithMocks();
             string actual = builder.Name;
 
             Assert.AreEqual(expected, actual);
@@ -64,7 +64,7 @@ namespace InventoryDAL.Products.Tests
             Decimal expected = 12.50M;
             mockProductEntity.Setup(pe => pe.Price).Returns(expected);
 
-            ProductBuilder builder = CreateProductBuilder();
+            ProductBuilder builder = CreateProductBuilderWithMocks();
             Decimal actual = builder.Price;
 
             Assert.AreEqual(expected, actual);
@@ -76,7 +76,7 @@ namespace InventoryDAL.Products.Tests
             string expected = "Sku123";
             mockProductEntity.Setup(pe => pe.Sku).Returns(expected);
 
-            ProductBuilder builder = CreateProductBuilder();
+            ProductBuilder builder = CreateProductBuilderWithMocks();
             string actual = builder.Sku;
 
             Assert.AreEqual(expected, actual);
@@ -87,7 +87,7 @@ namespace InventoryDAL.Products.Tests
         {
             int expected = 0;
 
-            ProductBuilder builder = CreateProductBuilder();
+            ProductBuilder builder = CreateProductBuilderWithMocks();
             int actual = builder.Tags.Count;
 
             Assert.AreEqual(expected, actual);
@@ -98,7 +98,7 @@ namespace InventoryDAL.Products.Tests
         {
             int expected = 0;
 
-            ProductBuilder builder = CreateProductBuilder();
+            ProductBuilder builder = CreateProductBuilderWithMocks();
             int actual = builder.Stocks.Count;
 
             Assert.AreEqual(expected, actual);
@@ -119,10 +119,10 @@ namespace InventoryDAL.Products.Tests
             // setup mock RepositoryFactory to return a TagRepository that returns Tags
             this.mockRepositoryFactory.Setup(rf => rf.GetCrudRepository<Tag>()
                                                      .Get(It.IsAny<int>()))
-                                                     .Returns((int id) => new Tag { Id = id });
+                                                     .Returns((int id) => new Tag(id, "TestTag"));
 
             /* ACT */
-            ProductBuilder builder = CreateProductBuilder();
+            ProductBuilder builder = CreateProductBuilderWithMocks();
             builder.BuildTags();
 
             /* ASSERT */
@@ -148,10 +148,10 @@ namespace InventoryDAL.Products.Tests
             // setup mock RepositoryFactory to return a StockRepository that returns Stocks
             this.mockRepositoryFactory.Setup(rf => rf.GetCrudRepository<Stock>()
                                                      .Get(It.IsAny<int>()))
-                                                     .Returns((int id) => new Stock { Id = id });
+                                                     .Returns((int id) => new Stock(id, 999, 888));
 
             /* ACT */
-            ProductBuilder builder = CreateProductBuilder();
+            ProductBuilder builder = CreateProductBuilderWithMocks();
             builder.BuildStocks();
 
             /* ASSERT */
@@ -167,27 +167,29 @@ namespace InventoryDAL.Products.Tests
         {
             /* ARRANGE */
             // setup expected
-            int expectedId = 100;
-            string expectedName = "Name";
-            Decimal expectedPrice = 10.00M;
-            string expectedSku = "Sku";
-            // setup mock ProductEntity
-            this.mockProductEntity.Object.Id = expectedId;
-            this.mockProductEntity.Object.Name = expectedName;
-            this.mockProductEntity.Object.Price = expectedPrice;
-            this.mockProductEntity.Object.Sku = expectedSku;
+            Product expected = new Product(100, "Name", 10.00M, "Sku");
             // setup mock DomainFactory
-            this.mockDomainFactory.Setup(df => df.CreateProduct()).Returns(new Product());
+            this.mockDomainFactory.Setup(df 
+                => df.CreateProduct(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<string>(),
+                                    It.IsAny<List<Tag>>(), It.IsAny<List<Stock>>()))
+                .Returns((int id, string name, Decimal price, string sku, List<Tag> tags, List<Stock> stocks)
+                    => new Product(id, name, price, sku, tags, stocks));
+            // setup mock ProductEntity
+            this.mockProductEntity.Object.Id = expected.Id;
+            this.mockProductEntity.Object.Name = expected.Name;
+            this.mockProductEntity.Object.Price = expected.Price;
+            this.mockProductEntity.Object.Sku = expected.Sku;
+
 
             /* ACT */
-            ProductBuilder builder = CreateProductBuilder();
+            ProductBuilder builder = CreateProductBuilderWithMocks();
             IProduct product = builder.GetResult();
 
             /* ASSERT */
-            Assert.AreEqual(product.Id, expectedId);
-            Assert.AreEqual(product.Name, expectedName);
-            Assert.AreEqual(product.Price, expectedPrice);
-            Assert.AreEqual(product.Sku, expectedSku);
+            Assert.AreEqual(product.Id, expected.Id);
+            Assert.AreEqual(product.Name, expected.Name);
+            Assert.AreEqual(product.Price, expected.Price);
+            Assert.AreEqual(product.Sku, expected.Sku);
         }
     }
 }
