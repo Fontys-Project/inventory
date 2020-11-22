@@ -99,7 +99,7 @@ namespace InventoryDAL.Tags.Tests
             IList<ProductTagEntity> productTagsList = new List<ProductTagEntity>();
             for (int i = 0; i < ids.Length; i++)
             {
-                productTagsList.Add(new ProductTagEntity { TagId = ids[i] });
+                productTagsList.Add(new ProductTagEntity { ProductId = ids[i] });
             }
             return productTagsList;
         }

@@ -49,8 +49,7 @@ namespace InventoryDAL.Tags
         {
             try
             {
-                Product product = repositoryFactory.GetCrudRepository<Product>().Get(prodTag.ProductId);
-                return product;
+                return repositoryFactory.GetCrudRepository<Product>().Get(prodTag.ProductId);
             }
             catch (NullReferenceException e)
             {
