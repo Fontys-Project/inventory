@@ -27,13 +27,6 @@ namespace InventoryDAL.Products.Tests
             this.mockProductEntity = new Mock<IProductEntity>().SetupAllProperties();
         }
 
-        private ProductBuilder CreateProductBuilderWithMocks()
-        {
-            return new ProductBuilder(mockProductEntity.Object,
-                                      mockDomainFactory.Object,
-                                      mockRepositoryFactory.Object);
-        }
-
         [TestMethod()]
         public void ProductBuilder_ShouldHaveSame_Id_AsEntity_WhenCreated()
         {
@@ -44,6 +37,14 @@ namespace InventoryDAL.Products.Tests
             int actual = builder.Id;
 
             Assert.AreEqual(expected, actual);
+        }
+
+
+        private ProductBuilder CreateProductBuilderWithMocks()
+        {
+            return new ProductBuilder(mockProductEntity.Object,
+                                      mockDomainFactory.Object,
+                                      mockRepositoryFactory.Object);
         }
 
         [TestMethod()]
@@ -83,7 +84,7 @@ namespace InventoryDAL.Products.Tests
         }
 
         [TestMethod()]
-        public void ProductBuilder_ShouldHaveSameEmpty_Tags_List_WhenCreated()
+        public void ProductBuilder_ShouldHaveEmpty_Tags_List_WhenCreated()
         {
             int expected = 0;
 
@@ -94,7 +95,7 @@ namespace InventoryDAL.Products.Tests
         }
 
         [TestMethod()]
-        public void ProductBuilder_ShouldHaveSameEmpty_Stocks_List_WhenCreated()
+        public void ProductBuilder_ShouldHaveEmpty_Stocks_List_WhenCreated()
         {
             int expected = 0;
 
@@ -108,18 +109,9 @@ namespace InventoryDAL.Products.Tests
         public void BuildTags_ShouldSet_TagIds_ToMatchIdsIn_ProductTags()
         {
             /* ARRANGE */
-            // setup mock ProductEntity ProductTagEntities
             int[] expected = { 111, 222, 333 };
-            IList<ProductTagEntity> productTagsList = new List<ProductTagEntity>();
-            for (int i = 0; i < expected.Length; i++)
-            {
-                productTagsList.Add(new ProductTagEntity { TagId = expected[i] });
-            }
-            this.mockProductEntity.Setup(pe => pe.ProductTagEntities).Returns(productTagsList);
-            // setup mock RepositoryFactory to return a TagRepository that returns Tags
-            this.mockRepositoryFactory.Setup(rf => rf.GetCrudRepository<Tag>()
-                                                     .Get(It.IsAny<int>()))
-                                                     .Returns((int id) => new Tag(id, "TestTag"));
+            SetupMockProductEntityToReturnProductTagEntities(expected);
+            SetupMockRepositoryFactoryToReturnTags();
 
             /* ACT */
             ProductBuilder builder = CreateProductBuilderWithMocks();
@@ -133,22 +125,36 @@ namespace InventoryDAL.Products.Tests
             }
         }
 
+        private void SetupMockRepositoryFactoryToReturnTags()
+        {
+            this.mockRepositoryFactory.Setup(factory => factory.GetCrudRepository<Tag>()
+                                                     .Get(It.IsAny<int>()))
+                                                     .Returns((int id) => new Tag(id, "TestTag"));
+        }
+
+        private void SetupMockProductEntityToReturnProductTagEntities(int[] expected)
+        {
+            IList<ProductTagEntity> productTagsList = CreateProductTags(expected);
+            this.mockProductEntity.Setup(pe => pe.ProductTagEntities).Returns(productTagsList);
+        }
+
+        private IList<ProductTagEntity> CreateProductTags(int[] expected)
+        {
+            IList<ProductTagEntity> productTagsList = new List<ProductTagEntity>();
+            for (int i = 0; i < expected.Length; i++)
+            {
+                productTagsList.Add(new ProductTagEntity { TagId = expected[i] });
+            }
+            return productTagsList;
+        }
+
         [TestMethod()]
         public void BuildStocks_ShouldSet_IdsInStocks_ToMatch_IdsInStockEntities()
         {
             /* ARRANGE */
-            // setup mock ProductEntity StockEntities
             int[] expected = { 111, 222, 333 };
-            IList<StockEntity> stockEntitiesList = new List<StockEntity>();
-            for (int i = 0; i < expected.Length; i++)
-            {
-                stockEntitiesList.Add(new StockEntity { Id = expected[i] });
-            }
-            this.mockProductEntity.Setup(pe => pe.StockEntities).Returns(stockEntitiesList);
-            // setup mock RepositoryFactory to return a StockRepository that returns Stocks
-            this.mockRepositoryFactory.Setup(rf => rf.GetCrudRepository<Stock>()
-                                                     .Get(It.IsAny<int>()))
-                                                     .Returns((int id) => new Stock(id, 999, 888));
+            SetupMockProductEntityToReturnStockEntities(expected);
+            SetupMockRepositoryFactoryToReturnStocks();
 
             /* ACT */
             ProductBuilder builder = CreateProductBuilderWithMocks();
@@ -162,24 +168,37 @@ namespace InventoryDAL.Products.Tests
             }
         }
 
+        private void SetupMockProductEntityToReturnStockEntities(int[] expected)
+        {
+            IList<StockEntity> stockEntitiesList = CreateStockEntities(expected);
+            this.mockProductEntity.Setup(pe => pe.StockEntities).Returns(stockEntitiesList);
+        }
+
+        private static IList<StockEntity> CreateStockEntities(int[] expected)
+        {
+            IList<StockEntity> stockEntitiesList = new List<StockEntity>();
+            for (int i = 0; i < expected.Length; i++)
+            {
+                stockEntitiesList.Add(new StockEntity { Id = expected[i] });
+            }
+            return stockEntitiesList;
+        }
+
+
+        private void SetupMockRepositoryFactoryToReturnStocks()
+        {
+            this.mockRepositoryFactory.Setup(rf => rf.GetCrudRepository<Stock>()
+                                                     .Get(It.IsAny<int>()))
+                                                     .Returns((int id) => new Stock(id, 999, 888));
+        }
+
         [TestMethod()]
         public void GetResult_ShouldReturnProduct_WithSameBasicProperties_AsProductEntity()
         {
             /* ARRANGE */
-            // setup expected
             Product expected = new Product(100, "Name", 10.00M, "Sku");
-            // setup mock DomainFactory
-            this.mockDomainFactory.Setup(df 
-                => df.CreateProduct(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<string>(),
-                                    It.IsAny<List<Tag>>(), It.IsAny<List<Stock>>()))
-                .Returns((int id, string name, Decimal price, string sku, List<Tag> tags, List<Stock> stocks)
-                    => new Product(id, name, price, sku, tags, stocks));
-            // setup mock ProductEntity
-            this.mockProductEntity.Object.Id = expected.Id;
-            this.mockProductEntity.Object.Name = expected.Name;
-            this.mockProductEntity.Object.Price = expected.Price;
-            this.mockProductEntity.Object.Sku = expected.Sku;
-
+            SetupMockProductEntityWithExpectedProperties(expected);
+            SetupMockDomainFactoryToReturnProduct();
 
             /* ACT */
             ProductBuilder builder = CreateProductBuilderWithMocks();
@@ -190,6 +209,26 @@ namespace InventoryDAL.Products.Tests
             Assert.AreEqual(product.Name, expected.Name);
             Assert.AreEqual(product.Price, expected.Price);
             Assert.AreEqual(product.Sku, expected.Sku);
+        }
+
+        private void SetupMockProductEntityWithExpectedProperties(Product expected)
+        {
+            this.mockProductEntity.Object.Id = expected.Id;
+            this.mockProductEntity.Object.Name = expected.Name;
+            this.mockProductEntity.Object.Price = expected.Price;
+            this.mockProductEntity.Object.Sku = expected.Sku;
+        }
+
+        private void SetupMockDomainFactoryToReturnProduct()
+        {
+            this.mockDomainFactory.Setup(df => df.CreateProduct(It.IsAny<int>(),
+                                                                It.IsAny<string>(),
+                                                                It.IsAny<Decimal>(),
+                                                                It.IsAny<string>(),
+                                                                It.IsAny<List<Tag>>(),
+                                                                It.IsAny<List<Stock>>()))
+                .Returns((int id, string name, Decimal price, string sku, List<Tag> tags, List<Stock> stocks)
+                    => new Product(id, name, price, sku, tags, stocks));
         }
     }
 }
