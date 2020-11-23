@@ -49,7 +49,7 @@ namespace InventoryAPI.Tags
         /// Modify a Stock definition
         /// </summary>
         [HttpPatch]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_product_modify")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_tag_modify")]
         public bool Modify([FromBody] TagRequestModel tag)
         {
             return tagsFacade.Modify(TagRequestModel.TagRequestModelToTagDTO(tag));
@@ -59,7 +59,7 @@ namespace InventoryAPI.Tags
         /// <summary>
         /// Delete a Stock definition
         /// </summary>
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_product_delete")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_tag_delete")]
         [HttpDelete]
         [Route("{id}")]
         public bool Delete(int id)
@@ -70,7 +70,7 @@ namespace InventoryAPI.Tags
         /// Apply a tag to a product
         /// </summary>
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_tag_applytag")]
         [Route("{productId}")]
         public Boolean ApplyTag(int productId, int tagId)
         {

@@ -49,7 +49,7 @@ namespace InventoryAPI.Stocks
         /// Modify a Stock definition
         /// </summary>
         [HttpPatch]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_product_modify")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_stock_modify")]
         public bool Modify([FromBody] StockRequestModel stock)
         {
             return stocksFacade.Modify(StockRequestModel.StockRequestModelToStockDTO(stock));
@@ -58,7 +58,7 @@ namespace InventoryAPI.Stocks
         /// <summary>
         /// Create a new Stock definition
         /// </summary>
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_product_add")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_stock_add")]
         [HttpPost]
         public StockRequestModel Add([FromBody] StockNewRequestModel stock)
         {
@@ -69,7 +69,7 @@ namespace InventoryAPI.Stocks
         /// <summary>
         /// Delete a Stock definition
         /// </summary>
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_product_delete")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_stock_delete")]
         [HttpDelete]
         [Route("{id}")]
         public bool Delete(int id)
