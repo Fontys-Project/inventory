@@ -3,7 +3,7 @@ using InventoryLogic.Stocks;
 
 namespace InventoryLogic.Facade
 {
-    public class StocksFacade : CrudFacade<Stock>
+    public class StocksFacade : CrudDTOFacade<Stock, StockDTO>
     {
         public StocksFacade(IRepositoryFactory repoFactory)
             : base(repoFactory)

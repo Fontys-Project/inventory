@@ -10,14 +10,28 @@ using NSwag.Generation.Processors.Security;
 using NSwag;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Text;
 using System.Security.Cryptography;
 using System;
 using InventoryDI;
 using InventoryLogic.Interfaces;
+using System.Security.Claims;
+using System.Text.Json;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using InventoryAPI.Security;
+using NJsonSchema.Generation;
 
 namespace Inventory
 {
+
+    public class SchemaNameGenerator : ISchemaNameGenerator
+    {
+        public string Generate(Type type)
+        {
+            return type.Name.EndsWith("RequestModel") ? type.Name.Replace("RequestModel", string.Empty) : type.Name;
+        }
+    }
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -36,31 +50,69 @@ namespace Inventory
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
 
+
+
             services.AddAuthentication(o =>
                 {
                     o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o =>
-                     {
-                         o.IncludeErrorDetails = true;
-                         RsaSecurityKey rsa = services.BuildServiceProvider().GetRequiredService<RsaSecurityKey>();
 
-                         o.TokenValidationParameters = new TokenValidationParameters
-                         {
-                             ValidateIssuer = false,
-                             ValidateAudience = false,
-                             ValidateIssuerSigningKey = true,
-                             IssuerSigningKey = rsa,
-                             ValidateLifetime = false,
-                             RequireExpirationTime = true,
-                             RequireSignedTokens = true
-                         };
-                     });
+                })
+                    .AddJwtBearer(); // use separate options below to allow dependency injection with rsa key to work.
+
+            // Dependency injection for RSA key -> the instance of the rsa key needs to be a singleton
+            services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
+                .Configure<RsaSecurityKey>((options, skey) =>
+                {
+                    options.IncludeErrorDetails = true;
+
+                    // fix to map permissions as roles in .net mvc via event handling:
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = async ctx =>
+                        {
+                            await Task.Run(() =>
+                            {
+                                var newClaims = new List<Claim>();
+
+                                foreach (Claim claim in ctx.Principal.Claims)
+                                {
+                                    if (claim.Type == "user_claims") // we use this attribute chosen by the login service that contains the permissions to be converted to .net mvc identity roles.
+                                    {
+                                        JwtClaims claims = JsonSerializer.Deserialize<JwtClaims>(claim.Value);
+
+                                        foreach (String permission in claims.permissions)
+                                        {
+                                            // add each permission as .net identity role for use in MVC controllers role filtering
+                                            newClaims.Add(new Claim(ClaimTypes.Role, permission));
+                                        }
+
+                                    }
+                                }
+                                // build new Claims Identity
+                                var appIdentity = new ClaimsIdentity(newClaims);
+
+                                // add the claims to the principal identity
+                                ctx.Principal.AddIdentity(appIdentity);
+                            });
+                        }
+                    };
+
+                    options.TokenValidationParameters.ValidateIssuer = false;
+                    options.TokenValidationParameters.ValidateAudience = false;
+                    options.TokenValidationParameters.ValidateIssuerSigningKey = true;
+                    options.TokenValidationParameters.IssuerSigningKey = skey;
+                    options.TokenValidationParameters.ValidateLifetime = false;
+                    options.TokenValidationParameters.RequireExpirationTime = true;
+                    options.TokenValidationParameters.RequireSignedTokens = true;
+
+                });
 
             services.AddSingleton<ProductsFacade>();
             services.AddSingleton<TagsFacade>();
             services.AddSingleton<StocksFacade>();
+
+            // needed in order for the rsa validation key to remain in memory (for some reason it does not work otherwise).
             services.AddSingleton<RsaSecurityKey>(provider => {
                 RSA rsa = RSA.Create();
                 rsa.ImportSubjectPublicKeyInfo(
@@ -94,6 +146,8 @@ iwIDAQAB"),
             {
                 config.DocumentName = "0.* (not for production)";
                 //config.ApiGroupNames = new[] { "0.1" };
+
+                config.SchemaNameGenerator = new SchemaNameGenerator();
 
                 // Authentication
                 config.OperationProcessors.Add(new OperationSecurityScopeProcessor("JWT token"));
