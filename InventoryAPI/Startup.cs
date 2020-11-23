@@ -10,7 +10,6 @@ using NSwag.Generation.Processors.Security;
 using NSwag;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Text;
 using System.Security.Cryptography;
 using System;
 using InventoryDI;
@@ -19,16 +18,19 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using InventoryAPI.Security;
+using NJsonSchema.Generation;
 
 namespace Inventory
 {
-    public class JwtClaims
+
+    public class SchemaNameGenerator : ISchemaNameGenerator
     {
-        public string username { get; set; }
-        public List<string> permissions { get; set; }
-
+        public string Generate(Type type)
+        {
+            return type.Name.EndsWith("RequestModel") ? type.Name.Replace("RequestModel", string.Empty) : type.Name;
+        }
     }
-
 
     public class Startup
     {
@@ -144,6 +146,8 @@ iwIDAQAB"),
             {
                 config.DocumentName = "0.* (not for production)";
                 //config.ApiGroupNames = new[] { "0.1" };
+
+                config.SchemaNameGenerator = new SchemaNameGenerator();
 
                 // Authentication
                 config.OperationProcessors.Add(new OperationSecurityScopeProcessor("JWT token"));
