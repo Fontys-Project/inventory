@@ -22,7 +22,11 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryLogicTests", "InventoryLogicTests\InventoryLogicTests.csproj", "{CA55002E-6155-48D6-89AF-992BC69DC42B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryDALTests", "InventoryDALTests\InventoryDALTests.csproj", "{EBC80A1A-3330-41C7-B1E8-78D4085B39DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryDALTests", "InventoryDALTests\InventoryDALTests.csproj", "{EBC80A1A-3330-41C7-B1E8-78D4085B39DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ", "..\RabbitMQMessenger\RabbitMQ.csproj", "{7A136FC3-9DAF-4386-B69C-A74FF89AF041}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQTester", "..\RabbitMQTester\RabbitMQTester.csproj", "{E6BD7EA1-3630-42C9-B013-DDA1B077BE8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,6 +62,14 @@ Global
 		{EBC80A1A-3330-41C7-B1E8-78D4085B39DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBC80A1A-3330-41C7-B1E8-78D4085B39DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBC80A1A-3330-41C7-B1E8-78D4085B39DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A136FC3-9DAF-4386-B69C-A74FF89AF041}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A136FC3-9DAF-4386-B69C-A74FF89AF041}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A136FC3-9DAF-4386-B69C-A74FF89AF041}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A136FC3-9DAF-4386-B69C-A74FF89AF041}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6BD7EA1-3630-42C9-B013-DDA1B077BE8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6BD7EA1-3630-42C9-B013-DDA1B077BE8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6BD7EA1-3630-42C9-B013-DDA1B077BE8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6BD7EA1-3630-42C9-B013-DDA1B077BE8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

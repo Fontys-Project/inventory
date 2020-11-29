@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using InventoryAPI.Security;
 using NJsonSchema.Generation;
+using InventoryLogic.EventBus;
 
 namespace Inventory
 {
@@ -108,10 +109,6 @@ namespace Inventory
 
                 });
 
-            services.AddSingleton<ProductsFacade>();
-            services.AddSingleton<TagsFacade>();
-            services.AddSingleton<StocksFacade>();
-
             // needed in order for the rsa validation key to remain in memory (for some reason it does not work otherwise).
             services.AddSingleton<RsaSecurityKey>(provider => {
                 RSA rsa = RSA.Create();
@@ -127,7 +124,13 @@ iwIDAQAB"),
 
                 return new RsaSecurityKey(rsa);
             });
-            services.AddSingleton<IRepositoryFactory, RepositoryFactory>();             
+
+
+            services.AddSingleton<ProductsFacade>();
+            services.AddSingleton<TagsFacade>();
+            services.AddSingleton<StocksFacade>();
+            services.AddSingleton<IRepositoryFactory, RepositoryFactory>();
+            services.AddSingleton<IEventBusMessenger, RabbitMQProxy>();
 
 
             services.AddApiVersioning(x =>
