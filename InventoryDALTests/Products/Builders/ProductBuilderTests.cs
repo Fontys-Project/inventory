@@ -39,7 +39,6 @@ namespace InventoryDAL.Products.Tests
             Assert.AreEqual(expected, actual);
         }
 
-
         private ProductBuilder CreateProductBuilderWithMocks()
         {
             return new ProductBuilder(mockProductEntity.Object,
