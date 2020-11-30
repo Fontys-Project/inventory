@@ -15,7 +15,7 @@ namespace InventoryLogic.Facade
             this.repoFactory = repoFactory;
         }
 
-        public List<DataTransferObject> GetAll()
+        public virtual List<DataTransferObject> GetAll() //TODO: remove virtual
         {
             List<DataTransferObject> newViews = new List<DataTransferObject>();
             List<DomainModel> records = repoFactory.GetCrudRepository<DomainModel>().GetAll();
