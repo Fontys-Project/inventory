@@ -24,9 +24,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryLogicTests", "Inve
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryDALTests", "InventoryDALTests\InventoryDALTests.csproj", "{EBC80A1A-3330-41C7-B1E8-78D4085B39DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ", "..\RabbitMQMessenger\RabbitMQ.csproj", "{7A136FC3-9DAF-4386-B69C-A74FF89AF041}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQ", "..\RabbitMQMessenger\RabbitMQ.csproj", "{7A136FC3-9DAF-4386-B69C-A74FF89AF041}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQTester", "..\RabbitMQTester\RabbitMQTester.csproj", "{E6BD7EA1-3630-42C9-B013-DDA1B077BE8D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQTests", "..\RabbitMQTests\RabbitMQTests.csproj", "{408D6AE5-E16F-4C30-A8C3-A6680D52D71C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,10 +66,10 @@ Global
 		{7A136FC3-9DAF-4386-B69C-A74FF89AF041}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A136FC3-9DAF-4386-B69C-A74FF89AF041}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A136FC3-9DAF-4386-B69C-A74FF89AF041}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E6BD7EA1-3630-42C9-B013-DDA1B077BE8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E6BD7EA1-3630-42C9-B013-DDA1B077BE8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E6BD7EA1-3630-42C9-B013-DDA1B077BE8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E6BD7EA1-3630-42C9-B013-DDA1B077BE8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{408D6AE5-E16F-4C30-A8C3-A6680D52D71C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{408D6AE5-E16F-4C30-A8C3-A6680D52D71C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{408D6AE5-E16F-4C30-A8C3-A6680D52D71C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{408D6AE5-E16F-4C30-A8C3-A6680D52D71C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
