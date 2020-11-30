@@ -32,6 +32,11 @@ namespace InventoryDAL.ProductTag
             return join;
         }
 
+        public List<ProductTagEntity> GetAllWithNavigationProperties()
+        {
+            return joins;
+        }
+
         public List<ProductTagEntity> GetAll()
         {
             return joins;

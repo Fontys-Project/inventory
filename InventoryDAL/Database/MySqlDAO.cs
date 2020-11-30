@@ -24,7 +24,15 @@ namespace InventoryDAL.Database
             return e;
         }
 
-        public virtual List<EntityType> GetAll()
+        public List<EntityType> GetAll()
+        {
+            this.dbContext.Database.EnsureCreated();
+            Task<List<EntityType>> lst = this.Table.ToListAsync();
+            lst.Wait();
+            return lst.Result;
+        }
+
+        public virtual List<EntityType> GetAllWithNavigationProperties()
         {
             this.dbContext.Database.EnsureCreated();
             Task<List<EntityType>> lst = this.Table.ToListAsync();

@@ -23,6 +23,11 @@ namespace InventoryDAL.Products
             return product;
         }
 
+        public List<ProductEntity> GetAllWithNavigationProperties()
+        {
+            return productsEntities;
+        }
+
         public List<ProductEntity> GetAll()
         {
             return productsEntities;

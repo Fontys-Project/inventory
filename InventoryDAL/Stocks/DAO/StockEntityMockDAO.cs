@@ -40,6 +40,11 @@ namespace InventoryDAL.Stocks
             return stockEntity;
         }
 
+        public List<StockEntity> GetAllWithNavigationProperties()
+        {
+            return this.stockEntities;
+        }
+
         public List<StockEntity> GetAll()
         {
             return this.stockEntities;

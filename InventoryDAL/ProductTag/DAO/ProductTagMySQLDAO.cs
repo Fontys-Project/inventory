@@ -1,6 +1,9 @@
 ﻿using InventoryDAL.Database;
 using InventoryDAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace InventoryDAL.ProductTag
 {
@@ -11,7 +14,18 @@ namespace InventoryDAL.ProductTag
         {
         }
 
-        //besides crud methods:
+        public override List<ProductTagEntity> GetAllWithNavigationProperties()
+        {
+            this.dbContext.Database.EnsureCreated();
+            Task<List<ProductTagEntity>> lst = this.Table
+                .Include(pte => pte.ProductEntity)
+                .Include(pte => pte.TagEntity)
+                .ToListAsync();
+            lst.Wait();
+            return lst.Result;
+        }
+
+        //besides generic crud methods:
 
         public ProductTagEntity Get(int productId, int tagId)
         {

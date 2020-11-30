@@ -23,6 +23,11 @@ namespace InventoryDAL.Tags
             return entity;
         }
 
+        public List<TagEntity> GetAllWithNavigationProperties()
+        {
+            return this.tagEntities;
+        }
+
         public List<TagEntity> GetAll()
         {
             return this.tagEntities;

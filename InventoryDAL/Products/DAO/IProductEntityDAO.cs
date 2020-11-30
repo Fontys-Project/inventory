@@ -1,4 +1,5 @@
 ﻿using InventoryDAL.Interfaces;
+using System.Collections.Generic;
 
 namespace InventoryDAL.Products
 {

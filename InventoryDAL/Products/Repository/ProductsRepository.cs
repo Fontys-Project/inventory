@@ -19,7 +19,7 @@ namespace InventoryDAL.Products
 
         public List<Product> GetAll()
         {
-            List<ProductEntity> productEntities = productEntityDAO.GetAll();
+            List<ProductEntity> productEntities = productEntityDAO.GetAllWithNavigationProperties();
             return productEntities
                 .Select(productEntity => BuildProduct(productEntity))
                 .ToList();

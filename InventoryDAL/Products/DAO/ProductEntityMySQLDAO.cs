@@ -17,7 +17,7 @@ namespace InventoryDAL.Products
         {
         }
 
-        public override List<ProductEntity> GetAll()
+        public override List<ProductEntity> GetAllWithNavigationProperties()
         {
             this.dbContext.Database.EnsureCreated();
             Task<List<ProductEntity>> lst = this.Table
