@@ -14,14 +14,14 @@ namespace InventoryDAL.Tags
     {
         private readonly IDomainFactory domainFactory;
         private readonly IRepositoryFactory repositoryFactory;
-        private readonly TagEntity tagEntity;
+        private readonly ITagEntity tagEntity;
 
 
         public int Id { get; set; }
         public string Name { get; set; }
         public List<Product> Products { get; set; }
 
-        public TagBuilder(TagEntity tagEntity, IDomainFactory domainFactory, IRepositoryFactory repositoryFactory)
+        public TagBuilder(ITagEntity tagEntity, IDomainFactory domainFactory, IRepositoryFactory repositoryFactory)
         {
             this.domainFactory = domainFactory;
             this.repositoryFactory = repositoryFactory;
@@ -34,31 +34,32 @@ namespace InventoryDAL.Tags
 
         public void BuildProducts()
         {
-            List<ProductTagEntity> productTagEntities = tagEntity.ProductTagEntities;
+            IList<ProductTagEntity> productTagEntities = tagEntity.ProductTagEntities;
             if (productTagEntities == null) return;
             List<Product> products = new List<Product>();
-            productTagEntities.ForEach(prodTag =>
+            foreach (var prodTag in productTagEntities)
             {
                 Product product = GetProduct(prodTag);
                 products.Add(product);
-            });
+            }
             this.Products = products;
         }
 
         private Product GetProduct(ProductTagEntity prodTag)
         {
-            Product product = repositoryFactory.GetCrudRepository<Product>().Get(prodTag.ProductId);
-            if (product == null) throw new InvalidDataException("Product not found. Please first create the product.");
-            return product;
+            try
+            {
+                return repositoryFactory.GetCrudRepository<Product>().Get(prodTag.ProductId);
+            }
+            catch (NullReferenceException e)
+            {
+                throw new NullReferenceException("Product not found. Please first create the product.", e);
+            }
         }
 
         public Tag GetResult()
         {
-            Tag tag = domainFactory.CreateTag();
-            tag.Id = this.Id;
-            tag.Name = this.Name;
-            tag.Products = this.Products;
-            return tag;
+            return domainFactory.CreateTag(Id, Name, Products);
         }
     }
 }

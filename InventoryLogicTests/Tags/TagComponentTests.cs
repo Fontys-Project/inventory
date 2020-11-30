@@ -16,8 +16,8 @@ namespace InventoryLogic.Tags.Tests
         [Priority(10)]
         public void GetProductTagJoinsShouldReturnProductTagJoins()
         {
-            var expected = new Product();
-            Tag tag = new Tag();
+            var expected = new Product(1,"test",1.0M,"test");
+            Tag tag = new Tag(1,"test");
 
             tag.Products.Add(expected);
             var actual = tag.Products[0];

@@ -11,7 +11,7 @@ namespace InventoryDAL.Stocks
     {
         private readonly IDomainFactory domainFactory;
         private readonly IRepositoryFactory repositoryFactory;
-        private readonly StockEntity stockEntity;
+        private readonly IStockEntity stockEntity;
 
 
         public int Id { get; set; }
@@ -21,7 +21,7 @@ namespace InventoryDAL.Stocks
         public DateTime Date { get; set; }
 
 
-        public StockBuilder(StockEntity stockEntity, IDomainFactory domainFactory, IRepositoryFactory repositoryFactory)
+        public StockBuilder(IStockEntity stockEntity, IDomainFactory domainFactory, IRepositoryFactory repositoryFactory)
         {
             this.domainFactory = domainFactory;
             this.repositoryFactory = repositoryFactory;
@@ -36,19 +36,20 @@ namespace InventoryDAL.Stocks
 
         public void BuildProduct()
         {
-            Product product = repositoryFactory.GetCrudRepository<Product>().Get(stockEntity.ProductId);
-            this.Product = product ?? throw new InvalidDataException("Product not found. Please first create the product.");
+            try
+            {
+                Product product = repositoryFactory.GetCrudRepository<Product>().Get(stockEntity.ProductId);
+                this.Product = product;
+            }
+            catch (NullReferenceException e)
+            {
+                throw new NullReferenceException("Product not found. Please first create the product.", e);
+            }
         }
 
         public Stock GetResult()
         {
-            Stock stock = domainFactory.CreateStock();
-            stock.Id = this.Id;
-            stock.ProductId = this.ProductId;
-            stock.Product = this.Product;
-            stock.Amount = this.Amount;
-            stock.Date = this.Date;
-            return stock;
+            return domainFactory.CreateStock(Id, ProductId, Amount, Date, Product);
         }
     }
 }

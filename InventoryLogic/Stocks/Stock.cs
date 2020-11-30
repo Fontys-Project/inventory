@@ -12,18 +12,33 @@ namespace InventoryLogic.Stocks
         public int Amount { get; set; }
         public DateTime Date { get; set; }
 
-        // Constructor used by .net API framwork
-        public Stock()
-        {
-
-        }
+        public Stock() { }  // TODO: Remove. Means updating DTOFacade.
 
         public Stock(int id, Product product, int amount)
         {
             Id = id;
+            ProductId = product.Id;
             Product = product;
             Amount = amount;
             Date = DateTime.Today;
+        }
+
+        public Stock(int id, int productId, int amount, Product product = null)
+        {
+            Id = id;
+            ProductId = productId;
+            Product = product;
+            Amount = amount;
+            Date = DateTime.Today;
+        }
+
+        public Stock(int id, int productId, int amount, DateTime date, Product product = null)
+        {
+            Id = id;
+            ProductId = productId;
+            Product = product;
+            Amount = amount;
+            Date = date;
         }
 
         public void ConvertFromDTO(StockDTO fromView)

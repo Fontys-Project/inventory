@@ -12,11 +12,11 @@ namespace InventoryLogic.Tags.Tests
     [TestClass()]
     public class TagTests
     {
-        [TestMethod()]
-        public void CreateTag()
-        {
-            Tag tag = new Tag();
-        }
+        //[TestMethod()]
+        //public void CreateTag()
+        //{
+        //    Tag tag = new Tag();
+        //}
 
         [TestMethod()]
         public void ConstructTagWithParameterName()
@@ -41,10 +41,10 @@ namespace InventoryLogic.Tags.Tests
         }
 
         [TestMethod]
-        public void GetNameShouldReturnNull()
+        public void GetNameShouldReturnTagName()
         {
-            Tag tag = new Tag();
-            string expected = null;
+            Tag tag = new Tag(999, "TagName");
+            string expected = "TagName";
 
             string actual = tag.Name;
 
@@ -81,7 +81,7 @@ namespace InventoryLogic.Tags.Tests
             var mock = new Mock<Product>();
             mock.Setup(j => j.Id).Returns(1);
             var mockProduct = mock.Object;
-            Tag tag = new Tag();
+            Tag tag = new Tag(1,"Test");
 
             tag.Products.Add(mockProduct);
             var actual = tag.Products[0];

@@ -15,6 +15,7 @@ namespace InventoryDAL.Products
     {
         private readonly IDomainFactory domainFactory;
         private readonly IRepositoryFactory repositoryFactory;
+        private readonly IProductEntity productEntity;
 
         public int Id { get; set; }
         public string Name { get; set; }
@@ -22,17 +23,14 @@ namespace InventoryDAL.Products
         public string Sku { get; set; }
         public List<Tag> Tags { get; set; }
         public List<Stock> Stocks { get; set; }
-        private readonly ProductEntity productEntity;
 
-
-        public ProductBuilder(ProductEntity productEntity,
+        public ProductBuilder(IProductEntity productEntity,
                               IDomainFactory domainFactory,
                               IRepositoryFactory repositoryFactory)
         {
             this.domainFactory = domainFactory;
             this.repositoryFactory = repositoryFactory;
             this.productEntity = productEntity;
-
 
             this.Id = productEntity.Id;
             this.Name = productEntity.Name;
@@ -44,54 +42,57 @@ namespace InventoryDAL.Products
 
         public void BuildTags()
         {
-            List<ProductTagEntity> productTagEntities = productEntity.ProductTagEntities;
+            IList<ProductTagEntity> productTagEntities = productEntity.ProductTagEntities;
             if (productTagEntities == null) return;
             List<Tag> tags = new List<Tag>();
-            productTagEntities.ForEach(prodTag =>
+            foreach (var prodTag in productTagEntities)
             {
                 Tag tag = GetTag(prodTag);
                 tags.Add(tag);
-            });
+            }
             this.Tags = tags;
         }
 
         private Tag GetTag(ProductTagEntity prodTag)
         {
-            Tag tag = repositoryFactory.GetCrudRepository<Tag>().Get(prodTag.TagId);
-            if (tag == null) throw new InvalidDataException("Tag not found. Please first create the tag.");
-            return tag;
+            try
+            {
+                Tag tag = repositoryFactory.GetCrudRepository<Tag>().Get(prodTag.TagId);
+                return tag;
+            }
+            catch (NullReferenceException e)
+            {
+                throw new NullReferenceException("Tag not found. Please first create the tag.", e);
+            }
         }
 
         public void BuildStocks()
         {
-            List<StockEntity> stockEntities = productEntity.StockEntities;
+            IList<StockEntity> stockEntities = productEntity.StockEntities;
             if (stockEntities == null) return;
             List<Stock> stocks = new List<Stock>();
-            stockEntities.ForEach(stockEntity =>
+            foreach (var stockEntity in stockEntities)
             {
                 Stock stock = GetStock(stockEntity);
                 stocks.Add(stock);
-            });
+            }
             this.Stocks = stocks;
         }
 
         private Stock GetStock(StockEntity stockEntity)
         {
-            Stock stock = repositoryFactory.GetCrudRepository<Stock>().Get(stockEntity.Id);
-            if (stock == null) throw new InvalidDataException("Stock not found. Please first create the stock.");
-            return stock;
+            try { 
+                Stock stock = repositoryFactory.GetCrudRepository<Stock>().Get(stockEntity.Id); 
+                return stock; 
+            }
+            catch (NullReferenceException e) { 
+                throw new NullReferenceException("Stock not found. Please first create the stock.", e); 
+            }
         }
 
         public Product GetResult()
         {
-            Product product = domainFactory.CreateProduct();
-            product.Id = this.Id;
-            product.Name = this.Name;
-            product.Price = this.Price;
-            product.Sku = this.Sku;
-            product.Tags = this.Tags;
-            product.Stocks = this.Stocks;
-            return product;
+            return domainFactory.CreateProduct(Id, Name, Price, Sku, Tags, Stocks);
         }
     }
 }

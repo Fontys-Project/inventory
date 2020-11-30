@@ -14,15 +14,14 @@ namespace InventoryDAL.Products
     {
         private readonly IDAOFactory daoFactory;
         private readonly IEntityFactory entityFactory;
+        private readonly Product product;
 
         public int Id { get; set; }
         public string Name { get; set; }
         public Decimal Price { get; set; }
         public string Sku { get; set; }
-        public List<ProductTagEntity> ProductTagEntities { get; set; }
-        public List<StockEntity> StockEntities { get; set; }
-        private readonly Product product;
-
+        public IList<ProductTagEntity> ProductTagEntities { get; set; }
+        public IList<StockEntity> StockEntities { get; set; }
 
         public ProductEntityBuilder(Product product,
                                     IEntityFactory entityFactory,
@@ -38,7 +37,6 @@ namespace InventoryDAL.Products
             this.Sku = product.Sku;
             this.ProductTagEntities = new List<ProductTagEntity>();
             this.StockEntities = new List<StockEntity>();
-
         }
 
         public void BuildProductTagEntities()

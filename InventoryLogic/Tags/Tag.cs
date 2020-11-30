@@ -11,16 +11,13 @@ namespace InventoryLogic.Tags
         public string Name { get; set; }
         public List<Product> Products { get; set; }
 
-        // Constructor used by .net API framwork
-        public Tag()
-        {
-
-        }
-
-        public Tag(int id, string name)
+        public Tag() { } // TODO: Remove. Means updating DTOFacade.
+        
+        public Tag(int id, string name, List<Product> products = null)
         {
             Id = id;
             Name = name;
+            Products = products != null ?  products : new List<Product>();
         }
 
         public void ConvertFromDTO(TagDTO tagDTO)

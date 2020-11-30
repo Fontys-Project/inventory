@@ -6,6 +6,7 @@ using System.Text;
 namespace InventoryLogic.Facade
 {
     public class CrudDTOFacade<DomainModel, DataTransferObject> : ICrudFacade<DataTransferObject> where DomainModel : IDataAssignable<DataTransferObject>, new() where DataTransferObject : IHasUniqueObjectId, new()
+    // TODO: remove new() after DomainModel
     {
         protected readonly IRepositoryFactory repoFactory;
 
