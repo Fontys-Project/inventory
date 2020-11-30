@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Inventory\InventoryLogic\InventoryLogic.csproj" />
+    <ProjectReference Include="..\InventoryLogic\InventoryLogic.csproj" />
   </ItemGroup>
 
 </Project>
