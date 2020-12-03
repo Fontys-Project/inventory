@@ -32,7 +32,7 @@ namespace InventoryDAL.Database
             return lst.Result;
         }
 
-        public virtual List<EntityType> GetAllWithNavigationProperties()
+        public virtual List<EntityType> GetAllIncludingNavigationProperties()
         {
             this.dbContext.Database.EnsureCreated();
             Task<List<EntityType>> lst = this.Table.ToListAsync();
@@ -41,6 +41,12 @@ namespace InventoryDAL.Database
         }
 
         public EntityType Get(int id)
+        {
+            this.dbContext.Database.EnsureCreated();
+            return this.Table.Find(id);
+        }
+
+        public virtual EntityType GetIncludingNavigationProperties(int id)
         {
             this.dbContext.Database.EnsureCreated();
             return this.Table.Find(id);

@@ -127,8 +127,8 @@ namespace InventoryDAL.Products.Tests
 
         private void SetupMockRepositoryFactoryToReturnTags()
         {
-            this.mockRepositoryFactory.Setup(factory => factory.GetCrudRepository<Tag>()
-                                                     .Get(It.IsAny<int>()))
+            this.mockRepositoryFactory.Setup(factory => factory.TagsRepository
+                                                     .GetExcludingNavigationProperties(It.IsAny<int>()))
                                                      .Returns((int id) => new Tag(id, "TestTag"));
         }
 
@@ -187,9 +187,9 @@ namespace InventoryDAL.Products.Tests
 
         private void SetupMockRepositoryFactoryToReturnStocks()
         {
-            this.mockRepositoryFactory.Setup(rf => rf.GetCrudRepository<Stock>()
-                                                     .Get(It.IsAny<int>()))
-                                                     .Returns((int id) => new Stock(id, 999, 888));
+            this.mockRepositoryFactory.Setup(rf => rf.StocksRepository
+                    .GetExcludingNavigationProperties(It.IsAny<int>()))
+                    .Returns((int id) => new Stock(id, 999, 888));
         }
 
         [TestMethod()]

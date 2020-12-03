@@ -49,7 +49,7 @@ namespace InventoryDAL.Tags
         {
             try
             {
-                return repositoryFactory.GetCrudRepository<Product>().Get(prodTag.ProductId);
+                return repositoryFactory.ProductsRepository.GetExcludingNavigationProperties(prodTag.ProductId);
             }
             catch (NullReferenceException e)
             {

@@ -15,7 +15,7 @@ namespace InventoryDAL.ProductTag
         {
         }
 
-        public override List<TagEntity> GetAllWithNavigationProperties()
+        public override List<TagEntity> GetAllIncludingNavigationProperties()
         {
             this.dbContext.Database.EnsureCreated();
             Task<List<TagEntity>> lst = this.Table
@@ -23,6 +23,17 @@ namespace InventoryDAL.ProductTag
                 .ToListAsync();
             lst.Wait();
             return lst.Result;
+        }
+
+        public override TagEntity GetIncludingNavigationProperties(int id)
+        {
+            this.dbContext.Database.EnsureCreated();
+            // these includes force checking the db; it ignores local cache...
+            Task<TagEntity> tagEntity = this.Table
+                .Include(te => te.ProductTagEntities)
+                .SingleOrDefaultAsync(te => te.Id == id);
+            tagEntity.Wait();
+            return tagEntity.Result;
         }
     }
 }

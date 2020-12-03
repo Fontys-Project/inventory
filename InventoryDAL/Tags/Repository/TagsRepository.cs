@@ -16,30 +16,44 @@ namespace InventoryDAL.Tags
             this.tagEntityDAO = tagEntityDAO;
         }
 
+        public List<Tag> GetAllExcludingNavigationProperties()
+        {
+            List<TagEntity> tagEntities = tagEntityDAO.GetAllIncludingNavigationProperties();
+            return tagEntities
+                .Select(tagEntity => BuildTag(tagEntity, false))
+                .ToList();
+        }
+
         public List<Tag> GetAll()
         {
-            List<TagEntity> tagEntities = tagEntityDAO.GetAll();
+            List<TagEntity> tagEntities = tagEntityDAO.GetAllIncludingNavigationProperties();
             return tagEntities
-                .Select(tagEntity => BuildTag(tagEntity))
+                .Select(tagEntity => BuildTag(tagEntity, true))
                 .ToList();
+        }
+
+        public Tag GetExcludingNavigationProperties(int id)
+        {
+            TagEntity tagEntity = tagEntityDAO.GetIncludingNavigationProperties(id);
+            return BuildTag(tagEntity, false);
         }
 
         public Tag Get(int id)
         {
-            TagEntity tagEntity = tagEntityDAO.Get(id);
-            return BuildTag(tagEntity);
+            TagEntity tagEntity = tagEntityDAO.GetIncludingNavigationProperties(id);
+            return BuildTag(tagEntity, true);
         }
 
         public Tag Add(Tag tag)
         {
-            TagEntity tagEntity = BuildTagEntity(tag);
+            TagEntity tagEntity = BuildTagEntity(tag, false);
             tagEntity = tagEntityDAO.Add(tagEntity);
-            return BuildTag(tagEntity);
+            return BuildTag(tagEntity, true);
         }
 
         public void Modify(Tag tag)
         {
-            TagEntity tagEntity = BuildTagEntity(tag);
+            TagEntity tagEntity = BuildTagEntity(tag, false);
             tagEntityDAO.Modify(tagEntity);
         }
 
@@ -48,17 +62,23 @@ namespace InventoryDAL.Tags
             tagEntityDAO.Remove(id);
         }
 
-        private Tag BuildTag(TagEntity tagEntity)
+        private Tag BuildTag(TagEntity tagEntity, bool includesNavigationProperties)
         {
             var tagBuilder = builderFactory.CreateTagBuilder(tagEntity);
-            //tagBuilder.BuildProducts();
+            if (includesNavigationProperties)
+            {
+                tagBuilder.BuildProducts();
+            }
             return tagBuilder.GetResult();
         }
 
-        private TagEntity BuildTagEntity(Tag tag)
+        private TagEntity BuildTagEntity(Tag tag, bool includesNavigationProperties)
         {
             var tagEntityBuilder = builderFactory.CreateTagEntityBuilder(tag);
-            //tagEntityBuilder.BuildProductTagEntities();
+            if (includesNavigationProperties)
+            {
+                tagEntityBuilder.BuildProductTagEntities();
+            }
             return tagEntityBuilder.GetResult();
         }
     }

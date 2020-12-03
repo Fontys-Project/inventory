@@ -17,30 +17,44 @@ namespace InventoryDAL.Products
             this.builderFactory = builderFactory;
         }
 
+        public List<Product> GetAllExcludingNavigationProperties()
+        {
+            List<ProductEntity> productEntities = productEntityDAO.GetAllIncludingNavigationProperties();
+            return productEntities
+                .Select(productEntity => BuildProduct(productEntity, false))
+                .ToList();
+        }
+
         public List<Product> GetAll()
         {
-            List<ProductEntity> productEntities = productEntityDAO.GetAllWithNavigationProperties();
+            List<ProductEntity> productEntities = productEntityDAO.GetAllIncludingNavigationProperties();
             return productEntities
-                .Select(productEntity => BuildProduct(productEntity))
+                .Select(productEntity => BuildProduct(productEntity, true))
                 .ToList();
+        }
+
+        public Product GetExcludingNavigationProperties(int id)
+        {
+            ProductEntity productEntity = productEntityDAO.GetIncludingNavigationProperties(id);
+            return BuildProduct(productEntity, false);
         }
 
         public Product Get(int id)
         {
-            ProductEntity productEntity = productEntityDAO.Get(id);
-            return BuildProduct(productEntity);
+            ProductEntity productEntity = productEntityDAO.GetIncludingNavigationProperties(id);
+            return BuildProduct(productEntity, true);
         }
 
         public Product Add(Product product)
         {
-            ProductEntity productEntity = BuildProductEntity(product);
+            ProductEntity productEntity = BuildProductEntity(product, false);
             productEntity = productEntityDAO.Add(productEntity);
-            return BuildProduct(productEntity);
+            return BuildProduct(productEntity, true);
         }
 
         public void Modify(Product product)
         {
-            ProductEntity productEntity = BuildProductEntity(product);
+            ProductEntity productEntity = BuildProductEntity(product, false);
             productEntityDAO.Modify(productEntity);
         }
 
@@ -49,19 +63,25 @@ namespace InventoryDAL.Products
             productEntityDAO.Remove(id);
         }
 
-        private Product BuildProduct(ProductEntity productEntity)
+        private Product BuildProduct(ProductEntity productEntity, bool includesNavigationProperties)
         {
             var productBuilder = builderFactory.CreateProductBuilder(productEntity);
-            productBuilder.BuildTags();
-            productBuilder.BuildStocks();
+            if (includesNavigationProperties)
+            {
+                productBuilder.BuildTags();
+                productBuilder.BuildStocks();
+            }
             return productBuilder.GetResult();
         }
 
-        private ProductEntity BuildProductEntity(Product product)
+        private ProductEntity BuildProductEntity(Product product, bool includesNavigationProperties)
         {
             var productEntityBuilder = builderFactory.CreateProductEntityBuilder(product);
-            productEntityBuilder.BuildProductTagEntities();
-            productEntityBuilder.BuildStockEntities();
+            if (includesNavigationProperties)
+            {
+                productEntityBuilder.BuildProductTagEntities();
+                productEntityBuilder.BuildStockEntities();
+            }
             return productEntityBuilder.GetResult();
         }
     }

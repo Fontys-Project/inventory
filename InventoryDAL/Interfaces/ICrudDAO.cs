@@ -4,11 +4,10 @@ namespace InventoryDAL.Interfaces
 {
     public interface ICrudDAO<T>
     {
-        // used by factory
-
-        T Get(int id);
-        List<T> GetAll();
-        List<T> GetAllWithNavigationProperties();
+        T GetIncludingNavigationProperties(int id);
+        // T Get(int id); // TODO: Are these used?
+        List<T> GetAllIncludingNavigationProperties();
+        // List<T> GetAll();
         T Add(T obj);
         void Remove(int id);
         void Modify(T obj);

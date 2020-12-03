@@ -17,30 +17,44 @@ namespace InventoryDAL.Stocks
             this.stockEntityDAO = stockEntityDAO;
         }
 
+        public List<Stock> GetAllExcludingNavigationProperties()
+        {
+            List<StockEntity> stockEntities = stockEntityDAO.GetAllIncludingNavigationProperties();
+            return stockEntities
+                .Select(stockEntity => BuildStock(stockEntity, false))
+                .ToList(); 
+        }
+
         public List<Stock> GetAll()
         {
-            List<StockEntity> stockEntities = stockEntityDAO.GetAll();
+            List<StockEntity> stockEntities = stockEntityDAO.GetAllIncludingNavigationProperties();
             return stockEntities
-                .Select(stockEntity => BuildStock(stockEntity))
-                .ToList(); 
+                .Select(stockEntity => BuildStock(stockEntity, true))
+                .ToList();
+        }
+
+        public Stock GetExcludingNavigationProperties(int id)
+        {
+            StockEntity stockEntity = stockEntityDAO.GetIncludingNavigationProperties(id);
+            return BuildStock(stockEntity, false);
         }
 
         public Stock Get(int id)
         {
-            StockEntity stockEntity = stockEntityDAO.Get(id);
-            return BuildStock(stockEntity);
+            StockEntity stockEntity = stockEntityDAO.GetIncludingNavigationProperties(id);
+            return BuildStock(stockEntity, true);
         }
 
         public Stock Add(Stock stock)
         {
-            StockEntity stockEntity = BuildStockEntity(stock);
+            StockEntity stockEntity = BuildStockEntity(stock, false);
             stockEntity = stockEntityDAO.Add(stockEntity);
-            return BuildStock(stockEntity);
+            return BuildStock(stockEntity, true);
         }
 
         public void Modify(Stock stock)
         {
-            StockEntity stockEntity = BuildStockEntity(stock);
+            StockEntity stockEntity = BuildStockEntity(stock, false);
             stockEntityDAO.Modify(stockEntity);
         }
 
@@ -49,17 +63,21 @@ namespace InventoryDAL.Stocks
             stockEntityDAO.Remove(id);
         }
 
-        private Stock BuildStock(StockEntity stockEntity)
+        private Stock BuildStock(StockEntity stockEntity, bool includesNavigationProperties)
         {
             var stockBuilder = builderFactory.CreateStockBuilder(stockEntity);
-            //stockBuilder.BuildProduct();
+            if(includesNavigationProperties){
+                stockBuilder.BuildProduct();
+            }
             return stockBuilder.GetResult();
         }
 
-        private StockEntity BuildStockEntity(Stock stock)
+        private StockEntity BuildStockEntity(Stock stock, bool includesNavigationProperties)
         {
             var stockEntityBuilder = builderFactory.CreateStockEntityBuilder(stock);
-            //stockEntityBuilder.BuildProductEntity();
+            if(includesNavigationProperties){
+                stockEntityBuilder.BuildProductEntity();
+            }
             return stockEntityBuilder.GetResult();
         }
     }

@@ -112,9 +112,9 @@ namespace InventoryDAL.Stocks.Tests
 
         private void SetupMockRepositoryFactoryToReturnProduct()
         {
-            this.mockRepositoryFactory.Setup(factory => factory.GetCrudRepository<Product>()
-                                                     .Get(It.IsAny<int>()))
-                                                     .Returns((int id) => new Product(id, "Name", 10M, "Sku"));
+            this.mockRepositoryFactory.Setup(factory => factory.ProductsRepository
+                .GetExcludingNavigationProperties(It.IsAny<int>()))
+                .Returns((int id) => new Product(id, "Name", 10M, "Sku"));
         }
 
         [TestMethod()]

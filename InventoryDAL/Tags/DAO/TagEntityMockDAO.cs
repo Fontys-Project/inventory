@@ -23,17 +23,27 @@ namespace InventoryDAL.Tags
             return entity;
         }
 
-        public List<TagEntity> GetAllWithNavigationProperties()
+        public List<TagEntity> GetAllExcludingNavigationProperties()
         {
             return this.tagEntities;
         }
 
-        public List<TagEntity> GetAll()
+        public List<TagEntity> GetAllIncludingNavigationProperties()
         {
             return this.tagEntities;
         }
 
-        public TagEntity Get(int id)
+        public TagEntity GetIncludingNavigationProperties(int id)
+        {
+            foreach (TagEntity entity in this.tagEntities)
+            {
+                if (entity.Id == id)
+                    return entity;
+            }
+            return null;
+        }
+
+        public TagEntity GetExcludingNavigationProperties(int id)
         {
             foreach (TagEntity entity in this.tagEntities)
             {

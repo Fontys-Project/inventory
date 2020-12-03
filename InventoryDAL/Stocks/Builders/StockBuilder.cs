@@ -38,7 +38,7 @@ namespace InventoryDAL.Stocks
         {
             try
             {
-                Product product = repositoryFactory.GetCrudRepository<Product>().Get(stockEntity.ProductId);
+                Product product = repositoryFactory.ProductsRepository.GetExcludingNavigationProperties(stockEntity.ProductId);
                 this.Product = product;
             }
             catch (NullReferenceException e)
