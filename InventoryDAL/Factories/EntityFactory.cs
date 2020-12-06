@@ -1,7 +1,9 @@
-﻿using InventoryDAL.Interfaces;
+﻿using InventoryDAL.Factories.Interfaces;
 using InventoryDAL.Products;
+using InventoryDAL.Products.ProductEntities;
 using InventoryDAL.ProductTag;
 using InventoryDAL.Stocks;
+using InventoryDAL.Stocks.StockEntities;
 using InventoryDAL.Tags;
 
 namespace InventoryDAL.Factories

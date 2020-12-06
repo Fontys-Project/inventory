@@ -1,8 +1,9 @@
 ﻿using InventoryDAL.Database;
 using InventoryDAL.Factories;
-using InventoryDAL.Interfaces;
 using InventoryDAL.Products;
+using InventoryDAL.Products.Products;
 using InventoryDAL.Stocks;
+using InventoryDAL.Stocks.Stocks;
 using InventoryDAL.Tags;
 using InventoryLogic.Interfaces;
 using InventoryLogic.Products;
@@ -20,28 +21,29 @@ namespace InventoryDI
         public RepositoryFactory()
         {
             var daoFactory = new DAOFactory(DatabaseType.MYSQL);
-            var builderFactory = new BuilderFactory(new DomainFactory(),
+            var builderFactory = new BuilderFactory(new DomainModelFactory(),
                                                     new EntityFactory(),
-                                                    this, 
-                                                    daoFactory);
+                                                    new BareModelSupplierFactory());
 
-            ProductsRepository = new ProductsRepository(daoFactory.ProductEntityDAO, builderFactory);
-            StocksRepository = new StocksRepository(daoFactory.StockEntityDAO, builderFactory);
-            TagsRepository = new TagsRepository(daoFactory.TagEntityDAO, builderFactory);
+            ProductsRepository = new ProductsRepository(daoFactory, builderFactory);
+            StocksRepository = new StocksRepository(daoFactory, builderFactory);
+            TagsRepository = new TagsRepository(daoFactory, builderFactory);
         }
 
-        public ICrudRepository<T> GetCrudRepository<T>()
+        public IHasCrudActions<T> GetCrudRepository<T>()
         {
             // Just for crud actions. If you need more actions from your repository 
             // you will need to call property directly
 
             if (typeof(T) == typeof(Product))
-                return (ICrudRepository<T>)ProductsRepository;
+                return (IHasCrudActions<T>)ProductsRepository;
             if (typeof(T) == typeof(Stock))
-                return (ICrudRepository<T>)StocksRepository;
+                return (IHasCrudActions<T>)StocksRepository;
             if (typeof(T) == typeof(Tag))
-                return (ICrudRepository<T>)TagsRepository;
+                return (IHasCrudActions<T>)TagsRepository;
             return null;
         }
+
+
     }
 }

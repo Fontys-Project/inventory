@@ -1,9 +1,9 @@
-﻿using InventoryDAL.Interfaces;
-using InventoryDAL.ProductTag;
+﻿using InventoryDAL.ProductTag;
 using InventoryLogic.Products;
 using InventoryLogic.Tags;
 using System.Collections.Generic;
 using System.IO;
+using InventoryDAL.Factories.Interfaces;
 
 namespace InventoryDAL.Tags
 {
@@ -46,14 +46,14 @@ namespace InventoryDAL.Tags
 
         private ProductTagEntity GetProductTagEntity(int productId, int tagId)
         {
-            ProductTagEntity ptEntity = daoFactory.ProductTagDAO.GetIncludingNavigationProperties(productId, tagId);
+            ProductTagEntity ptEntity = daoFactory.ProductTagDAO.Get(productId, tagId);
             if (ptEntity == null) ptEntity = entityFactory.CreateProductTagEntity(productId, tagId, this.daoFactory);
             return ptEntity;
         }
 
         public TagEntity GetResult()
         {
-            TagEntity tagEntity = daoFactory.TagEntityDAO.GetIncludingNavigationProperties(this.Id);
+            TagEntity tagEntity = daoFactory.TagEntityDAO.Get(this.Id);
             if (tagEntity == null) tagEntity = entityFactory.CreateTagEntity();
             tagEntity.Name = this.Name;
             tagEntity.ProductTagEntities = this.ProductTagEntities;

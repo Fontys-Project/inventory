@@ -13,6 +13,6 @@ namespace InventoryLogic.Interfaces
         IStocksRepository StocksRepository { get; }
         ITagsRepository TagsRepository { get; }
         
-        ICrudRepository<T> GetCrudRepository<T>();
+        IHasCrudActions<T> GetCrudRepository<T>();
     }
 }

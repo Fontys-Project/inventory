@@ -1,46 +1,34 @@
-﻿using InventoryDAL.Interfaces;
-using InventoryLogic.Tags;
+﻿using InventoryLogic.Tags;
 using System.Collections.Generic;
 using System.Linq;
+using InventoryDAL.Factories.Interfaces;
 
 namespace InventoryDAL.Tags
 {
     public class TagsRepository : ITagsRepository
     {
+        private readonly IDAOFactory daoFactory;
         private readonly IBuilderFactory builderFactory; 
         private readonly ITagEntityDAO tagEntityDAO;
 
-        public TagsRepository(ITagEntityDAO tagEntityDAO, IBuilderFactory builderFactory)
+        public TagsRepository(IDAOFactory daoFactory, IBuilderFactory builderFactory)
         {
-            this.builderFactory = builderFactory; 
-            this.tagEntityDAO = tagEntityDAO;
-        }
-
-        public List<Tag> GetAllExcludingNavigationProperties()
-        {
-            List<TagEntity> tagEntities = tagEntityDAO.GetAllIncludingNavigationProperties();
-            return tagEntities
-                .Select(tagEntity => BuildTag(tagEntity, false))
-                .ToList();
+            this.builderFactory = builderFactory;
+            this.daoFactory = daoFactory;
+            this.tagEntityDAO = daoFactory.TagEntityDAO;
         }
 
         public List<Tag> GetAll()
         {
-            List<TagEntity> tagEntities = tagEntityDAO.GetAllIncludingNavigationProperties();
+            List<TagEntity> tagEntities = tagEntityDAO.GetAll();
             return tagEntities
                 .Select(tagEntity => BuildTag(tagEntity, true))
                 .ToList();
         }
 
-        public Tag GetExcludingNavigationProperties(int id)
-        {
-            TagEntity tagEntity = tagEntityDAO.GetIncludingNavigationProperties(id);
-            return BuildTag(tagEntity, false);
-        }
-
         public Tag Get(int id)
         {
-            TagEntity tagEntity = tagEntityDAO.GetIncludingNavigationProperties(id);
+            TagEntity tagEntity = tagEntityDAO.Get(id);
             return BuildTag(tagEntity, true);
         }
 

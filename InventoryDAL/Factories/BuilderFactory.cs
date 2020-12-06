@@ -1,7 +1,11 @@
-﻿using InventoryDAL.Tags;
-using InventoryDAL.Interfaces;
+﻿using InventoryDAL.Factories.Interfaces;
 using InventoryDAL.Products;
+using InventoryDAL.Products.ProductEntities;
+using InventoryDAL.Products.Products;
 using InventoryDAL.Stocks;
+using InventoryDAL.Stocks.StockEntities;
+using InventoryDAL.Stocks.Stocks;
+using InventoryDAL.Tags;
 using InventoryLogic.Interfaces;
 using InventoryLogic.Products;
 using InventoryLogic.Stocks;
@@ -12,49 +16,49 @@ namespace InventoryDAL.Factories
     public class BuilderFactory : IBuilderFactory
     {
         private readonly IDomainFactory domainFactory;
-        private readonly IRepositoryFactory repositoryFactory;
         private readonly IEntityFactory entityFactory; 
-        private readonly IDAOFactory daoFactory;
+        private readonly IBareModelSupplierFactory bareModelSupplierFactory;
 
         public BuilderFactory(IDomainFactory domainFactory,
                               IEntityFactory entityFactory,
-                              IRepositoryFactory repositoryFactory,
-                              IDAOFactory daoFactory)
+                              IBareModelSupplierFactory bareModelSupplierFactory)
         {
             this.domainFactory = domainFactory;
             this.entityFactory = entityFactory;
-            this.repositoryFactory = repositoryFactory;
-            this.daoFactory = daoFactory;
+            this.bareModelSupplierFactory = bareModelSupplierFactory;
         }
 
-        public ProductBuilder CreateProductBuilder(ProductEntity productEntity)
+        public ProductConverter CreateProductBuilder(ProductEntity productEntity)
         {
-            return new ProductBuilder(productEntity, this.domainFactory, this.repositoryFactory);
+            return new ProductConverter(productEntity,
+                                        domainFactory,
+                                        bareModelSupplierFactory.GetBareStocksSupplier(daoFactory, builderFactory),
+                                        bareModelSupplierFactory.BareTagsSupplier);
         }
 
         public ProductEntityBuilder CreateProductEntityBuilder(Product product)
         {
-            return new ProductEntityBuilder(product, this.entityFactory, this.daoFactory);
+            return new ProductEntityBuilder(product, entityFactory, daoFactory);
         }
 
-        public StockBuilder CreateStockBuilder(StockEntity stockEntity)
+        public StockConverter CreateStockBuilder(StockEntity stockEntity)
         {
-            return new StockBuilder(stockEntity, this.domainFactory, this.repositoryFactory);
+            return new StockBuilder(stockEntity, domainFactory, bareModelSupplierFactory.BareProductsSupplier);
         }
 
         public StockEntityBuilder CreateStockEntityBuilder(Stock stock)
         {
-            return new StockEntityBuilder(stock, this.entityFactory, this.daoFactory);
+            return new StockEntityBuilder(stock, entityFactory, daoFactory);
         }
 
         public TagBuilder CreateTagBuilder(TagEntity tagEntity)
         {
-            return new TagBuilder(tagEntity, this.domainFactory, this.repositoryFactory);
+            return new TagBuilder(tagEntity, domainFactory, bareModelSupplierFactory.BareProductsSupplier);
         }
 
         public TagEntityBuilder CreateTagEntityBuilder(Tag tag)
         {
-            return new TagEntityBuilder(tag, this.entityFactory, this.daoFactory);
+            return new TagEntityBuilder(tag, entityFactory, daoFactory);
         }
     }
 }

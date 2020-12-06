@@ -3,10 +3,14 @@ using System;
 using Moq;
 using InventoryLogic.Interfaces;
 using InventoryLogic.Products;
-using InventoryDAL.Interfaces;
 using InventoryDAL.ProductTag;
 using InventoryDAL.Stocks;
 using System.Collections.Generic;
+using InventoryDAL.Factories.Interfaces;
+using InventoryDAL.Products.ProductEntities;
+using InventoryDAL.Products.ProductEntities.Interfaces;
+using InventoryDAL.Products.Products;
+using InventoryDAL.Stocks.StockEntities;
 using InventoryLogic.Stocks;
 using InventoryLogic.Tags;
 
@@ -33,16 +37,16 @@ namespace InventoryDAL.Products.Tests
             int expected = 123;
             mockProductEntity.Setup(pe => pe.Id).Returns(expected);
 
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            int actual = builder.Id;
+            ProductConverter converter = CreateProductBuilderWithMocks();
+            int actual = converter.Id;
 
             Assert.AreEqual(expected, actual);
         }
 
 
-        private ProductBuilder CreateProductBuilderWithMocks()
+        private ProductConverter CreateProductBuilderWithMocks()
         {
-            return new ProductBuilder(mockProductEntity.Object,
+            return new ProductConverter(mockProductEntity.Object,
                                       mockDomainFactory.Object,
                                       mockRepositoryFactory.Object);
         }
@@ -53,8 +57,8 @@ namespace InventoryDAL.Products.Tests
             string expected = "Name123";
             mockProductEntity.Setup(pe => pe.Name).Returns(expected);
 
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            string actual = builder.Name;
+            ProductConverter converter = CreateProductBuilderWithMocks();
+            string actual = converter.Name;
 
             Assert.AreEqual(expected, actual);
         }
@@ -65,8 +69,8 @@ namespace InventoryDAL.Products.Tests
             Decimal expected = 12.50M;
             mockProductEntity.Setup(pe => pe.Price).Returns(expected);
 
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            Decimal actual = builder.Price;
+            ProductConverter converter = CreateProductBuilderWithMocks();
+            Decimal actual = converter.Price;
 
             Assert.AreEqual(expected, actual);
         }
@@ -77,8 +81,8 @@ namespace InventoryDAL.Products.Tests
             string expected = "Sku123";
             mockProductEntity.Setup(pe => pe.Sku).Returns(expected);
 
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            string actual = builder.Sku;
+            ProductConverter converter = CreateProductBuilderWithMocks();
+            string actual = converter.Sku;
 
             Assert.AreEqual(expected, actual);
         }
@@ -88,8 +92,8 @@ namespace InventoryDAL.Products.Tests
         {
             int expected = 0;
 
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            int actual = builder.Tags.Count;
+            ProductConverter converter = CreateProductBuilderWithMocks();
+            int actual = converter.Tags.Count;
 
             Assert.AreEqual(expected, actual);
         }
@@ -99,8 +103,8 @@ namespace InventoryDAL.Products.Tests
         {
             int expected = 0;
 
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            int actual = builder.Stocks.Count;
+            ProductConverter converter = CreateProductBuilderWithMocks();
+            int actual = converter.Stocks.Count;
 
             Assert.AreEqual(expected, actual);
         }
@@ -114,13 +118,13 @@ namespace InventoryDAL.Products.Tests
             SetupMockRepositoryFactoryToReturnTags();
 
             /* ACT */
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            builder.BuildTags();
+            ProductConverter converter = CreateProductBuilderWithMocks();
+            converter.BuildTags();
 
             /* ASSERT */
             for (int i = 0; i < expected.Length; i++)
             {
-                int actual = builder.Tags[i].Id;
+                int actual = converter.Tags[i].Id;
                 Assert.AreEqual(expected[i], actual);
             }
         }
@@ -157,13 +161,13 @@ namespace InventoryDAL.Products.Tests
             SetupMockRepositoryFactoryToReturnStocks();
 
             /* ACT */
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            builder.BuildStocks();
+            ProductConverter converter = CreateProductBuilderWithMocks();
+            converter.BuildStocks();
 
             /* ASSERT */
             for (int i = 0; i < expected.Length; i++)
             {
-                int actual = builder.Stocks[i].Id;
+                int actual = converter.Stocks[i].Id;
                 Assert.AreEqual(expected[i], actual);
             }
         }
@@ -201,8 +205,8 @@ namespace InventoryDAL.Products.Tests
             SetupMockDomainFactoryToReturnProduct();
 
             /* ACT */
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            IProduct product = builder.GetResult();
+            ProductConverter converter = CreateProductBuilderWithMocks();
+            IProduct product = converter.GetResult();
 
             /* ASSERT */
             Assert.AreEqual(product.Id, expectedProps.Id);
@@ -243,9 +247,9 @@ namespace InventoryDAL.Products.Tests
             SetupMockRepositoryFactoryToReturnStocks();
 
             /* ACT */
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            builder.BuildStocks();
-            IProduct product = builder.GetResult();
+            ProductConverter converter = CreateProductBuilderWithMocks();
+            converter.BuildStocks();
+            IProduct product = converter.GetResult();
 
             /* ASSERT */
             for (int i = 0; i < expectedStockIds.Length; i++)
@@ -267,9 +271,9 @@ namespace InventoryDAL.Products.Tests
             SetupMockRepositoryFactoryToReturnTags();
 
             /* ACT */
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            builder.BuildTags();
-            IProduct product = builder.GetResult();
+            ProductConverter converter = CreateProductBuilderWithMocks();
+            converter.BuildTags();
+            IProduct product = converter.GetResult();
 
             /* ASSERT */
             for (int i = 0; i < expectedTagIds.Length; i++)

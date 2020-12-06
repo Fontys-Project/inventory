@@ -1,8 +1,9 @@
-﻿using InventoryDAL.Interfaces;
+﻿using InventoryDAL.Factories.Interfaces;
+using InventoryDAL.Interfaces;
 
 namespace InventoryDAL.Tags
 {
-    public interface ITagEntityDAO : ICrudDAO<TagEntity>
+    public interface ITagEntityDAO : IHasCrudActions<TagEntity>
     {
     }
 }

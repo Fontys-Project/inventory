@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using InventoryDAL.Factories.Interfaces;
 using InventoryDAL.Interfaces;
 
 namespace InventoryDAL.Database
 {
-    public abstract class MySqlDAO<EntityType> : ICrudDAO<EntityType> where EntityType : class
+    public abstract class MySqlDAO<EntityType> : IHasCrudActions<EntityType> where EntityType : class
     {
         public readonly MySqlContext dbContext;
         public DbSet<EntityType> Table { get; private set; }
@@ -24,15 +25,7 @@ namespace InventoryDAL.Database
             return e;
         }
 
-        public List<EntityType> GetAll()
-        {
-            this.dbContext.Database.EnsureCreated();
-            Task<List<EntityType>> lst = this.Table.ToListAsync();
-            lst.Wait();
-            return lst.Result;
-        }
-
-        public virtual List<EntityType> GetAllIncludingNavigationProperties()
+        public virtual List<EntityType> GetAll()
         {
             this.dbContext.Database.EnsureCreated();
             Task<List<EntityType>> lst = this.Table.ToListAsync();
@@ -40,13 +33,7 @@ namespace InventoryDAL.Database
             return lst.Result;
         }
 
-        public EntityType Get(int id)
-        {
-            this.dbContext.Database.EnsureCreated();
-            return this.Table.Find(id);
-        }
-
-        public virtual EntityType GetIncludingNavigationProperties(int id)
+        public virtual EntityType Get(int id)
         {
             this.dbContext.Database.EnsureCreated();
             return this.Table.Find(id);

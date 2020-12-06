@@ -15,7 +15,7 @@ namespace InventoryDAL.ProductTag
         {
         }
 
-        public override List<TagEntity> GetAllIncludingNavigationProperties()
+        public override List<TagEntity> GetAll()
         {
             this.dbContext.Database.EnsureCreated();
             Task<List<TagEntity>> lst = this.Table
@@ -25,7 +25,7 @@ namespace InventoryDAL.ProductTag
             return lst.Result;
         }
 
-        public override TagEntity GetIncludingNavigationProperties(int id)
+        public override TagEntity Get(int id)
         {
             this.dbContext.Database.EnsureCreated();
             // these includes force checking the db; it ignores local cache...

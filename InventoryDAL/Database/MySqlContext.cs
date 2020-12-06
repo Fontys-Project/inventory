@@ -2,7 +2,9 @@
 using InventoryDAL.Tags;
 using InventoryDAL.ProductTag;
 using InventoryDAL.Products;
+using InventoryDAL.Products.ProductEntities;
 using InventoryDAL.Stocks;
+using InventoryDAL.Stocks.StockEntities;
 
 namespace InventoryDAL.Database
 {

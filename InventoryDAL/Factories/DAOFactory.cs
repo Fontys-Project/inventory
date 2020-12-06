@@ -1,8 +1,16 @@
 ﻿using InventoryDAL.Database;
-using InventoryDAL.Products;
-using InventoryDAL.ProductTag;
-using InventoryDAL.Stocks;
+using InventoryDAL.Factories.Interfaces;
 using InventoryDAL.Interfaces;
+using InventoryDAL.Products;
+using InventoryDAL.Products.ProductEntities;
+using InventoryDAL.Products.ProductEntities.Interfaces;
+using InventoryDAL.Products.ProductEntities.Mock;
+using InventoryDAL.ProductTag;
+using InventoryDAL.ProductTag.Interfaces;
+using InventoryDAL.Stocks;
+using InventoryDAL.Stocks.StockEntities;
+using InventoryDAL.Stocks.StockEntities.Interfaces;
+using InventoryDAL.Stocks.StockEntities.Mock;
 using InventoryDAL.Tags;
 
 namespace InventoryDAL.Factories
@@ -33,17 +41,17 @@ namespace InventoryDAL.Factories
             }
         }
 
-        public ICrudDAO<T> GetCrudDAO<T>()
+        public IHasCrudActions<T> GetCrudDAO<T>()
         {
             // Just for crud actions. If you need more actions from your DAO 
             // you will need to call property directly
 
             if (typeof(T) == typeof(ProductEntity))
-                return (ICrudDAO<T>)ProductEntityDAO;
+                return (IHasCrudActions<T>)ProductEntityDAO;
             if (typeof(T) == typeof(StockEntity))
-                return (ICrudDAO<T>)StockEntityDAO;
+                return (IHasCrudActions<T>)StockEntityDAO;
             if (typeof(T) == typeof(TagEntity))
-                return (ICrudDAO<T>)TagEntityDAO;
+                return (IHasCrudActions<T>)TagEntityDAO;
             return null;
         }
     }
