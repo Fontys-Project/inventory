@@ -4,6 +4,7 @@ using InventoryLogic.Facade;
 using Microsoft.EntityFrameworkCore;
 using InventoryDAL.ProductTag;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace InventoryDAL.Products
@@ -23,6 +24,18 @@ namespace InventoryDAL.Products
             Task<List<ProductEntity>> lst = this.Table
                 .Include(pe => pe.ProductTagEntities)
                 .Include(pe => pe.StockEntities)
+                .ToListAsync();
+            lst.Wait();
+            return lst.Result;
+        }
+
+        public List<ProductEntity> GetAllWith(int tagId)
+        {
+            this.dbContext.Database.EnsureCreated();
+            Task<List<ProductEntity>> lst = this.Table
+                .Include(pe => pe.ProductTagEntities)
+                .Include(pe => pe.StockEntities)
+                .Where(pe => pe.ProductTagEntities.Any(pte => pte.TagId == tagId))
                 .ToListAsync();
             lst.Wait();
             return lst.Result;

@@ -12,5 +12,20 @@ namespace InventoryLogic.Facade
             : base(repoFactory)
         {
         }
+
+        public List<ProductDTO> GetAllWith(int tagId)
+        {
+            List<ProductDTO> newViews = new List<ProductDTO>();
+            List<Product> records = repoFactory.ProductsRepository.GetAllWith(tagId);
+
+            foreach (Product record in records)
+            {
+                ProductDTO newView = new ProductDTO();
+                record.ConvertToDTO(newView);
+                newViews.Add(newView);
+            }
+
+            return newViews;
+        }
     }
 }

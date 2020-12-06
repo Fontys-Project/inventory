@@ -14,14 +14,14 @@ namespace InventoryDAL.Factories
             return new Product(id, name, price, sku, tags, stocks);
         }
 
-        public Stock CreateStock(int id, int productId, int amount, DateTime date, Product product = null)
+        public Stock CreateStock(int id, int productId, int amount, DateTime date)
         {
-            return new Stock(id, productId, amount, date, product);
+            return new Stock(id, productId, amount, date);
         }
 
-        public Tag CreateTag(int id, string name, List<Product> products)
+        public Tag CreateTag(int id, string name)
         {
-            return new Tag(id, name, products);
+            return new Tag(id, name);
         }
     }
 }

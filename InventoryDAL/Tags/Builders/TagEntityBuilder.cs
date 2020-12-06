@@ -11,8 +11,6 @@ namespace InventoryDAL.Tags
     {
         private readonly IDAOFactory daoFactory;
         private readonly IEntityFactory entityFactory;
-        private readonly Tag tag;
-
 
         public int Id { get; set; }
         public string Name { get; set; }
@@ -24,31 +22,10 @@ namespace InventoryDAL.Tags
         {
             this.entityFactory = entityFactory;
             this.daoFactory = daoFactory;
-            this.tag = tag;
 
             this.Id = tag.Id;
             this.Name = tag.Name;
             this.ProductTagEntities = new List<ProductTagEntity>();
-        }
-
-        public void BuildProductTagEntities()
-        {
-            List<Product> products = tag.Products;
-            if (products == null || products.Count == 0) return;
-            List<ProductTagEntity> newProductTagEntities = new List<ProductTagEntity>();
-            products.ForEach(product =>
-            {
-                ProductTagEntity ptEntity = GetProductTagEntity(product.Id, tag.Id);
-                newProductTagEntities.Add(ptEntity);
-            });
-            this.ProductTagEntities = newProductTagEntities;
-        }
-
-        private ProductTagEntity GetProductTagEntity(int productId, int tagId)
-        {
-            ProductTagEntity ptEntity = daoFactory.ProductTagDAO.Get(productId, tagId);
-            if (ptEntity == null) ptEntity = entityFactory.CreateProductTagEntity(productId, tagId, this.daoFactory);
-            return ptEntity;
         }
 
         public TagEntity GetResult()

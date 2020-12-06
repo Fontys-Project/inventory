@@ -21,7 +21,15 @@ namespace InventoryDAL.Products
         {
             List<ProductEntity> productEntities = productEntityDAO.GetAll();
             return productEntities
-                .Select(productEntity => BuildProduct(productEntity))
+                .Select(BuildProduct)
+                .ToList();
+        }
+
+        public List<Product> GetAllWith(int tagId)
+        {
+            List<ProductEntity> productEntities = productEntityDAO.GetAllWith(tagId);
+            return productEntities
+                .Select(BuildProduct)
                 .ToList();
         }
 

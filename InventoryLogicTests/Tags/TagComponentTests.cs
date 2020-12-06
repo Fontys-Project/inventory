@@ -12,17 +12,17 @@ namespace InventoryLogic.Tags.Tests
     [TestClass()]
     public class TagComponentTests
     {
-        [TestMethod]
-        [Priority(10)]
-        public void GetProductTagJoinsShouldReturnProductTagJoins()
-        {
-            var expected = new Product();
-            Tag tag = new Tag();
+        //[TestMethod]
+        //[Priority(10)]
+        //public void GetProductTagJoinsShouldReturnProductTagJoins()
+        //{
+        //    var expected = new Product();
+        //    Tag tag = new Tag();
 
-            tag.Products.Add(expected);
-            var actual = tag.Products[0];
+        //    tag.Products.Add(expected);
+        //    var actual = tag.Products[0];
 
-            Assert.AreEqual(expected, actual);
-        }
+        //    Assert.AreEqual(expected, actual);
+        //}
     }
 }

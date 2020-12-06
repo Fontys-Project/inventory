@@ -5,5 +5,6 @@ namespace InventoryDAL.Products
 {
     public interface IProductEntityDAO : ICrudDAO<ProductEntity>
     {
+        List<ProductEntity> GetAllWith(int tagId);
     }
 }

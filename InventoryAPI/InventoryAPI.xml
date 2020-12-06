@@ -34,6 +34,11 @@
             List of all Product definitions
             </summary>
         </member>
+        <member name="M:InventoryAPI.Products.ProductsController.GetAllWith(System.Int32)">
+            <summary>
+            List of Product definitions filtered by tag ID
+            </summary>
+        </member>
         <member name="M:InventoryAPI.Products.ProductsController.Get(System.Int32)">
             <summary>
             Get a specified Product definition

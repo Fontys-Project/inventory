@@ -80,7 +80,6 @@ namespace InventoryLogic.Products.Tests
             Product product = new Product(1, "testname", 1, "");
             
             Stock expected = stockMock.Object;
-            stockMock.Setup(s => s.Product).Returns(product);
 
             // Act
             product.Stocks.Add(stockMock.Object);

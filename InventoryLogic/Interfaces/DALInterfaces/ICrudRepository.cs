@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using InventoryLogic.Products;
 
 namespace InventoryLogic.Interfaces
 {

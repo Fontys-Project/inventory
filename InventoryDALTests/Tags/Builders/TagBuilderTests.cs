@@ -137,34 +137,34 @@ namespace InventoryDAL.Tags.Tests
         private void SetupMockDomainFactoryToReturnTag()
         {
             this.mockDomainFactory.Setup(factory => factory.CreateTag(It.IsAny<int>(),
-                                                                        It.IsAny<string>(),
-                                                                        It.IsAny<List<Product>>()))
-                .Returns((int id, string name, List<Product> products) => new Tag(id, name, products));
+                                                                        It.IsAny<string>()
+                                                                       ))
+                .Returns((int id, string name) => new Tag(id, name));
         }
 
 
-        [TestMethod()]
-        public void GetResult_ShouldReturnTag_WithSameProductAssociations_AsTagEntity_WhenUsedAfter_BuildProducts()
-        {
-            /* ARRANGE */
-            TagEntity basicProps = new TagEntity { Id = 111, Name = "Name" };
-            int[] expectedProductIds = { 111, 222, 333 };
-            SetBasicPropertiesInMockTagEntity(basicProps);
-            SetProductTagsInMockTagEntity(expectedProductIds);
-            SetupMockDomainFactoryToReturnTag();
-            SetupMockRepositoryFactoryToReturnProducts();
+        //[TestMethod()]
+        //public void GetResult_ShouldReturnTag_WithSameProductAssociations_AsTagEntity_WhenUsedAfter_BuildProducts()
+        //{
+        //    /* ARRANGE */
+        //    TagEntity basicProps = new TagEntity { Id = 111, Name = "Name" };
+        //    int[] expectedProductIds = { 111, 222, 333 };
+        //    SetBasicPropertiesInMockTagEntity(basicProps);
+        //    SetProductTagsInMockTagEntity(expectedProductIds);
+        //    SetupMockDomainFactoryToReturnTag();
+        //    SetupMockRepositoryFactoryToReturnProducts();
 
-            /* ACT */
-            TagBuilder builder = CreateTagBuilderWithMocks();
-            builder.BuildProducts();
-            ITag tag = builder.GetResult();
+        //    /* ACT */
+        //    TagBuilder builder = CreateTagBuilderWithMocks();
+        //    builder.BuildProducts();
+        //    ITag tag = builder.GetResult();
 
-            /* ASSERT */
-            for (int i = 0; i < expectedProductIds.Length; i++)
-            {
-                int actual = tag.Products[i].Id;
-                Assert.AreEqual(expectedProductIds[i], actual);
-            }
-        }
+        //    /* ASSERT */
+        //    for (int i = 0; i < expectedProductIds.Length; i++)
+        //    {
+        //        int actual = tag.Products[i].Id;
+        //        Assert.AreEqual(expectedProductIds[i], actual);
+        //    }
+        //}
     }
 }

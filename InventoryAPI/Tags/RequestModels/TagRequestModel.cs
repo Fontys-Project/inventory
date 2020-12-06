@@ -32,7 +32,6 @@ namespace InventoryAPI.Tags.RequestModels
             {
                 Id = tag.Id,
                 Name = tag.Name,
-                Products = null // TODO
             };
         }
     }

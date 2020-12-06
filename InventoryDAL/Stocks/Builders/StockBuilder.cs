@@ -38,7 +38,7 @@ namespace InventoryDAL.Stocks
         {
             try
             {
-                Product product = repositoryFactory.ProductsRepository.GetExcludingNavigationProperties(stockEntity.ProductId);
+                Product product = repositoryFactory.ProductsRepository.Get(stockEntity.ProductId);
                 this.Product = product;
             }
             catch (NullReferenceException e)
@@ -49,7 +49,7 @@ namespace InventoryDAL.Stocks
 
         public Stock GetResult()
         {
-            return domainFactory.CreateStock(Id, ProductId, Amount, Date, Product);
+            return domainFactory.CreateStock(Id, ProductId, Amount, Date);
         }
     }
 }

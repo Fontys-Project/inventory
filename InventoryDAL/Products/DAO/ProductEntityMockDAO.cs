@@ -60,6 +60,11 @@ namespace InventoryDAL.Products
             throw new NotImplementedException();
         }
 
+        public List<ProductEntity> GetAllWith(int tagId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Remove(int ID)
         {
             throw new NotImplementedException();

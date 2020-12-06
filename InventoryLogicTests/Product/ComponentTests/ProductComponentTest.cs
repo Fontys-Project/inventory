@@ -18,7 +18,7 @@ namespace InventoryLogic.Products.Tests
         {
             // Arrange
             Product product = new Product(1, "testname", 1, "");
-            Stock stock = new Stock(1,product,10);
+            Stock stock = new Stock(1, product.Id, 10);
             Stock expected = stock;
             // Act
             product.Stocks.Add(stock);

@@ -35,6 +35,20 @@ namespace InventoryAPI.Products
         }
 
         /// <summary>
+        /// List of Product definitions filtered by tag ID
+        /// </summary>
+        [HttpGet]
+        [Route("hastag/{tagId}")]
+        public List<ProductRequestModel> GetAllWith(int tagId)
+        {
+            var products = productsFacade.GetAllWith(tagId);
+
+            var productRequestModels = products.ConvertAll(new System.Converter<ProductDTO, ProductRequestModel>(ProductRequestModel.ProductDTOToProductRequestModel));
+
+            return productRequestModels;
+        }
+
+        /// <summary>
         /// Get a specified Product definition
         /// </summary>
         [HttpGet]

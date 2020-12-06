@@ -57,7 +57,7 @@ namespace InventoryDAL.Products
         {
             try
             {
-                Tag tag = repositoryFactory.TagsRepository.GetExcludingNavigationProperties(prodTag.TagId);
+                Tag tag = repositoryFactory.TagsRepository.Get(prodTag.TagId);
                 return tag;
             }
             catch (NullReferenceException e)
@@ -82,7 +82,7 @@ namespace InventoryDAL.Products
         private Stock GetStock(StockEntity stockEntity)
         {
             try { 
-                Stock stock = repositoryFactory.StocksRepository.GetExcludingNavigationProperties(stockEntity.Id); 
+                Stock stock = repositoryFactory.StocksRepository.Get(stockEntity.Id); 
                 return stock; 
             }
             catch (NullReferenceException e) { 

@@ -28,7 +28,7 @@ namespace InventoryLogic.Stocks.Tests
         {
             // Arrange
             Product product = new Product(1, "Mondkapje", 1, "MondkapjeTest");
-            Stock stock = new Stock(1, product, 10);
+            Stock stock = new Stock(1, product.Id, 10);
             int expected = 1;
             // Act
             int actual = stock.Id;
@@ -44,7 +44,7 @@ namespace InventoryLogic.Stocks.Tests
         {
             // Arrange
             Product product = new Product(1, "Mondkapje", 1, "MondkapjeTest");
-            Stock stock = new Stock(1, product, 10);
+            Stock stock = new Stock(1, product.Id, 10);
             int expected = 10;
             // Act
             int actual = stock.Amount;

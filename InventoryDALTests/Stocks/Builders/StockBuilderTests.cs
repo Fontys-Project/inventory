@@ -149,34 +149,34 @@ namespace InventoryDAL.Stocks.Tests
             this.mockDomainFactory.Setup(factory => factory.CreateStock(It.IsAny<int>(),
                                                                         It.IsAny<int>(),
                                                                         It.IsAny<int>(),
-                                                                        It.IsAny<DateTime>(),
-                                                                        It.IsAny<Product>()))
+                                                                        It.IsAny<DateTime>()
+                                                                       ))
                 .Returns((int id,
                           int productId,
                           int amount,
-                          DateTime date,
-                          Product product) => new Stock(id, productId, amount, date, product));
+                          DateTime date
+                          ) => new Stock(id, productId, amount, date));
         }
 
 
-        [TestMethod()]
-        public void GetResult_ShouldReturnStock_WithSameProduct_AsStockEntity_WhenUsedAfter_BuildProduct()
-        {
-            /* ARRANGE */
-            int expectedProductId = 222;
-            StockEntity basicProps = new StockEntity { Id = 111, ProductId = expectedProductId, Amount = 300, Date = DateTime.Now };
-            SetBasicPropertiesInMockStockEntity(basicProps);
-            SetupMockDomainFactoryToReturnStock();
-            SetupMockRepositoryFactoryToReturnProduct();
+        //[TestMethod()]
+        //public void GetResult_ShouldReturnStock_WithSameProduct_AsStockEntity_WhenUsedAfter_BuildProduct()
+        //{
+        //    /* ARRANGE */
+        //    int expectedProductId = 222;
+        //    StockEntity basicProps = new StockEntity { Id = 111, ProductId = expectedProductId, Amount = 300, Date = DateTime.Now };
+        //    SetBasicPropertiesInMockStockEntity(basicProps);
+        //    SetupMockDomainFactoryToReturnStock();
+        //    SetupMockRepositoryFactoryToReturnProduct();
 
-            /* ACT */
-            StockBuilder builder = CreateStockBuilderWithMocks();
-            builder.BuildProduct();
-            IStock stock = builder.GetResult();
+        //    /* ACT */
+        //    StockBuilder builder = CreateStockBuilderWithMocks();
+        //    builder.BuildProduct();
+        //    IStock stock = builder.GetResult();
 
-            /* ASSERT */
-            int actual = stock.Product.Id;
-            Assert.AreEqual(expectedProductId, actual);
-        }
+        //    /* ASSERT */
+        //    int actual = stock.Product.Id;
+        //    Assert.AreEqual(expectedProductId, actual);
+        //}
     }
 }
