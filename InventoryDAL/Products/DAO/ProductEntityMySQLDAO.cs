@@ -31,7 +31,7 @@ namespace InventoryDAL.Products
         public override ProductEntity GetIncludingNavigationProperties(int id)
         {
             this.dbContext.Database.EnsureCreated();
-            // these includes force checking the db; it ignores local cache...
+            // these includes force check the db; it ignores local cache...
             Task<ProductEntity> productEntity = this.Table
                 .Include(pe => pe.ProductTagEntities)
                 .Include(pe => pe.StockEntities)

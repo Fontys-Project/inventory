@@ -33,6 +33,14 @@ namespace InventoryDAL.Products
                 .ToList();
         }
 
+        //public List<Product> GetAll(int tagId)
+        //{
+        //    List<ProductEntity> productEntities = productEntityDAO.GetAllIncludingNavigationProperties().Where();
+        //    return productEntities
+        //        .Select(productEntity => BuildProduct(productEntity, true))
+        //        .ToList();
+        //}
+
         public Product GetExcludingNavigationProperties(int id)
         {
             ProductEntity productEntity = productEntityDAO.GetIncludingNavigationProperties(id);
