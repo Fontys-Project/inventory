@@ -11,5 +11,19 @@ namespace InventoryLogic.Facade
             : base(repoFactory)
         {
         }
+
+        public bool ApplyTag(int productId, int tagId)
+        {
+            Product product = repoFactory.GetCrudRepository<Product>().Get(productId);
+            Tag tag = repoFactory.GetCrudRepository<Tag>().Get(tagId);
+
+            if (product == null) throw new ArgumentException("Product not found.");
+            if (tag == null) throw new ArgumentException("Tag not found.");
+            if (product.Tags.Contains(tag)) return false;
+
+            product.Tags.Add(tag);
+            repoFactory.GetCrudRepository<Product>().Modify(product);
+            return true;
+        }
     }
 }
