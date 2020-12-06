@@ -1,10 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Moq;
+using InventoryDAL.Interfaces;
 using InventoryLogic.Interfaces;
 using InventoryLogic.Products;
 using System.Collections.Generic;
-using InventoryDAL.Factories.Interfaces;
 using InventoryDAL.ProductTag;
 using InventoryLogic.Tags;
 

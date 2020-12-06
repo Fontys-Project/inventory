@@ -18,10 +18,4 @@
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.22" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Tags\TagEntities\" />
-    <Folder Include="Tags\Tags\" />
-    <Folder Include="Tags\PropertyTags\" />
-  </ItemGroup>
-
 </Project>

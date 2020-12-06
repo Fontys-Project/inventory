@@ -1,14 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using InventoryDAL.Factories.Interfaces;
 using Moq;
+using InventoryDAL.Interfaces;
 using InventoryLogic.Interfaces;
 using InventoryLogic.Products;
 using InventoryDAL.Products;
-using InventoryDAL.Stocks.StockEntities;
-using InventoryDAL.Stocks.StockEntities.Interfaces;
-using InventoryDAL.Stocks.Stocks;
 using InventoryLogic.Stocks;
 
 namespace InventoryDAL.Stocks.Tests
@@ -34,14 +31,14 @@ namespace InventoryDAL.Stocks.Tests
             int expected = 123;
             mockStockEntity.Setup(entity => entity.Id).Returns(expected);
 
-            StockConverter builder = CreateStockBuilderWithMocks();
+            StockBuilder builder = CreateStockBuilderWithMocks();
             int actual = builder.Id;
 
             Assert.AreEqual(expected, actual);
         }
 
 
-        private StockConverter CreateStockBuilderWithMocks()
+        private StockBuilder CreateStockBuilderWithMocks()
         {
             return new StockBuilder(mockStockEntity.Object,
                                       mockDomainFactory.Object,
@@ -54,7 +51,7 @@ namespace InventoryDAL.Stocks.Tests
             int expected = 222;
             mockStockEntity.Setup(entity => entity.ProductId).Returns(expected);
 
-            StockConverter builder = CreateStockBuilderWithMocks();
+            StockBuilder builder = CreateStockBuilderWithMocks();
             int actual = builder.ProductId;
 
             Assert.AreEqual(expected, actual);
@@ -66,7 +63,7 @@ namespace InventoryDAL.Stocks.Tests
             int expected = 333;
             mockStockEntity.Setup(entity => entity.Amount).Returns(expected);
 
-            StockConverter builder = CreateStockBuilderWithMocks();
+            StockBuilder builder = CreateStockBuilderWithMocks();
             int actual = builder.Amount;
 
             Assert.AreEqual(expected, actual);
@@ -78,7 +75,7 @@ namespace InventoryDAL.Stocks.Tests
             DateTime expected = DateTime.Now;
             mockStockEntity.Setup(pe => pe.Date).Returns(expected);
 
-            StockConverter builder = CreateStockBuilderWithMocks();
+            StockBuilder builder = CreateStockBuilderWithMocks();
             DateTime actual = builder.Date;
 
             Assert.AreEqual(expected, actual);
@@ -89,7 +86,7 @@ namespace InventoryDAL.Stocks.Tests
         {
             Product expected = null;
 
-            StockConverter builder = CreateStockBuilderWithMocks();
+            StockBuilder builder = CreateStockBuilderWithMocks();
             Product actual = builder.Product;
 
             Assert.AreEqual(expected, actual);
@@ -105,7 +102,7 @@ namespace InventoryDAL.Stocks.Tests
             SetupMockRepositoryFactoryToReturnProduct();
 
             /* ACT */
-            StockConverter builder = CreateStockBuilderWithMocks();
+            StockBuilder builder = CreateStockBuilderWithMocks();
             builder.BuildProduct();
 
             /* ASSERT */
@@ -129,7 +126,7 @@ namespace InventoryDAL.Stocks.Tests
             SetupMockDomainFactoryToReturnStock();
 
             /* ACT */
-            StockConverter builder = CreateStockBuilderWithMocks();
+            StockBuilder builder = CreateStockBuilderWithMocks();
             IStock stock = builder.GetResult();
 
             /* ASSERT */
@@ -173,7 +170,7 @@ namespace InventoryDAL.Stocks.Tests
             SetupMockRepositoryFactoryToReturnProduct();
 
             /* ACT */
-            StockConverter builder = CreateStockBuilderWithMocks();
+            StockBuilder builder = CreateStockBuilderWithMocks();
             builder.BuildProduct();
             IStock stock = builder.GetResult();
 

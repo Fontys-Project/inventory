@@ -4,6 +4,7 @@ using InventoryAPI.Products.RequestModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using InventoryDAL.Interfaces;
 using System.Collections.Generic;
 
 namespace InventoryAPI.Products

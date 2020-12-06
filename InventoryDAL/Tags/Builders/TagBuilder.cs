@@ -1,4 +1,5 @@
-﻿using InventoryDAL.Products;
+﻿using InventoryDAL.Interfaces;
+using InventoryDAL.Products;
 using InventoryDAL.ProductTag;
 using InventoryLogic.Interfaces;
 using InventoryLogic.Products;
@@ -6,16 +7,13 @@ using InventoryLogic.Tags;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using InventoryDAL.Factories.Interfaces;
-using InventoryDAL.Products.PropertyProducts;
-using InventoryDAL.Products.PropertyProducts.Interfaces;
 
 namespace InventoryDAL.Tags
 {
     public class TagBuilder : ITagBuilder
     {
         private readonly IDomainFactory domainFactory;
-        private readonly IPropertyProductSupplier propertyProductSupplier;
+        private readonly IRepositoryFactory repositoryFactory;
         private readonly ITagEntity tagEntity;
 
 
@@ -23,10 +21,10 @@ namespace InventoryDAL.Tags
         public string Name { get; set; }
         public List<Product> Products { get; set; }
 
-        public TagBuilder(ITagEntity tagEntity, IDomainFactory domainFactory, IPropertyProductSupplier propertyProductSupplier)
+        public TagBuilder(ITagEntity tagEntity, IDomainFactory domainFactory, IRepositoryFactory repositoryFactory)
         {
             this.domainFactory = domainFactory;
-            this.propertyProductSupplier = propertyProductSupplier;
+            this.repositoryFactory = repositoryFactory;
             this.tagEntity = tagEntity;
 
             this.Id = tagEntity.Id;
@@ -51,7 +49,7 @@ namespace InventoryDAL.Tags
         {
             try
             {
-                return propertyProductSupplier.Get(prodTag.ProductId);
+                return repositoryFactory.ProductsRepository.GetExcludingNavigationProperties(prodTag.ProductId);
             }
             catch (NullReferenceException e)
             {

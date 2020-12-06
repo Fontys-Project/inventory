@@ -28,12 +28,12 @@ namespace InventoryDAL.Tags
             return this.tagEntities;
         }
 
-        public List<TagEntity> GetAll()
+        public List<TagEntity> GetAllIncludingNavigationProperties()
         {
             return this.tagEntities;
         }
 
-        public TagEntity Get(int id)
+        public TagEntity GetIncludingNavigationProperties(int id)
         {
             foreach (TagEntity entity in this.tagEntities)
             {
