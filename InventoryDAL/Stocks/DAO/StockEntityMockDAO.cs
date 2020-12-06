@@ -45,12 +45,12 @@ namespace InventoryDAL.Stocks
             return this.stockEntities;
         }
 
-        public List<StockEntity> GetAllIncludingNavigationProperties()
+        public List<StockEntity> GetAll()
         {
             return this.stockEntities;
         }
 
-        public StockEntity GetIncludingNavigationProperties(int id)
+        public StockEntity Get(int id)
         {
             foreach (StockEntity e in this.stockEntities)
             {

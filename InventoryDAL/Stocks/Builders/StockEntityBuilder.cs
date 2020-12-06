@@ -37,13 +37,13 @@ namespace InventoryDAL.Stocks
 
         public void BuildProductEntity()
         {
-            ProductEntity productEntity = daoFactory.ProductEntityDAO.GetIncludingNavigationProperties(stock.ProductId);
+            ProductEntity productEntity = daoFactory.ProductEntityDAO.Get(stock.ProductId);
             this.ProductEntity = productEntity /*?? throw new InvalidDataException("Product not found. Please first create the product.")*/;
         }
 
         public StockEntity GetResult()
         {
-            StockEntity stockEntity = daoFactory.StockEntityDAO.GetIncludingNavigationProperties(this.Id);
+            StockEntity stockEntity = daoFactory.StockEntityDAO.Get(this.Id);
             if (stockEntity == null) stockEntity = entityFactory.CreateStockEntity();
             stockEntity.ProductId = this.ProductId;
             stockEntity.Amount = this.Amount;

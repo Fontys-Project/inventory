@@ -17,44 +17,30 @@ namespace InventoryDAL.Stocks
             this.stockEntityDAO = stockEntityDAO;
         }
 
-        public List<Stock> GetAllExcludingNavigationProperties()
-        {
-            List<StockEntity> stockEntities = stockEntityDAO.GetAllIncludingNavigationProperties();
-            return stockEntities
-                .Select(stockEntity => BuildStock(stockEntity, false))
-                .ToList(); 
-        }
-
         public List<Stock> GetAll()
         {
-            List<StockEntity> stockEntities = stockEntityDAO.GetAllIncludingNavigationProperties();
+            List<StockEntity> stockEntities = stockEntityDAO.GetAll();
             return stockEntities
-                .Select(stockEntity => BuildStock(stockEntity, true))
+                .Select(stockEntity => BuildStock(stockEntity))
                 .ToList();
-        }
-
-        public Stock GetExcludingNavigationProperties(int id)
-        {
-            StockEntity stockEntity = stockEntityDAO.GetIncludingNavigationProperties(id);
-            return BuildStock(stockEntity, false);
         }
 
         public Stock Get(int id)
         {
-            StockEntity stockEntity = stockEntityDAO.GetIncludingNavigationProperties(id);
-            return BuildStock(stockEntity, true);
+            StockEntity stockEntity = stockEntityDAO.Get(id);
+            return BuildStock(stockEntity);
         }
 
         public Stock Add(Stock stock)
         {
-            StockEntity stockEntity = BuildStockEntity(stock, false);
+            StockEntity stockEntity = BuildStockEntity(stock);
             stockEntity = stockEntityDAO.Add(stockEntity);
-            return BuildStock(stockEntity, true);
+            return BuildStock(stockEntity);
         }
 
         public void Modify(Stock stock)
         {
-            StockEntity stockEntity = BuildStockEntity(stock, false);
+            StockEntity stockEntity = BuildStockEntity(stock);
             stockEntityDAO.Modify(stockEntity);
         }
 
@@ -63,21 +49,15 @@ namespace InventoryDAL.Stocks
             stockEntityDAO.Remove(id);
         }
 
-        private Stock BuildStock(StockEntity stockEntity, bool includesNavigationProperties)
+        private Stock BuildStock(StockEntity stockEntity)
         {
             var stockBuilder = builderFactory.CreateStockBuilder(stockEntity);
-            if(includesNavigationProperties){
-                stockBuilder.BuildProduct();
-            }
             return stockBuilder.GetResult();
         }
 
-        private StockEntity BuildStockEntity(Stock stock, bool includesNavigationProperties)
+        private StockEntity BuildStockEntity(Stock stock)
         {
             var stockEntityBuilder = builderFactory.CreateStockEntityBuilder(stock);
-            if(includesNavigationProperties){
-                stockEntityBuilder.BuildProductEntity();
-            }
             return stockEntityBuilder.GetResult();
         }
     }

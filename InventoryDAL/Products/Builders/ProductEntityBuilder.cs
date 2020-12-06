@@ -54,7 +54,7 @@ namespace InventoryDAL.Products
 
         private ProductTagEntity GetProductTagEntity(int productId, int tagId)
         {
-            var ptEntity = daoFactory.ProductTagDAO.GetIncludingNavigationProperties(productId, tagId) ??
+            var ptEntity = daoFactory.ProductTagDAO.Get(productId, tagId) ??
                            entityFactory.CreateProductTagEntity(productId, tagId, this.daoFactory);
             return ptEntity;
         }
@@ -74,14 +74,14 @@ namespace InventoryDAL.Products
 
         private StockEntity GetStockEntity(int stockId)
         {
-            StockEntity stockEntity = daoFactory.StockEntityDAO.GetIncludingNavigationProperties(stockId);
+            StockEntity stockEntity = daoFactory.StockEntityDAO.Get(stockId);
             if (stockEntity == null) throw new InvalidDataException("Stock not found. Please first create this stock.");
             return stockEntity;
         }
 
         public ProductEntity GetResult()
         {
-            ProductEntity productEntity = daoFactory.ProductEntityDAO.GetIncludingNavigationProperties(this.Id);
+            ProductEntity productEntity = daoFactory.ProductEntityDAO.Get(this.Id);
             if (productEntity == null) productEntity = entityFactory.CreateProductEntity();
             productEntity.Name = this.Name;
             productEntity.Price = this.Price;

@@ -28,7 +28,7 @@ namespace InventoryDAL.Products
             return productsEntities;
         }
 
-        public List<ProductEntity> GetAllIncludingNavigationProperties()
+        public List<ProductEntity> GetAll()
         {
             return productsEntities;
         }
@@ -44,7 +44,7 @@ namespace InventoryDAL.Products
             return null;
         }
 
-        public ProductEntity GetIncludingNavigationProperties(int ID)
+        public ProductEntity Get(int ID)
         {
             foreach (ProductEntity product in productsEntities)
             {

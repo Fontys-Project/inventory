@@ -107,7 +107,7 @@ namespace InventoryDAL.Tags.Tests
         private void SetupMockRepositoryFactoryToReturnProducts()
         {
             this.mockRepositoryFactory.Setup(factory => factory.ProductsRepository
-                                                     .GetExcludingNavigationProperties(It.IsAny<int>()))
+                                                     .Get(It.IsAny<int>()))
                                                      .Returns((int id) => new Product(id, "Name", 10M, "Sku"));
         }
 

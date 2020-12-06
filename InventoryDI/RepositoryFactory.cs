@@ -30,17 +30,17 @@ namespace InventoryDI
             TagsRepository = new TagsRepository(daoFactory.TagEntityDAO, builderFactory);
         }
 
-        public ICrudRepository<T> GetCrudRepository<T>()
+        public InventoryLogic.Interfaces.ICrudRepository<T> GetCrudRepository<T>()
         {
             // Just for crud actions. If you need more actions from your repository 
             // you will need to call property directly
 
             if (typeof(T) == typeof(Product))
-                return (ICrudRepository<T>)ProductsRepository;
+                return (InventoryLogic.Interfaces.ICrudRepository<T>)ProductsRepository;
             if (typeof(T) == typeof(Stock))
-                return (ICrudRepository<T>)StocksRepository;
+                return (InventoryLogic.Interfaces.ICrudRepository<T>)StocksRepository;
             if (typeof(T) == typeof(Tag))
-                return (ICrudRepository<T>)TagsRepository;
+                return (InventoryLogic.Interfaces.ICrudRepository<T>)TagsRepository;
             return null;
         }
     }

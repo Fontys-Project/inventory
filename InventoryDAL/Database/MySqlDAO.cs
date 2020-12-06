@@ -24,15 +24,7 @@ namespace InventoryDAL.Database
             return e;
         }
 
-        public List<EntityType> GetAll()
-        {
-            this.dbContext.Database.EnsureCreated();
-            Task<List<EntityType>> lst = this.Table.ToListAsync();
-            lst.Wait();
-            return lst.Result;
-        }
-
-        public virtual List<EntityType> GetAllIncludingNavigationProperties()
+        public virtual List<EntityType> GetAll()
         {
             this.dbContext.Database.EnsureCreated();
             Task<List<EntityType>> lst = this.Table.ToListAsync();
@@ -40,13 +32,7 @@ namespace InventoryDAL.Database
             return lst.Result;
         }
 
-        public EntityType Get(int id)
-        {
-            this.dbContext.Database.EnsureCreated();
-            return this.Table.Find(id);
-        }
-
-        public virtual EntityType GetIncludingNavigationProperties(int id)
+        public virtual EntityType Get(int id)
         {
             this.dbContext.Database.EnsureCreated();
             return this.Table.Find(id);
