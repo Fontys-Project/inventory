@@ -17,12 +17,15 @@ services:
   inventoryapi:
     depends_on:
         - db
+        - rabbitmq
     image: ${DOCKER_REGISTRY-}inventoryapi
     build:
       context: .
       dockerfile: InventoryAPI/Dockerfile
     ports:
       - "5001:80"
+    networks:
+      - my-network
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -35,6 +38,12 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+    networks:
+      - my-network
 
 volumes:
     dbdata:
+
+networks:
+    my-network: 
+        driver: bridge
