@@ -23,6 +23,8 @@ namespace InventoryDAL.Tags.Tests
             this.mockDomainFactory = new Mock<IDomainFactory>();
             this.mockRepositoryFactory = new Mock<IRepositoryFactory>();
             this.mockTagEntity = new Mock<ITagEntity>().SetupAllProperties();
+            SetupMockDomainFactoryToReturnTag();
+            mockTagEntity.Setup(tagMock => tagMock.ProductTagEntities).Returns(new List<ProductTagEntity>());
         }
 
         [TestMethod()]
@@ -31,17 +33,16 @@ namespace InventoryDAL.Tags.Tests
             int expected = 123;
             mockTagEntity.Setup(entity => entity.Id).Returns(expected);
 
-            TagBuilder builder = CreateTagBuilderWithMocks();
-            int actual = builder.Id;
+            TagConverter builder = CreateTagBuilderWithMocks();
+            int actual = builder.Convert(mockTagEntity.Object, (a, b) => { }).Id;
 
             Assert.AreEqual(expected, actual);
         }
 
 
-        private TagBuilder CreateTagBuilderWithMocks()
+        private TagConverter CreateTagBuilderWithMocks()
         {
-            return new TagBuilder(mockTagEntity.Object,
-                                  mockDomainFactory.Object,
+            return new TagConverter(mockDomainFactory.Object,
                                   mockRepositoryFactory.Object);
         }
 
@@ -51,8 +52,8 @@ namespace InventoryDAL.Tags.Tests
             string expected = "Name";
             mockTagEntity.Setup(entity => entity.Name).Returns(expected);
 
-            TagBuilder builder = CreateTagBuilderWithMocks();
-            string actual = builder.Name;
+            TagConverter builder = CreateTagBuilderWithMocks();
+            string actual = builder.Convert(mockTagEntity.Object, (a, b) => { }).Name;
 
             Assert.AreEqual(expected, actual);
         }
@@ -62,8 +63,8 @@ namespace InventoryDAL.Tags.Tests
         {
             int expected = 0;
 
-            TagBuilder builder = CreateTagBuilderWithMocks();
-            int actual = builder.Products.Count;
+            TagConverter builder = CreateTagBuilderWithMocks();
+            int actual = builder.Convert(mockTagEntity.Object, (a, b) => { }).Products.Count;
 
             Assert.AreEqual(expected, actual);
         }
@@ -77,13 +78,13 @@ namespace InventoryDAL.Tags.Tests
             SetupMockRepositoryFactoryToReturnProducts();
 
             /* ACT */
-            TagBuilder builder = CreateTagBuilderWithMocks();
-            builder.BuildProducts();
+            TagConverter builder = CreateTagBuilderWithMocks();
+            //builder.BuildProducts();
 
             /* ASSERT */
             for (int i = 0; i < expectedProductIds.Length; i++)
             {
-                int actual = builder.Products[i].Id;
+                int actual = builder.Convert(mockTagEntity.Object, (a, b) => { }).Products[i].Id;
                 Assert.AreEqual(expectedProductIds[i], actual);
             }
         }
@@ -107,7 +108,7 @@ namespace InventoryDAL.Tags.Tests
         private void SetupMockRepositoryFactoryToReturnProducts()
         {
             this.mockRepositoryFactory.Setup(factory => factory.ProductsRepository
-                                                     .GetExcludingNavigationProperties(It.IsAny<int>()))
+                                                     .Get(It.IsAny<int>()))
                                                      .Returns((int id) => new Product(id, "Name", 10M, "Sku"));
         }
 
@@ -120,8 +121,8 @@ namespace InventoryDAL.Tags.Tests
             SetupMockDomainFactoryToReturnTag();
 
             /* ACT */
-            TagBuilder builder = CreateTagBuilderWithMocks();
-            ITag tag = builder.GetResult();
+            TagConverter builder = CreateTagBuilderWithMocks();
+            ITag tag = builder.Convert(basicProps, (a, b) => { });
 
             /* ASSERT */
             Assert.AreEqual(tag.Id, basicProps.Id);
@@ -155,9 +156,9 @@ namespace InventoryDAL.Tags.Tests
             SetupMockRepositoryFactoryToReturnProducts();
 
             /* ACT */
-            TagBuilder builder = CreateTagBuilderWithMocks();
-            builder.BuildProducts();
-            ITag tag = builder.GetResult();
+            TagConverter builder = CreateTagBuilderWithMocks();
+            //builder.BuildProducts();
+            ITag tag = builder.Convert(mockTagEntity.Object, (a, b) => { });
 
             /* ASSERT */
             for (int i = 0; i < expectedProductIds.Length; i++)

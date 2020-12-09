@@ -7,7 +7,7 @@ namespace InventoryDAL.Interfaces
 {
     public interface IRepository<T> : ICrudRepository<T>
     {
-        T GetExcludingNavigationProperties(int id);
-        List<T> GetAllExcludingNavigationProperties();
+       // T GetExcludingNavigationProperties(int id);
+       // List<T> GetAllExcludingNavigationProperties();
     }
 }

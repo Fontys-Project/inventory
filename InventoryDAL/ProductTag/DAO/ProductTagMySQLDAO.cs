@@ -36,7 +36,7 @@ namespace InventoryDAL.ProductTag
             return productTagEntity.Result;
         }
 
-        public ProductTagEntity GetIncludingNavigationProperties(int productId, int tagId)
+        public ProductTagEntity Get(int productId, int tagId)
         {
             dbContext.Database.EnsureCreated();
             // these includes force checking the db; it ignores local cache...

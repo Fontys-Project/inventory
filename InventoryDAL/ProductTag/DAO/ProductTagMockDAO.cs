@@ -32,27 +32,17 @@ namespace InventoryDAL.ProductTag
             return join;
         }
 
-        public List<ProductTagEntity> GetAllExcludingNavigationProperties()
+        public List<ProductTagEntity> GetAll()
         {
             return joins;
         }
 
-        public List<ProductTagEntity> GetAllIncludingNavigationProperties()
-        {
-            return joins;
-        }
-
-        public ProductTagEntity GetIncludingNavigationProperties(int joinId)
+        public ProductTagEntity Get(int joinId)
         {
             throw new NotImplementedException();
         }
 
-        public ProductTagEntity GetExcludingNavigationProperties(int joinId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ProductTagEntity GetIncludingNavigationProperties(int productId, int tagId)
+        public ProductTagEntity Get(int productId, int tagId)
         {
             return joins.Where(j => j.ProductId == productId && j.TagId == tagId).First();
         }

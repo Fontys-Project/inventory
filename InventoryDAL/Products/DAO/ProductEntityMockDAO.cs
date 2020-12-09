@@ -23,30 +23,14 @@ namespace InventoryDAL.Products
             return product;
         }
 
-        public List<ProductEntity> GetAllExcludingNavigationProperties()
+        public List<ProductEntity> GetAll()
         {
             return productsEntities;
         }
 
-        public List<ProductEntity> GetAllIncludingNavigationProperties()
-        {
-            return productsEntities;
-        }
-
-        public ProductEntity GetExcludingNavigationProperties(int ID)
+        public ProductEntity Get(int ID)
         {
             foreach(ProductEntity product in productsEntities)
-            {
-                if (product.Id == ID)
-                    return product;
-            }
-
-            return null;
-        }
-
-        public ProductEntity GetIncludingNavigationProperties(int ID)
-        {
-            foreach (ProductEntity product in productsEntities)
             {
                 if (product.Id == ID)
                     return product;

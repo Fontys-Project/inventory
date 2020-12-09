@@ -40,27 +40,12 @@ namespace InventoryDAL.Stocks
             return stockEntity;
         }
 
-        public List<StockEntity> GetAllExcludingNavigationProperties()
+        public List<StockEntity> GetAll()
         {
             return this.stockEntities;
         }
 
-        public List<StockEntity> GetAllIncludingNavigationProperties()
-        {
-            return this.stockEntities;
-        }
-
-        public StockEntity GetIncludingNavigationProperties(int id)
-        {
-            foreach (StockEntity e in this.stockEntities)
-            {
-                if (e.Id == id)
-                    return e;
-            }
-            return null;
-        }
-
-        public StockEntity GetExcludingNavigationProperties(int id)
+        public StockEntity Get(int id)
         {
             foreach (StockEntity e in this.stockEntities)
             {

@@ -7,53 +7,60 @@ namespace InventoryDAL.Tags
 {
     public class TagsRepository : ITagsRepository
     {
-        private readonly IBuilderFactory builderFactory; 
+        private readonly IConverterFactory converterFactory; 
         private readonly ITagEntityDAO tagEntityDAO;
+        private readonly Dictionary<Tag,ITagEntity> tagCache;
 
-        public TagsRepository(ITagEntityDAO tagEntityDAO, IBuilderFactory builderFactory)
+        public TagsRepository(ITagEntityDAO tagEntityDAO, IConverterFactory converterFactory)
         {
-            this.builderFactory = builderFactory; 
+            this.converterFactory = converterFactory; 
             this.tagEntityDAO = tagEntityDAO;
+            tagCache = new Dictionary<Tag, ITagEntity>();
         }
 
-        public List<Tag> GetAllExcludingNavigationProperties()
+        // Handle cacheing of object on instantiation
+        private void OnObjectCreation(Tag tag, ITagEntity tagEntity)
         {
-            List<TagEntity> tagEntities = tagEntityDAO.GetAllIncludingNavigationProperties();
-            return tagEntities
-                .Select(tagEntity => BuildTag(tagEntity, false))
-                .ToList();
+            tagCache.Add(tag, tagEntity);
         }
 
         public List<Tag> GetAll()
         {
-            List<TagEntity> tagEntities = tagEntityDAO.GetAllIncludingNavigationProperties();
-            return tagEntities
-                .Select(tagEntity => BuildTag(tagEntity, true))
-                .ToList();
-        }
+            List<TagEntity> tagEntities = tagEntityDAO.GetAll();
 
-        public Tag GetExcludingNavigationProperties(int id)
-        {
-            TagEntity tagEntity = tagEntityDAO.GetIncludingNavigationProperties(id);
-            return BuildTag(tagEntity, false);
+            // Trigger with where, only products not cached, and then select all uncached product entities to convert Products that will be added
+            // to the cache with the OnObjectCreation delegate.
+            tagEntities.Where(tagEntity => tagCache.Values.Any(cacheEntity => cacheEntity.Id == tagEntity.Id) == false)
+                .Select(tagEntity => converterFactory.tagConverter.Convert(tagEntity, OnObjectCreation));
+
+            return tagCache.Keys.ToList<Tag>();
         }
 
         public Tag Get(int id)
         {
-            TagEntity tagEntity = tagEntityDAO.GetIncludingNavigationProperties(id);
-            return BuildTag(tagEntity, true);
+            Tag tag = tagCache.Keys.Where(t => t.Id == id).FirstOrDefault();
+            if (tag == null)
+            {
+                TagEntity tagEntity = tagEntityDAO.Get(id);
+                return converterFactory.tagConverter.Convert(tagEntity, OnObjectCreation);
+            }
+            else
+            {
+                return tag;
+            }
+
         }
 
         public Tag Add(Tag tag)
         {
-            TagEntity tagEntity = BuildTagEntity(tag, false);
+            TagEntity tagEntity = converterFactory.tagEntityConverter.Convert(tag);
             tagEntity = tagEntityDAO.Add(tagEntity);
-            return BuildTag(tagEntity, true);
+            return converterFactory.tagConverter.Convert(tagEntity, OnObjectCreation);
         }
 
         public void Modify(Tag tag)
         {
-            TagEntity tagEntity = BuildTagEntity(tag, false);
+            TagEntity tagEntity = converterFactory.tagEntityConverter.Convert(tag);
             tagEntityDAO.Modify(tagEntity);
         }
 
@@ -62,24 +69,5 @@ namespace InventoryDAL.Tags
             tagEntityDAO.Remove(id);
         }
 
-        private Tag BuildTag(TagEntity tagEntity, bool includesNavigationProperties)
-        {
-            var tagBuilder = builderFactory.CreateTagBuilder(tagEntity);
-            if (includesNavigationProperties)
-            {
-                tagBuilder.BuildProducts();
-            }
-            return tagBuilder.GetResult();
-        }
-
-        private TagEntity BuildTagEntity(Tag tag, bool includesNavigationProperties)
-        {
-            var tagEntityBuilder = builderFactory.CreateTagEntityBuilder(tag);
-            if (includesNavigationProperties)
-            {
-                tagEntityBuilder.BuildProductTagEntities();
-            }
-            return tagEntityBuilder.GetResult();
-        }
     }
 }

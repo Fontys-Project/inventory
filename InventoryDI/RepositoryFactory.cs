@@ -20,7 +20,7 @@ namespace InventoryDI
         public RepositoryFactory()
         {
             var daoFactory = new DAOFactory(DatabaseType.MYSQL);
-            var builderFactory = new BuilderFactory(new DomainFactory(),
+            var builderFactory = new ConverterFactory(new DomainFactory(),
                                                     new EntityFactory(),
                                                     this, 
                                                     daoFactory);

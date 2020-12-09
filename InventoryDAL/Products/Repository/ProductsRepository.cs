@@ -7,90 +7,69 @@ namespace InventoryDAL.Products
 {
     public class ProductsRepository : IProductsRepository
     {
-        private readonly IBuilderFactory builderFactory;
+        private readonly IConverterFactory converterFactory;
         private readonly IProductEntityDAO productEntityDAO;
 
+        private readonly Dictionary<Product,IProductEntity> productCache;
+
+
         public ProductsRepository(IProductEntityDAO productEntityDAO,
-                                  IBuilderFactory builderFactory)
+                                  IConverterFactory converterFactory)
         {
             this.productEntityDAO = productEntityDAO;
-            this.builderFactory = builderFactory;
+            this.converterFactory = converterFactory;
+            productCache = new Dictionary<Product, IProductEntity>();
         }
 
-        public List<Product> GetAllExcludingNavigationProperties()
+        // Handle cacheing of object on instantiation
+        private void OnObjectCreation(Product product, IProductEntity productEntity)
         {
-            List<ProductEntity> productEntities = productEntityDAO.GetAllIncludingNavigationProperties();
-            return productEntities
-                .Select(productEntity => BuildProduct(productEntity, false))
-                .ToList();
+            productCache.Add(product, productEntity);
         }
 
         public List<Product> GetAll()
         {
-            List<ProductEntity> productEntities = productEntityDAO.GetAllIncludingNavigationProperties();
-            return productEntities
-                .Select(productEntity => BuildProduct(productEntity, true))
-                .ToList();
-        }
-
-        //public List<Product> GetAll(int tagId)
-        //{
-        //    List<ProductEntity> productEntities = productEntityDAO.GetAllIncludingNavigationProperties().Where();
-        //    return productEntities
-        //        .Select(productEntity => BuildProduct(productEntity, true))
-        //        .ToList();
-        //}
-
-        public Product GetExcludingNavigationProperties(int id)
-        {
-            ProductEntity productEntity = productEntityDAO.GetIncludingNavigationProperties(id);
-            return BuildProduct(productEntity, false);
+            List<ProductEntity> productEntities = productEntityDAO.GetAll();
+            
+            // Trigger with where, only products not cached, and then select all uncached product entities to convert Products that will be added
+            // to the cache with the OnObjectCreation delegate.
+            productEntities.Where(productEntity => productCache.Values.Any(cacheEntity => cacheEntity.Id == productEntity.Id) == false)
+                .Select(productEntity => converterFactory.productConverter.Convert(productEntity, OnObjectCreation));
+            
+            return productCache.Keys.ToList<Product>();
         }
 
         public Product Get(int id)
         {
-            ProductEntity productEntity = productEntityDAO.GetIncludingNavigationProperties(id);
-            return BuildProduct(productEntity, true);
+            Product product = productCache.Keys.Where(p => p.Id == id).FirstOrDefault();
+            if (product == null) {
+                ProductEntity productEntity = productEntityDAO.Get(id);
+                return converterFactory.productConverter.Convert(productEntity, OnObjectCreation);
+            } else
+            {
+                return product;
+            }
         }
 
         public Product Add(Product product)
         {
-            ProductEntity productEntity = BuildProductEntity(product, false);
+            ProductEntity productEntity = converterFactory.productEntityConverter.Convert(product);
             productEntity = productEntityDAO.Add(productEntity);
-            return BuildProduct(productEntity, true);
+            return converterFactory.productConverter.Convert(productEntity, OnObjectCreation);
         }
 
         public void Modify(Product product)
         {
-            ProductEntity productEntity = BuildProductEntity(product, false);
+            ProductEntity productEntity = converterFactory.productEntityConverter.Convert(product);
             productEntityDAO.Modify(productEntity);
         }
 
         public void Remove(int id)
         {
             productEntityDAO.Remove(id);
+
+            //TODO : cleanup childs.
         }
 
-        private Product BuildProduct(ProductEntity productEntity, bool includesNavigationProperties)
-        {
-            var productBuilder = builderFactory.CreateProductBuilder(productEntity);
-            if (includesNavigationProperties)
-            {
-                productBuilder.BuildTags();
-                productBuilder.BuildStocks();
-            }
-            return productBuilder.GetResult();
-        }
-
-        private ProductEntity BuildProductEntity(Product product, bool includesNavigationProperties)
-        {
-            var productEntityBuilder = builderFactory.CreateProductEntityBuilder(product);
-            if (includesNavigationProperties)
-            {
-                productEntityBuilder.BuildProductTagEntities();
-                productEntityBuilder.BuildStockEntities();
-            }
-            return productEntityBuilder.GetResult();
-        }
     }
 }

@@ -8,53 +8,62 @@ namespace InventoryDAL.Stocks
 {
     public class StocksRepository : IStocksRepository
     {
-        private readonly IBuilderFactory builderFactory; 
+        private readonly IConverterFactory converterFactory; 
         private readonly IStockEntityDAO stockEntityDAO;
+        private readonly Dictionary<Stock, IStockEntity> stockCache;
 
-        public StocksRepository(IStockEntityDAO stockEntityDAO, IBuilderFactory builderFactory)
+
+        public StocksRepository(IStockEntityDAO stockEntityDAO, IConverterFactory converterFactory)
         {
-            this.builderFactory = builderFactory; 
+            this.converterFactory = converterFactory; 
             this.stockEntityDAO = stockEntityDAO;
+            stockCache = new Dictionary<Stock, IStockEntity>();
         }
 
-        public List<Stock> GetAllExcludingNavigationProperties()
+
+        // Handle cacheing of object on instantiation
+        private void OnObjectCreation(Stock stock, IStockEntity stockEntity)
         {
-            List<StockEntity> stockEntities = stockEntityDAO.GetAllIncludingNavigationProperties();
-            return stockEntities
-                .Select(stockEntity => BuildStock(stockEntity, false))
-                .ToList(); 
+            stockCache.Add(stock, stockEntity);
         }
 
         public List<Stock> GetAll()
         {
-            List<StockEntity> stockEntities = stockEntityDAO.GetAllIncludingNavigationProperties();
-            return stockEntities
-                .Select(stockEntity => BuildStock(stockEntity, true))
-                .ToList();
+            List<StockEntity> stockEntities = stockEntityDAO.GetAll();
+           
+            // Trigger with where, only stocks not cached, and then select all uncached stock entities to convert Stocks that will be added
+            // to the cache with the OnObjectCreation delegate.
+            stockEntities.Where(stockEntity => stockCache.Values.Any(cacheEntity => stockEntity.Id == cacheEntity.Id) == false)
+            .Select(stockEntity => converterFactory.stockConverter.Convert(stockEntity,OnObjectCreation));
+          
+            return stockCache.Keys.ToList<Stock>();
         }
 
-        public Stock GetExcludingNavigationProperties(int id)
-        {
-            StockEntity stockEntity = stockEntityDAO.GetIncludingNavigationProperties(id);
-            return BuildStock(stockEntity, false);
-        }
 
         public Stock Get(int id)
         {
-            StockEntity stockEntity = stockEntityDAO.GetIncludingNavigationProperties(id);
-            return BuildStock(stockEntity, true);
+            Stock stock = stockCache.Keys.Where(s => s.Id == id).FirstOrDefault();
+            if (stock == null)
+            {
+                StockEntity stockEntity = stockEntityDAO.Get(id);
+                return converterFactory.stockConverter.Convert(stockEntity, OnObjectCreation);
+            }
+            else
+            {
+                return stock;
+            }
         }
 
         public Stock Add(Stock stock)
         {
-            StockEntity stockEntity = BuildStockEntity(stock, false);
+            StockEntity stockEntity = converterFactory.stockEntityConverter.Convert(stock);
             stockEntity = stockEntityDAO.Add(stockEntity);
-            return BuildStock(stockEntity, true);
+            return converterFactory.stockConverter.Convert(stockEntity, OnObjectCreation);
         }
 
         public void Modify(Stock stock)
         {
-            StockEntity stockEntity = BuildStockEntity(stock, false);
+            StockEntity stockEntity = converterFactory.stockEntityConverter.Convert(stock);
             stockEntityDAO.Modify(stockEntity);
         }
 
@@ -63,22 +72,5 @@ namespace InventoryDAL.Stocks
             stockEntityDAO.Remove(id);
         }
 
-        private Stock BuildStock(StockEntity stockEntity, bool includesNavigationProperties)
-        {
-            var stockBuilder = builderFactory.CreateStockBuilder(stockEntity);
-            if(includesNavigationProperties){
-                stockBuilder.BuildProduct();
-            }
-            return stockBuilder.GetResult();
-        }
-
-        private StockEntity BuildStockEntity(Stock stock, bool includesNavigationProperties)
-        {
-            var stockEntityBuilder = builderFactory.CreateStockEntityBuilder(stock);
-            if(includesNavigationProperties){
-                stockEntityBuilder.BuildProductEntity();
-            }
-            return stockEntityBuilder.GetResult();
-        }
     }
 }
