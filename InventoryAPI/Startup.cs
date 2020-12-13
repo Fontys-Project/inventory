@@ -130,7 +130,8 @@ iwIDAQAB"),
             services.AddSingleton<TagsFacade>();
             services.AddSingleton<StocksFacade>();
             services.AddSingleton<IRepositoryFactory, RepositoryFactory>();
-            services.AddSingleton<IEventBusMessenger, RabbitMQProxy>();
+            services.AddSingleton<IEventBusPublisher, RabbitMessenger>();
+
 
 
             services.AddApiVersioning(x =>

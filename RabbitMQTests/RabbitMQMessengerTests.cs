@@ -14,7 +14,8 @@ namespace RabbitMQ.Tests
         [TestMethod()]
         public void RabbitMQMessengerTest()
         {
-            Assert.Fail();
+            IBus bus = new ConnectionFactory().GetBus(); 
+            var messenger = new Publisher();
         }
 
         [DataTestMethod]
@@ -25,8 +26,8 @@ namespace RabbitMQ.Tests
         {
             // quick integration testing, refactor!
             IBus bus = new ConnectionFactory().GetBus();
-            RabbitMQMessenger m = new RabbitMQMessenger(bus);
-            m.Publish(new Message{
+            Publisher m = new Publisher(bus);
+            m.Publish(new OrderMessage{
                 Text = input
             });
         }

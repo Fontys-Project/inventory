@@ -4,9 +4,8 @@ using System.Text;
 
 namespace InventoryLogic.EventBus
 {
-    public interface IEventBusMessenger
+    public class ScannerMessage
     {
-        public void Publish(Message message);
-        public void Subscribe();
+        public string Text { get; set; }
     }
 }

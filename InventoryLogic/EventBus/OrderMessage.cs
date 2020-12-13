@@ -4,7 +4,7 @@ using System.Text;
 
 namespace InventoryLogic.EventBus
 {
-    public class Message
+    public class OrderMessage
     {
         public string Text { get; set; }
     }

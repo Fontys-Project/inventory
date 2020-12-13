@@ -11,7 +11,8 @@ namespace RabbitMQ
 
         public ConnectionFactory()
         {
-            bus = RabbitHutch.CreateBus("host=localhost;port=5672"); // TODO: put in config file or environment variables?
+            var rabbitHostName = Environment.GetEnvironmentVariable("RABBIT_HOSTNAME");
+            bus = RabbitHutch.CreateBus($"host={rabbitHostName ?? "localhost"}"); 
         }
 
         public IBus GetBus()

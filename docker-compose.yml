@@ -15,35 +15,26 @@ services:
     restart: always
 
   inventoryapi:
+    restart: on-failure  
     depends_on:
         - db
         - rabbitmq
+    environment:
+      - RABBIT_HOSTNAME=rabbitmq
     image: ${DOCKER_REGISTRY-}inventoryapi
     build:
       context: .
       dockerfile: InventoryAPI/Dockerfile
     ports:
       - "5001:80"
-    networks:
-      - my-network
 
   rabbitmq:
     image: rabbitmq:3-management
     hostname: my-rabbit
-    #volumes:
-      #- ./rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json
-      #- ./rabbitmq/etc/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
-      #- ./rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
-      #- ./rabbitmq/logs:/var/log/rabbitmq/log
+    container_name: rabbitmq
     ports:
       - 5672:5672
       - 15672:15672
-    networks:
-      - my-network
 
 volumes:
     dbdata:
-
-networks:
-    my-network: 
-        driver: bridge
