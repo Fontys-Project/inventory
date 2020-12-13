@@ -34,7 +34,7 @@ namespace InventoryDAL.Stocks
             // Trigger with where, only stocks not cached, and then select all uncached stock entities to convert Stocks that will be added
             // to the cache with the OnObjectCreation delegate.
             stockEntities.Where(stockEntity => stockCache.Values.Any(cacheEntity => stockEntity.Id == cacheEntity.Id) == false)
-            .Select(stockEntity => converterFactory.stockConverter.Convert(stockEntity,OnObjectCreation));
+            .ToList().ForEach(stockEntity => converterFactory.stockConverter.Convert(stockEntity,OnObjectCreation));
           
             return stockCache.Keys.ToList<Stock>();
         }

@@ -30,12 +30,13 @@ namespace InventoryDAL.Products
         public List<Product> GetAll()
         {
             List<ProductEntity> productEntities = productEntityDAO.GetAll();
-            
+
             // Trigger with where, only products not cached, and then select all uncached product entities to convert Products that will be added
             // to the cache with the OnObjectCreation delegate.
-            productEntities.Where(productEntity => productCache.Values.Any(cacheEntity => cacheEntity.Id == productEntity.Id) == false)
-                .Select(productEntity => converterFactory.productConverter.Convert(productEntity, OnObjectCreation));
+            productEntities.Where(productEntity => productCache.Values.Any(cacheEntity => cacheEntity.Id == productEntity.Id) == false
+            ).ToList().ForEach(productEntity => converterFactory.productConverter.Convert(productEntity, OnObjectCreation));
             
+
             return productCache.Keys.ToList<Product>();
         }
 

@@ -31,7 +31,7 @@ namespace InventoryDAL.Tags
             // Trigger with where, only products not cached, and then select all uncached product entities to convert Products that will be added
             // to the cache with the OnObjectCreation delegate.
             tagEntities.Where(tagEntity => tagCache.Values.Any(cacheEntity => cacheEntity.Id == tagEntity.Id) == false)
-                .Select(tagEntity => converterFactory.tagConverter.Convert(tagEntity, OnObjectCreation));
+                .ToList().ForEach(tagEntity => converterFactory.tagConverter.Convert(tagEntity, OnObjectCreation));
 
             return tagCache.Keys.ToList<Tag>();
         }
