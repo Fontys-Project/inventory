@@ -13,11 +13,11 @@ namespace InventoryAPI.Products.RequestModels
         public decimal Price { get; set; }
         public string Sku { get; set; }
         public int Id { get; set; }
-        public List<StockRequestModel> StockRequestModels { get; private set; }
+        public List<StockRequestModel> Stocks { get; private set; }
 
         public ProductRequestModel()
         {
-            StockRequestModels = new List<StockRequestModel>();
+            Stocks = new List<StockRequestModel>();
         }
 
         // system converter
@@ -33,7 +33,7 @@ namespace InventoryAPI.Products.RequestModels
 
             productDTO.Stocks.ForEach(stock =>
             {
-                productRequestModel.StockRequestModels.Add(StockRequestModel.StockDTOToStockRequestModel(stock));
+                productRequestModel.Stocks.Add(StockRequestModel.StockDTOToStockRequestModel(stock));
             });
 
             return productRequestModel;

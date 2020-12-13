@@ -15,7 +15,7 @@ namespace InventoryDAL.Stocks
 
         }
 
-        public override List<StockEntity> GetAllIncludingNavigationProperties()
+        public new List<StockEntity> GetAll()
         {
             this.dbContext.Database.EnsureCreated();
             Task<List<StockEntity>> lst = this.Table
@@ -25,7 +25,7 @@ namespace InventoryDAL.Stocks
             return lst.Result;
         }
 
-        public override StockEntity GetIncludingNavigationProperties(int id)
+        public new StockEntity Get(int id)
         {
             this.dbContext.Database.EnsureCreated();
             // these includes force checking the db; it ignores local cache...

@@ -28,7 +28,7 @@ namespace InventoryDAL.Products
         }
 
         public List<Product> GetAll()
-        {
+        {     
             List<ProductEntity> productEntities = productEntityDAO.GetAll();
 
             // Trigger with where, only products not cached, and then select all uncached product entities to convert Products that will be added
