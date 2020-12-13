@@ -29,6 +29,11 @@
             Delete a <typeparamref name="Type"/> definition
             </summary>
         </member>
+        <member name="M:InventoryAPI.EventBusTest.EventBusTestController.Publish(System.String)">
+            <summary>
+            Publish a message to the event bus for testing purposes
+            </summary>
+        </member>
         <member name="M:InventoryAPI.Products.ProductsController.GetAll">
             <summary>
             List of all Product definitions
