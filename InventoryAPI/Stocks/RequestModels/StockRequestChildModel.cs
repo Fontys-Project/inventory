@@ -7,30 +7,30 @@ using System.Threading.Tasks;
 
 namespace InventoryAPI.Stocks.RequestModels
 {
-    public class StockRequestModel : StockRequestChildModel
+    public class StockRequestChildModel
     {
-        public ProductRequestModel Product { get; set; }
+        public int Id { get; set; }
+        public int ProductId { get; set; }
 
-        public StockRequestModel() : base()
+        
+        public int Amount { get; set; }
+        public DateTime Date { get; set; }
+
+        // system converter
+        public static StockRequestChildModel StockDTOToStockRequestChildModel(StockDTO stock)
         {
-
-        }
-
-
-        public static StockRequestModel StockDTOToStockRequestModel(StockDTO stock)
-        {
-            return new StockRequestModel()
+            return new StockRequestChildModel()
             {
                 Id = stock.Id,
                 Amount = stock.Amount,
                 ProductId = stock.ProductId,
-                Product = stock.Product != null ? ProductRequestModel.ProductDTOToProductRequestModel(stock.Product) : null,
+                //Product = ProductRequestModel.ProductDTOToProductRequestModel(stock.Product), error in logic layer TODO, stockDTO must contain ProductDTO, not Product
                 Date = stock.Date
             };
         }
 
         // system converter
-        public static StockDTO StockRequestModelToStockDTO(StockRequestModel stock)
+        public static StockDTO StockRequestChildModelToStockDTO(StockRequestChildModel stock)
         {
             return new StockDTO()
             {

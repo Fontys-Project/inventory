@@ -148,7 +148,7 @@ iwIDAQAB"),
                 //config.ApiGroupNames = new[] { "0.1" };
 
                 config.SchemaNameGenerator = new SchemaNameGenerator();
-
+                   
                 // Authentication
                 config.OperationProcessors.Add(new OperationSecurityScopeProcessor("JWT token"));
                 config.AddSecurity("JWT token", Enumerable.Empty<string>(),
@@ -179,7 +179,10 @@ iwIDAQAB"),
 
             // Register the Swagger generator and the Swagger UI middlewares
             app.UseOpenApi();
-            app.UseSwaggerUi3();
+            app.UseSwaggerUi3(c =>
+            {
+                c.DefaultModelsExpandDepth = -1;
+            });
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

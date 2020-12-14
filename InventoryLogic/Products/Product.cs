@@ -54,6 +54,14 @@ namespace InventoryLogic.Products
                 if (!Stocks.Contains(stockModel))
                     Stocks.Add(stockModel);
             }
+            foreach (TagDTO tag in fromDTO.Tags)
+            {
+                Tag tagModel = new Tag();
+                tagModel.ConvertFromDTO(tag);
+                if (!Tags.Contains(tagModel))
+                    Tags.Add(tagModel);
+            }
+
         }
 
         public void ConvertToDTO(ProductDTO toDTO)
