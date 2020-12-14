@@ -12,6 +12,7 @@ namespace InventoryLogic.Tags.Tests
     [TestClass()]
     public class TagComponentTests
     {
+        /*
         [TestMethod]
         [Priority(10)]
         public void GetProductTagJoinsShouldReturnProductTagJoins()
@@ -23,6 +24,6 @@ namespace InventoryLogic.Tags.Tests
             var actual = tag.Products[0];
 
             Assert.AreEqual(expected, actual);
-        }
+        }*/
     }
 }

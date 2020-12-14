@@ -45,7 +45,8 @@ namespace InventoryLogic.Stocks
         {
             Id = fromView.Id;
             ProductId = fromView.ProductId;
-            Product = fromView.Product;
+            Product = new Product();
+            Product.ConvertFromDTO(fromView.Product);
             Amount = fromView.Amount;
             Date = fromView.Date;
 
@@ -56,7 +57,7 @@ namespace InventoryLogic.Stocks
         {
             toView.Id = Id;
             toView.ProductId = ProductId;
-            toView.Product = Product;
+            toView.Product = toView.Product;
             toView.Amount = Amount;
             toView.Date = Date;
 

@@ -74,7 +74,7 @@ namespace InventoryLogic.Tags.Tests
 
             Assert.AreEqual(expected, actual);
         }
-
+/*
         [TestMethod]
         public void GetProductTagJoinsShouldReturnProductTagJoins()
         {
@@ -87,6 +87,6 @@ namespace InventoryLogic.Tags.Tests
             var actual = tag.Products[0];
 
             Assert.AreEqual(mockProduct, actual);
-        }
+        }*/
     }
 }

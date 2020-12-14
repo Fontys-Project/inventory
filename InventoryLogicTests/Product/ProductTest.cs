@@ -70,6 +70,7 @@ namespace InventoryLogic.Products.Tests
             Assert.AreEqual<String>(expected, actual, "Error in retrieving product sku");
         }
 
+        /*
         [TestMethod("Product_Stocks_Returns mockstock")]
         [TestCategory("Unit Tests")]
         [Priority(1)]
@@ -87,7 +88,7 @@ namespace InventoryLogic.Products.Tests
             Stock actual = product.Stocks[0];
             // Assert
             Assert.AreEqual<Stock>(expected, actual, "Error in retrieving mocked stock");
-        }
+        }*/
 
 
         [TestMethod("Product_Tags_Returns mocktag")]

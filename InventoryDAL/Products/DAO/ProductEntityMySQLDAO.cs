@@ -17,7 +17,7 @@ namespace InventoryDAL.Products
         {
         }
 
-        public override List<ProductEntity> GetAll()
+        public new List<ProductEntity> GetAll()
         {
             this.dbContext.Database.EnsureCreated();
             Task<List<ProductEntity>> lst = this.Table
@@ -26,6 +26,18 @@ namespace InventoryDAL.Products
                 .ToListAsync();
             lst.Wait();
             return lst.Result;
+        }
+
+        public new ProductEntity Get(int id)
+        {
+            this.dbContext.Database.EnsureCreated();
+            // these includes force check the db; it ignores local cache...
+            Task<ProductEntity> productEntity = this.Table
+                .Include(pe => pe.ProductTagEntities)
+                .Include(pe => pe.StockEntities)
+                .SingleOrDefaultAsync(pe => pe.Id == id);
+            productEntity.Wait();
+            return productEntity.Result;
         }
     }
 }
