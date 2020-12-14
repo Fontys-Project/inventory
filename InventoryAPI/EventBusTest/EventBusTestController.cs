@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using InventoryLogic.EventBus;
+using Newtonsoft.Json;
 
 namespace InventoryAPI.EventBusTest
 {
@@ -25,10 +26,19 @@ namespace InventoryAPI.EventBusTest
         [HttpGet]
         public void Publish(string text = "lalala")
         {
-            publisher.Publish(new OrderMessage
+            // TODO: Does Inventory need to publish at all? Or just listen for messages?
+            
+            // optional: use model to create a message
+            var message = new OrderMessage
             {
                 Text = text
-            });
+            };
+
+            // But in the end you will need a string
+            string payload = JsonConvert.SerializeObject(message);
+
+            // Example for Order microservice
+            publisher.Publish("ordering", "order.created", payload);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using InventoryLogic.EventBus;
+using Newtonsoft.Json;
 using RabbitMQ;
 
 namespace InventoryDI
@@ -14,15 +15,15 @@ namespace InventoryDI
 
         public RabbitMessenger()
         {
-            var bus = new ConnectionFactory().GetBus();
-            publisher = new Publisher(bus);
-            messageHandler = new MessageHandler(bus);
+            var channel = new ConnectionService().GetChannel();
+            publisher = new Publisher(channel);
+            messageHandler = new MessageHandler(channel);
             messageHandler.StartListening();
         }
 
-        public void Publish(OrderMessage message)
+        public void Publish(string exchange, string routingKey, string payload)
         {
-            publisher.Publish(message);
+            publisher.Publish(exchange, routingKey, payload);
         }
     }
 }

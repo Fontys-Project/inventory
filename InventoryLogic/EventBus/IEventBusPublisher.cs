@@ -6,7 +6,6 @@ namespace InventoryLogic.EventBus
 {
     public interface IEventBusPublisher
     {
-        // TODO: Does Inventory need to publish at all? Or just listen for messages?
-        public void Publish(OrderMessage message); 
+        public void Publish(string exchange, string routingKey, string payload); 
     }
 }
