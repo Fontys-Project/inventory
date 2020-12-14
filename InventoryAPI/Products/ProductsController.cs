@@ -75,5 +75,27 @@ namespace InventoryAPI.Products
         {
             return productsFacade.Remove(id);
         }
+
+        /// <summary>
+        /// Apply a tag to a product
+        /// </summary>
+        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_tag_applytag")]
+        [HttpPost]
+        [Route("{id}/applytag")]
+        public bool ApplyTag(int id, int tagId)
+        {
+            return productsFacade.ApplyTag(id, tagId);
+        }
+
+        /// <summary>
+        /// Apply a tag to a product
+        /// </summary>
+        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_tag_removetag")]
+        [HttpPost]
+        [Route("{id}/removetag")]
+        public bool RemoveTag(int id, int tagId)
+        {
+            return productsFacade.RemoveTag(id, tagId);
+        }
     }
 }

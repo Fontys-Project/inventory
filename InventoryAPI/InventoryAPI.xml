@@ -59,6 +59,16 @@
             Delete a Product definition
             </summary>
         </member>
+        <member name="M:InventoryAPI.Products.ProductsController.ApplyTag(System.Int32,System.Int32)">
+            <summary>
+            Apply a tag to a product
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Products.ProductsController.RemoveTag(System.Int32,System.Int32)">
+            <summary>
+            Apply a tag to a product
+            </summary>
+        </member>
         <member name="M:InventoryAPI.Stocks.StocksController.GetAll">
             <summary>
             List of all Stock definitions
@@ -102,11 +112,6 @@
         <member name="M:InventoryAPI.Tags.TagsController.Delete(System.Int32)">
             <summary>
             Delete a Stock definition
-            </summary>
-        </member>
-        <member name="M:InventoryAPI.Tags.TagsController.ApplyTag(System.Int32,System.Int32)">
-            <summary>
-            Apply a tag to a product
             </summary>
         </member>
     </members>
