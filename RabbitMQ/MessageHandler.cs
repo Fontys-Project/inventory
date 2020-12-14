@@ -31,7 +31,8 @@ namespace RabbitMQ
         private void Subscribe(string exchange, OnMessage callback)
         {
             channel.ExchangeDeclare(exchange: exchange, type: ExchangeType.Fanout);
-            var queueName = channel.QueueDeclare().QueueName; // random name
+            var queueName = exchange + ".inventory";
+            channel.QueueDeclare(queueName); 
             Console.WriteLine(queueName);
 
             // Messages published to exchange, should be directed to our queue
@@ -63,7 +64,7 @@ namespace RabbitMQ
 
         private void HandleScan(string message)
         {
-            ScannerMessage scannerMessage = JsonConvert.DeserializeObject<ScannerMessage>(message); 
+            ScannerMessage scannerMessage = JsonConvert.DeserializeObject<ScannerMessage>(message);
             Console.WriteLine("do something with ScannerMessage attributes:" + scannerMessage.Text);
         }
     }
