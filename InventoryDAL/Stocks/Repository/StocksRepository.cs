@@ -24,7 +24,8 @@ namespace InventoryDAL.Stocks
         // Handle cacheing of object on instantiation
         private void OnObjectCreation(Stock stock, IStockEntity stockEntity)
         {
-            stockCache.Add(stock, stockEntity);
+            if(!stockCache.ContainsValue(stockEntity))
+                stockCache.Add(stock, stockEntity);
         }
 
         public List<Stock> GetAll()
@@ -72,5 +73,9 @@ namespace InventoryDAL.Stocks
             stockEntityDAO.Remove(id);
         }
 
+        public Stock CreateNew()
+        {
+            return new Stock(-1, null, 0);
+        }
     }
 }

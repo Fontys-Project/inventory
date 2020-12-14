@@ -22,6 +22,8 @@ namespace InventoryLogic.Facade
             if (product.Tags.Contains(tag)) return false;
 
             product.Tags.Add(tag);
+            tag.Products.Add(product);
+
             repoFactory.GetCrudRepository<Product>().Modify(product);
             return true;
         }

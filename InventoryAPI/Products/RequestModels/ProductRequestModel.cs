@@ -15,28 +15,26 @@ namespace InventoryAPI.Products.RequestModels
         public string Sku { get; set; }
         public int Id { get; set; }
         public List<StockRequestChildModel> Stocks { get; private set; }
-        public List<TagRequestModel> Tags { get; private set; }
+        public List<TagRequestChildModel> Tags { get; private set; }
              
-        public ProductRequestModel()
+        private ProductRequestModel(int Id,string Name, decimal Price, string Sku)
         {
             Stocks = new List<StockRequestChildModel>();
-            Tags = new List<TagRequestModel>();
+            Tags = new List<TagRequestChildModel>();
+            this.Id = Id;
+            this.Name = Name;
+            this.Price = Price;
+            this.Sku = Sku;
         }
 
         // system converter
         public static ProductRequestModel ProductDTOToProductRequestModel(ProductDTO productDTO)
         {
-            var productRequestModel = new ProductRequestModel()
-            {
-                Id = productDTO.Id,
-                Name = productDTO.Name,
-                Price = productDTO.Price,
-                Sku = productDTO.Sku
-            };
+            var productRequestModel = new ProductRequestModel(productDTO.Id, productDTO.Name, productDTO.Price, productDTO.Sku);
 
-            productDTO.Stocks.ForEach(stock => productRequestModel.Stocks.Add(StockRequestModel.StockDTOToStockRequestModel(stock)));
+            productDTO.Stocks.ForEach(stock => productRequestModel.Stocks.Add(StockRequestChildModel.StockDTOToStockRequestChildModel(stock)));
 
-            productDTO.Tags.ForEach(tag => productRequestModel.Tags.Add(TagRequestModel.TagDTOToTagRequestModel(tag)));
+            productDTO.Tags.ForEach(tag => productRequestModel.Tags.Add(TagRequestChildModel.TagDTOToTagRequestChildModel(tag)));
 
             return productRequestModel;
         }

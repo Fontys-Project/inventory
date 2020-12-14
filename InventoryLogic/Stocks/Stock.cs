@@ -12,8 +12,6 @@ namespace InventoryLogic.Stocks
         public int Amount { get; set; }
         public DateTime Date { get; set; }
 
-        public Stock() { }  // TODO: Remove. Means updating DTOFacade.
-
         public Stock(int id, Product product, int amount)
         {
             Id = id;
@@ -45,19 +43,21 @@ namespace InventoryLogic.Stocks
         {
             Id = fromView.Id;
             ProductId = fromView.ProductId;
-            Product = new Product();
+            Product = new Product(fromView.Product.Id,fromView.Product.Name,fromView.Product.Price,fromView.Product.Sku);
             Product.ConvertFromDTO(fromView.Product);
             Amount = fromView.Amount;
             Date = fromView.Date;
-
-
         }
 
         public void ConvertToDTO(StockDTO toView)
         {
             toView.Id = Id;
             toView.ProductId = ProductId;
-            toView.Product = toView.Product;
+            toView.Product = new ProductDTO();
+            toView.Product.Id = Product.Id;
+            toView.Product.Name = Product.Name;
+            toView.Product.Price = Product.Price;
+            toView.Product.Sku = Product.Sku;
             toView.Amount = Amount;
             toView.Date = Date;
 
