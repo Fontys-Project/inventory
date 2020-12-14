@@ -37,6 +37,8 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+#    volumes:
+#    - ./RabbitMQ/etc/enabled_plugins:/etc/rabbitmq/enabled_plugins
 
 volumes:
     dbdata:
