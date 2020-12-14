@@ -79,7 +79,8 @@ namespace InventoryAPI.Products
         /// <summary>
         /// Apply a tag to a product
         /// </summary>
-        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_tag_applytag")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_tag_applytag")]
+        // TODO: role aanpassen naar inventory_product_applytag
         [HttpPost]
         [Route("{id}/applytag")]
         public bool ApplyTag(int id, int tagId)
@@ -90,7 +91,7 @@ namespace InventoryAPI.Products
         /// <summary>
         /// Apply a tag to a product
         /// </summary>
-        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_tag_removetag")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_product_removetag")]
         [HttpPost]
         [Route("{id}/removetag")]
         public bool RemoveTag(int id, int tagId)
