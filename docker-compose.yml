@@ -13,15 +13,32 @@ services:
     volumes:
        - dbdata:/var/lib/mysql
     restart: always
+
   inventoryapi:
+    restart: on-failure  
     depends_on:
         - db
+        - rabbitmq
+    environment:
+      - RABBIT_HOSTNAME=rabbitmq
+      - ORDERS_EXCHANGE=orders
+      - SCANNER_EXCHANGE=scanner
     image: ${DOCKER_REGISTRY-}inventoryapi
     build:
       context: .
       dockerfile: InventoryAPI/Dockerfile
     ports:
       - "5001:80"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: my-rabbit
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+#    volumes:
+#    - ./RabbitMQ/etc/enabled_plugins:/etc/rabbitmq/enabled_plugins
 
 volumes:
     dbdata:
