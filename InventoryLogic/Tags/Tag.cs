@@ -17,7 +17,7 @@ namespace InventoryLogic.Tags
         {
             Id = id;
             Name = name;
-            Products = products;
+            Products = products != null ?  products : new List<Product>();
         }
 
         public void ConvertFromDTO(TagDTO tagDTO)
