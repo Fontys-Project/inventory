@@ -6,6 +6,6 @@ namespace InventoryLogic.EventBus
 {
     public interface IEventBusPublisher
     {
-        public void Publish(string exchange, string routingKey, string payload); 
+        public void Publish(string exchange, string payload); 
     }
 }

@@ -21,9 +21,9 @@ namespace InventoryDI
             messageHandler.StartListening();
         }
 
-        public void Publish(string exchange, string routingKey, string payload)
+        public void Publish(string exchange, string payload)
         {
-            publisher.Publish(exchange, routingKey, payload);
+            publisher.Publish(exchange, payload);
         }
     }
 }

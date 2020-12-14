@@ -38,7 +38,8 @@ namespace InventoryAPI.EventBusTest
             string payload = JsonConvert.SerializeObject(message);
 
             // Example for Order microservice
-            publisher.Publish("ordering", "order.created", payload);
+            var exchangeName= Environment.GetEnvironmentVariable("ORDERS_EXCHANGE");
+            publisher.Publish(exchangeName, payload);
         }
     }
 }

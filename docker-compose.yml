@@ -21,6 +21,8 @@ services:
         - rabbitmq
     environment:
       - RABBIT_HOSTNAME=rabbitmq
+      - ORDERS_EXCHANGE=orders
+      - SCANNER_EXCHANGE=scanner
     image: ${DOCKER_REGISTRY-}inventoryapi
     build:
       context: .

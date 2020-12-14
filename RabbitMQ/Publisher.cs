@@ -13,11 +13,13 @@ namespace RabbitMQ
         public Publisher(IModel channel)
         {
             this.channel = channel;
-            this.channel.ConfirmSelect();
         }
 
-        public void Publish(string exchange, string routingKey, string payload)
+        public void Publish(string exchange, string payload)
         {
+            channel.ExchangeDeclare(exchange: exchange, type: ExchangeType.Fanout);
+
+            // optional properties
             var props = this.channel.CreateBasicProperties();
             props.AppId = "Inventory";
             props.Persistent = true;
@@ -25,9 +27,17 @@ namespace RabbitMQ
             props.MessageId = Guid.NewGuid().ToString("N");
             props.Timestamp = new AmqpTimestamp(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
 
+            // body
             var body = Encoding.UTF8.GetBytes(payload);
-            this.channel.BasicPublish(exchange, routingKey, props, body);
-            this.channel.WaitForConfirmsOrDie(new TimeSpan(0, 0, 5));
+
+            // publish
+            channel.BasicPublish(
+                exchange: exchange,
+                routingKey: "", // ignored with type fanout
+                basicProperties: props,
+                body: body);
+
+            Console.WriteLine(" [x] Sent: {0}", payload);
         }
     }
 }

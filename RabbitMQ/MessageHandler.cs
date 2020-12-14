@@ -1,7 +1,7 @@
 ﻿using InventoryLogic.EventBus;
 using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -19,15 +19,27 @@ namespace RabbitMQ
 
         public void StartListening()
         {
-            Subscribe("ordering.inventory", HandleOrder);
-            Subscribe("scanner.inventory", HandleScan);
+            var exchangeName = Environment.GetEnvironmentVariable("ORDERS_EXCHANGE");
+            Subscribe(exchangeName, HandleOrder);
+
+            exchangeName = Environment.GetEnvironmentVariable("SCANNER_EXCHANGE");
+            Subscribe(exchangeName, HandleScan);
         }
 
         public delegate void OnMessage(string str);
 
-        private void Subscribe(string queueName, OnMessage callback)
+        private void Subscribe(string exchange, OnMessage callback)
         {
-            channel.QueueDeclare(queueName);
+            channel.ExchangeDeclare(exchange: exchange, type: ExchangeType.Fanout);
+            var queueName = channel.QueueDeclare().QueueName; // random name
+            Console.WriteLine(queueName);
+
+            // Messages published to exchange, should be directed to our queue
+            channel.QueueBind(queue: queueName,
+                exchange: exchange,
+                routingKey: "");
+
+            Console.WriteLine(" [*] Waiting for logs.");
 
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += (model, eventArgs) =>
