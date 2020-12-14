@@ -25,6 +25,9 @@ namespace InventoryDAL.Products.Tests
             this.mockDomainFactory = new Mock<IDomainFactory>();
             this.mockRepositoryFactory = new Mock<IRepositoryFactory>();
             this.mockProductEntity = new Mock<IProductEntity>().SetupAllProperties();
+            mockProductEntity.Setup(pe => pe.ProductTagEntities).Returns(new List<ProductTagEntity>());
+            mockProductEntity.Setup(pe => pe.StockEntities).Returns(new List<StockEntity>());
+            
         }
 
         [TestMethod()]
@@ -33,17 +36,19 @@ namespace InventoryDAL.Products.Tests
             int expected = 123;
             mockProductEntity.Setup(pe => pe.Id).Returns(expected);
 
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            int actual = builder.Id;
+            ProductConverter builder = CreateProductBuilderWithMocks();
+            int actual = builder.Convert(mockProductEntity.Object, (a, b) => { }).Id;
 
             Assert.AreEqual(expected, actual);
         }
 
-        private ProductBuilder CreateProductBuilderWithMocks()
+
+        private ProductConverter CreateProductBuilderWithMocks()
         {
-            return new ProductBuilder(mockProductEntity.Object,
-                                      mockDomainFactory.Object,
+            return new ProductConverter(mockDomainFactory.Object,
                                       mockRepositoryFactory.Object);
+            
+
         }
 
         [TestMethod()]
@@ -52,8 +57,8 @@ namespace InventoryDAL.Products.Tests
             string expected = "Name123";
             mockProductEntity.Setup(pe => pe.Name).Returns(expected);
 
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            string actual = builder.Name;
+            ProductConverter builder = CreateProductBuilderWithMocks();
+            string actual = builder.Convert(mockProductEntity.Object, (a, b) => { }).Name;
 
             Assert.AreEqual(expected, actual);
         }
@@ -64,8 +69,8 @@ namespace InventoryDAL.Products.Tests
             Decimal expected = 12.50M;
             mockProductEntity.Setup(pe => pe.Price).Returns(expected);
 
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            Decimal actual = builder.Price;
+            ProductConverter builder = CreateProductBuilderWithMocks();
+            Decimal actual = builder.Convert(mockProductEntity.Object, (a, b) => { }).Price;
 
             Assert.AreEqual(expected, actual);
         }
@@ -76,8 +81,8 @@ namespace InventoryDAL.Products.Tests
             string expected = "Sku123";
             mockProductEntity.Setup(pe => pe.Sku).Returns(expected);
 
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            string actual = builder.Sku;
+            ProductConverter builder = CreateProductBuilderWithMocks();
+            string actual = builder.Convert(mockProductEntity.Object, (a, b) => { }).Sku;
 
             Assert.AreEqual(expected, actual);
         }
@@ -87,8 +92,8 @@ namespace InventoryDAL.Products.Tests
         {
             int expected = 0;
 
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            int actual = builder.Tags.Count;
+            ProductConverter builder = CreateProductBuilderWithMocks();
+            int actual = builder.Convert(mockProductEntity.Object, (a, b) => { }).Tags.Count;
 
             Assert.AreEqual(expected, actual);
         }
@@ -98,8 +103,8 @@ namespace InventoryDAL.Products.Tests
         {
             int expected = 0;
 
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            int actual = builder.Stocks.Count;
+            ProductConverter builder = CreateProductBuilderWithMocks();
+            int actual = builder.Convert(mockProductEntity.Object, (a, b) => { }).Stocks.Count;
 
             Assert.AreEqual(expected, actual);
         }
@@ -113,20 +118,20 @@ namespace InventoryDAL.Products.Tests
             SetupMockRepositoryFactoryToReturnTags();
 
             /* ACT */
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            builder.BuildTags();
+            ProductConverter builder = CreateProductBuilderWithMocks();
+            //builder.BuildTags();
 
             /* ASSERT */
             for (int i = 0; i < expected.Length; i++)
             {
-                int actual = builder.Tags[i].Id;
+                int actual = builder.Convert(mockProductEntity.Object, (a, b) => { }).Tags[i].Id;
                 Assert.AreEqual(expected[i], actual);
             }
         }
 
         private void SetupMockRepositoryFactoryToReturnTags()
         {
-            this.mockRepositoryFactory.Setup(factory => factory.GetCrudRepository<Tag>()
+            this.mockRepositoryFactory.Setup(factory => factory.TagsRepository
                                                      .Get(It.IsAny<int>()))
                                                      .Returns((int id) => new Tag(id, "TestTag"));
         }
@@ -156,13 +161,13 @@ namespace InventoryDAL.Products.Tests
             SetupMockRepositoryFactoryToReturnStocks();
 
             /* ACT */
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            builder.BuildStocks();
+            ProductConverter builder = CreateProductBuilderWithMocks();
+            //builder.BuildStocks();
 
             /* ASSERT */
             for (int i = 0; i < expected.Length; i++)
             {
-                int actual = builder.Stocks[i].Id;
+                int actual = builder.Convert(mockProductEntity.Object, (a, b) => { }).Stocks[i].Id;
                 Assert.AreEqual(expected[i], actual);
             }
         }
@@ -186,9 +191,9 @@ namespace InventoryDAL.Products.Tests
 
         private void SetupMockRepositoryFactoryToReturnStocks()
         {
-            this.mockRepositoryFactory.Setup(rf => rf.GetCrudRepository<Stock>()
-                                                     .Get(It.IsAny<int>()))
-                                                     .Returns((int id) => new Stock(id, 999, 888));
+            this.mockRepositoryFactory.Setup(rf => rf.StocksRepository
+                    .Get(It.IsAny<int>()))
+                    .Returns((int id) => new Stock(id, 999, 888));
         }
 
         [TestMethod()]
@@ -200,8 +205,8 @@ namespace InventoryDAL.Products.Tests
             SetupMockDomainFactoryToReturnProduct();
 
             /* ACT */
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            IProduct product = builder.GetResult();
+            ProductConverter builder = CreateProductBuilderWithMocks();
+            IProduct product = builder.Convert(expectedProps, (a, b) => { });
 
             /* ASSERT */
             Assert.AreEqual(product.Id, expectedProps.Id);
@@ -236,15 +241,16 @@ namespace InventoryDAL.Products.Tests
             /* ARRANGE */
             ProductEntity basicProps = new ProductEntity { Id = 100, Name = "Name", Price = 10.00M, Sku = "Sku" };
             int[] expectedStockIds = { 111, 222, 333 };
+   
             SetBasicPropertiesInMockProductEntity(basicProps);
             GiveStockEntitiesToMockProductEntity(expectedStockIds);
             SetupMockDomainFactoryToReturnProduct();
             SetupMockRepositoryFactoryToReturnStocks();
 
             /* ACT */
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            builder.BuildStocks();
-            IProduct product = builder.GetResult();
+            ProductConverter builder = CreateProductBuilderWithMocks();
+            //builder.BuildStocks();
+            IProduct product = builder.Convert(mockProductEntity.Object, (a, b) => { });
 
             /* ASSERT */
             for (int i = 0; i < expectedStockIds.Length; i++)
@@ -266,9 +272,9 @@ namespace InventoryDAL.Products.Tests
             SetupMockRepositoryFactoryToReturnTags();
 
             /* ACT */
-            ProductBuilder builder = CreateProductBuilderWithMocks();
-            builder.BuildTags();
-            IProduct product = builder.GetResult();
+            ProductConverter builder = CreateProductBuilderWithMocks();
+            //builder.BuildTags();
+            IProduct product = builder.Convert(mockProductEntity.Object, (a, b) => { });
 
             /* ASSERT */
             for (int i = 0; i < expectedTagIds.Length; i++)

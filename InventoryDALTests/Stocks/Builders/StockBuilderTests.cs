@@ -21,7 +21,9 @@ namespace InventoryDAL.Stocks.Tests
         public void CreateMocks()
         {
             this.mockDomainFactory = new Mock<IDomainFactory>();
+            SetupMockDomainFactoryToReturnStock();
             this.mockRepositoryFactory = new Mock<IRepositoryFactory>();
+            SetupMockRepositoryFactoryToReturnProduct();
             this.mockStockEntity = new Mock<IStockEntity>().SetupAllProperties();
         }
 
@@ -31,17 +33,17 @@ namespace InventoryDAL.Stocks.Tests
             int expected = 123;
             mockStockEntity.Setup(entity => entity.Id).Returns(expected);
 
-            StockBuilder builder = CreateStockBuilderWithMocks();
-            int actual = builder.Id;
+            StockConverter builder = CreateStockBuilderWithMocks();
+            int actual = builder.Convert(mockStockEntity.Object, (a, b) => { }).Id;
 
             Assert.AreEqual(expected, actual);
         }
 
 
-        private StockBuilder CreateStockBuilderWithMocks()
+        private StockConverter CreateStockBuilderWithMocks()
         {
-            return new StockBuilder(mockStockEntity.Object,
-                                      mockDomainFactory.Object,
+            return new StockConverter(
+                mockDomainFactory.Object,
                                       mockRepositoryFactory.Object);
         }
 
@@ -51,8 +53,8 @@ namespace InventoryDAL.Stocks.Tests
             int expected = 222;
             mockStockEntity.Setup(entity => entity.ProductId).Returns(expected);
 
-            StockBuilder builder = CreateStockBuilderWithMocks();
-            int actual = builder.ProductId;
+            StockConverter builder = CreateStockBuilderWithMocks();
+            int actual = builder.Convert(mockStockEntity.Object, (a,b)=> { }).ProductId;
 
             Assert.AreEqual(expected, actual);
         }
@@ -63,8 +65,8 @@ namespace InventoryDAL.Stocks.Tests
             int expected = 333;
             mockStockEntity.Setup(entity => entity.Amount).Returns(expected);
 
-            StockBuilder builder = CreateStockBuilderWithMocks();
-            int actual = builder.Amount;
+            StockConverter builder = CreateStockBuilderWithMocks();
+            int actual = builder.Convert(mockStockEntity.Object, (a, b) => { }).Amount;
 
             Assert.AreEqual(expected, actual);
         }
@@ -75,22 +77,22 @@ namespace InventoryDAL.Stocks.Tests
             DateTime expected = DateTime.Now;
             mockStockEntity.Setup(pe => pe.Date).Returns(expected);
 
-            StockBuilder builder = CreateStockBuilderWithMocks();
-            DateTime actual = builder.Date;
+            StockConverter builder = CreateStockBuilderWithMocks();
+            DateTime actual = builder.Convert(mockStockEntity.Object, (a, b) => { }).Date;
 
             Assert.AreEqual(expected, actual);
         }
-
+        /*
         [TestMethod()]
         public void StockBuilder_ShouldHaveNo_Product_WhenCreated()
         {
             Product expected = null;
 
-            StockBuilder builder = CreateStockBuilderWithMocks();
-            Product actual = builder.Product;
+            StockConverter builder = CreateStockBuilderWithMocks();
+            Product actual = builder.Convert(mockStockEntity.Object, (a, b) => { }).Product;
 
             Assert.AreEqual(expected, actual);
-        }
+        }*/
 
         [TestMethod()]
         public void BuildProduct_ShouldSet_ProductId_ToMatchProductIdIn_Stock()
@@ -102,19 +104,19 @@ namespace InventoryDAL.Stocks.Tests
             SetupMockRepositoryFactoryToReturnProduct();
 
             /* ACT */
-            StockBuilder builder = CreateStockBuilderWithMocks();
-            builder.BuildProduct();
+            StockConverter builder = CreateStockBuilderWithMocks();
+            //builder.BuildProduct();
 
             /* ASSERT */
-            int actual = builder.Product.Id;
+            int actual = builder.Convert(basicProps, (a, b) => { }).Product.Id;
             Assert.AreEqual(expectedProductId, actual);
         }
 
         private void SetupMockRepositoryFactoryToReturnProduct()
         {
-            this.mockRepositoryFactory.Setup(factory => factory.GetCrudRepository<Product>()
-                                                     .Get(It.IsAny<int>()))
-                                                     .Returns((int id) => new Product(id, "Name", 10M, "Sku"));
+            this.mockRepositoryFactory.Setup(factory => factory.ProductsRepository
+                .Get(It.IsAny<int>()))
+                .Returns((int id) => new Product(id, "Name", 10M, "Sku"));
         }
 
         [TestMethod()]
@@ -126,8 +128,8 @@ namespace InventoryDAL.Stocks.Tests
             SetupMockDomainFactoryToReturnStock();
 
             /* ACT */
-            StockBuilder builder = CreateStockBuilderWithMocks();
-            IStock stock = builder.GetResult();
+            StockConverter builder = CreateStockBuilderWithMocks();
+            IStock stock = builder.Convert(basicProps, (a, b) => { });
 
             /* ASSERT */
             Assert.AreEqual(stock.Id, basicProps.Id);
@@ -170,9 +172,9 @@ namespace InventoryDAL.Stocks.Tests
             SetupMockRepositoryFactoryToReturnProduct();
 
             /* ACT */
-            StockBuilder builder = CreateStockBuilderWithMocks();
-            builder.BuildProduct();
-            IStock stock = builder.GetResult();
+            StockConverter builder = CreateStockBuilderWithMocks();
+            //builder.BuildProduct();
+            IStock stock = builder.Convert(basicProps, (a, b) => { });
 
             /* ASSERT */
             int actual = stock.Product.Id;
