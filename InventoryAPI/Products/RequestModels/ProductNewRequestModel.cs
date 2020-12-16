@@ -12,6 +12,13 @@ namespace InventoryAPI.Products.RequestModels
         public decimal Price { get; set; }
         public string Sku { get; set; }
 
+        private ProductNewRequestModel(string Name, decimal Price, string Sku)
+        {
+            this.Name = Name;
+            this.Price = Price;
+            this.Sku = Sku;
+        }
+
         // system converter
         public static ProductDTO ProductNewRequestModelToProductDTO(ProductNewRequestModel productRequestModel)
         {

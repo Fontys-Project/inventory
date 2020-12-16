@@ -11,18 +11,24 @@ namespace InventoryAPI.Tags.RequestModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<ProductRequestModel> Products { get; set; }
+        public List<ProductRequestChildModel> Products { get; set; }
+
+        private TagRequestModel(int Id, string Name)
+        {
+            this.Id = Id;
+            this.Name = Name;
+            this.Products = new List<ProductRequestChildModel>();
+        }
 
 
         // system converter
         public static TagRequestModel TagDTOToTagRequestModel(TagDTO tag)
         {
-            return new TagRequestModel()
-            {
-                Id = tag.Id,
-                Name = tag.Name,
-                Products = null // TODO
-            };
+            var tagObj = new TagRequestModel(tag.Id, tag.Name);
+
+            tag.Products.ForEach(product => tagObj.Products.Add(ProductRequestChildModel.ProductDTOToProductRequestChildModel(product)));
+
+            return tagObj;
         }
 
         // system converter

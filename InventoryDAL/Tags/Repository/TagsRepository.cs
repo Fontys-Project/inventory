@@ -69,5 +69,9 @@ namespace InventoryDAL.Tags
             tagEntityDAO.Remove(id);
         }
 
+        public Tag CreateNew()
+        {
+            return new Tag(-1, "");
+        }
     }
 }
