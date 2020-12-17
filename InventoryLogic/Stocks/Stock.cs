@@ -15,7 +15,7 @@ namespace InventoryLogic.Stocks
         public Stock(int id, Product product, int amount)
         {
             Id = id;
-            ProductId = product.Id;
+            ProductId = product != null ? product.Id : -1;
             Product = product;
             Amount = amount;
             Date = DateTime.Today;

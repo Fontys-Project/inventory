@@ -1,5 +1,6 @@
 ﻿using InventoryAPI.Products.RequestModels;
 using InventoryLogic.Tags;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace InventoryAPI.Tags.RequestModels
         public string Name { get; set; }
         public List<ProductRequestChildModel> Products { get; set; }
 
+        [JsonConstructor]
         private TagRequestModel(int Id, string Name)
         {
             this.Id = Id;

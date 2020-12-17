@@ -1,5 +1,6 @@
 ﻿using InventoryAPI.Products.RequestModels;
 using InventoryLogic.Stocks;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace InventoryAPI.Stocks.RequestModels
         public DateTime Date { get; set; }
         public ProductRequestChildModel Product { get; set; }
 
+        [JsonConstructor]
         private StockRequestModel(int Id, int ProductId, int Amount, DateTime Date) : base()
         {
             this.Id = Id;

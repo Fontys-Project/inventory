@@ -1,4 +1,5 @@
 ﻿using InventoryLogic.Products;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace InventoryAPI.Products.RequestModels
         public decimal Price { get; set; }
         public string Sku { get; set; }
 
+        [JsonConstructor]
         private ProductNewRequestModel(string Name, decimal Price, string Sku)
         {
             this.Name = Name;
