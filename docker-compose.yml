@@ -23,6 +23,7 @@ services:
       - RABBIT_HOSTNAME=rabbitmq
       - ORDERS_EXCHANGE=orders
       - SCANNER_EXCHANGE=scanner
+      - SCANNER_RESPONSE_EXCHANGE=scanner-response
     image: ${DOCKER_REGISTRY-}inventoryapi
     build:
       context: .

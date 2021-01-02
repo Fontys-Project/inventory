@@ -69,7 +69,7 @@ $testbody = '
 $headers = @{"Authorization"=("Bearer "+$response.access_token)}
 $url = "http://localhost:5001/api/v0.1/Products"
 
-$responseProduct = Invoke-RestMethod -Method Put -Uri $url -Body $testbody -ContentType "application/json" -headers $headers -verbose
+$responseProduct = Invoke-RestMethod -Method Post -Uri $url -Body $testbody -ContentType "application/json" -headers $headers -verbose
 Out-String -InputObject $responseProduct
 
 read-host "press key to stop containers"

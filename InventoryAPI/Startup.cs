@@ -176,6 +176,8 @@ iwIDAQAB"),
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.ApplicationServices.GetService<IEventBusPublisher>(); // trigger event bus startup.
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

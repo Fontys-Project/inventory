@@ -4,8 +4,25 @@ using System.Text;
 
 namespace InventoryLogic.EventBus
 {
+
+    public enum ScannerResult
+    {
+        UnknownSku,
+        AddedToStock,
+        Scanned,
+        UnknownError
+    }
+
     public class ScannerMessage
     {
-        public string Text { get; set; }
+        public ScannerMessage(string barcode, ScannerResult scannerResult)
+        {
+            this.ScannerResult = scannerResult;
+            this.Barcode = barcode;
+
+        }
+
+        public string Barcode { get; set; }
+        public ScannerResult ScannerResult { get; set; }
     }
 }
