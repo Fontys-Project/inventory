@@ -72,5 +72,9 @@ namespace InventoryDAL.Products
             //TODO : cleanup childs.
         }
 
+        public Product CreateNew()
+        {
+            return new Product(-1, "", 0M, "");
+        }
     }
 }

@@ -15,12 +15,6 @@ namespace InventoryLogic.Products
         public List<Tag> Tags { get; set; }
         public List<Stock> Stocks { get; set; }
 
-        public Product() // TODO: Remove. Means updating DTOFacade.
-        { 
-            Tags = new List<Tag>();
-            Stocks = new List<Stock>();
-        }
-
         public Product(int id, string name, decimal price, string sku)
         {
             Id = id;
@@ -49,14 +43,14 @@ namespace InventoryLogic.Products
 
             foreach (StockDTO stock in fromDTO.Stocks)
             {
-                Stock stockModel = new Stock();
+                Stock stockModel = new Stock(stock.Id,new Product(stock.Product.Id,stock.Product.Name,stock.Product.Price,stock.Product.Sku),stock.Amount);
                 stockModel.ConvertFromDTO(stock);
                 if (!Stocks.Contains(stockModel))
                     Stocks.Add(stockModel);
             }
             foreach (TagDTO tag in fromDTO.Tags)
             {
-                Tag tagModel = new Tag();
+                Tag tagModel = new Tag(tag.Id,tag.Name);
                 tagModel.ConvertFromDTO(tag);
                 if (!Tags.Contains(tagModel))
                     Tags.Add(tagModel);
@@ -70,6 +64,7 @@ namespace InventoryLogic.Products
             toDTO.Price = Price;
             toDTO.Id = Id;
             toDTO.Sku = Sku;
+
             toDTO.Stocks.Clear();
             foreach (Stock stock in Stocks)
             {
@@ -78,6 +73,8 @@ namespace InventoryLogic.Products
 
                 toDTO.Stocks.Add(newStockDTO);
             }
+
+            toDTO.Tags.Clear();
             foreach (Tag tag in Tags)
             {
                 TagDTO newTagDTO = new TagDTO();

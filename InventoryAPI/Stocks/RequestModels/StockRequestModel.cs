@@ -1,5 +1,6 @@
 ﻿using InventoryAPI.Products.RequestModels;
 using InventoryLogic.Stocks;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,25 +8,32 @@ using System.Threading.Tasks;
 
 namespace InventoryAPI.Stocks.RequestModels
 {
-    public class StockRequestModel : StockRequestChildModel
+    public class StockRequestModel
     {
-        public ProductRequestModel Product { get; set; }
+        public int Id { get; set; }
+        public int ProductId { get; set; }
+        public int Amount { get; set; }
+        public DateTime Date { get; set; }
+        public ProductRequestChildModel Product { get; set; }
 
-        public StockRequestModel() : base()
+        [JsonConstructor]
+        private StockRequestModel(int Id, int ProductId, int Amount, DateTime Date) : base()
         {
+            this.Id = Id;
+            this.ProductId = ProductId;
+            this.Amount = Amount;
+            this.Date = Date;
 
         }
 
 
         public static StockRequestModel StockDTOToStockRequestModel(StockDTO stock)
         {
-            return new StockRequestModel()
+            return new StockRequestModel(stock.Id, stock.ProductId, stock.Amount, stock.Date)
             {
-                Id = stock.Id,
-                Amount = stock.Amount,
-                ProductId = stock.ProductId,
-                Product = stock.Product != null ? ProductRequestModel.ProductDTOToProductRequestModel(stock.Product) : null,
-                Date = stock.Date
+                
+                Product = stock.Product != null ? ProductRequestChildModel.ProductDTOToProductRequestChildModel(stock.Product) : null,
+               
             };
         }
 

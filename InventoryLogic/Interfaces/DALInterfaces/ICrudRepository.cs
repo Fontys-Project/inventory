@@ -2,14 +2,15 @@
 
 namespace InventoryLogic.Interfaces
 {
-    public interface ICrudRepository<T>
+    public interface ICrudRepository<DomainModel>
     {
         // used by facade
+        DomainModel CreateNew();
 
-        T Get(int id);
-        List<T> GetAll();
-        T Add(T obj);
+        DomainModel Get(int id);
+        List<DomainModel> GetAll();
+        DomainModel Add(DomainModel obj);
         void Remove(int id);
-        void Modify(T obj);
+        void Modify(DomainModel obj);
     }
 }

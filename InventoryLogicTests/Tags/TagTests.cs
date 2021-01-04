@@ -54,10 +54,9 @@ namespace InventoryLogic.Tags.Tests
         [TestMethod]
         public void GetNameShouldReturnSetName()
         {
-            Tag tag = new Tag();
+            Tag tag = new Tag(1, "name");
             string expected = "name";
 
-            tag.Name = expected;
             string actual = tag.Name;
 
             Assert.AreEqual(expected, actual);
@@ -66,10 +65,9 @@ namespace InventoryLogic.Tags.Tests
         [TestMethod]
         public void GetIdShouldReturnSetId()
         {
-            Tag tag = new Tag();
+            Tag tag = new Tag(245,"");
             int expected = 245;
 
-            tag.Id = expected;
             int actual = tag.Id;
 
             Assert.AreEqual(expected, actual);

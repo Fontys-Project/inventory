@@ -21,7 +21,7 @@ namespace InventoryLogic.Products.Tests
         public void Setup()
         {
             stockMock = new Mock<Stock>();
-            tagMock = new Mock<Tag>();
+            tagMock = new Mock<Tag>(1,"",null);
 
         }
 
