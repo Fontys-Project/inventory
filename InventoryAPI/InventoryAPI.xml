@@ -44,7 +44,7 @@
             Get a specified Product definition
             </summary>
         </member>
-        <member name="M:InventoryAPI.Products.ProductsController.Modify(InventoryAPI.Products.RequestModels.ProductRequestModel)">
+        <member name="M:InventoryAPI.Products.ProductsController.Modify(InventoryAPI.Products.RequestModels.ProductRequestChildModel)">
             <summary>
             Modify a Product definition
             </summary>

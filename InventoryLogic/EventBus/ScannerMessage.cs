@@ -24,5 +24,11 @@ namespace InventoryLogic.EventBus
 
         public string Barcode { get; set; }
         public ScannerResult ScannerResult { get; set; }
+
+        public string ProductName { get; set; }
+
+        public decimal ProductPrice { get; set; }
+
+        public int ProductStock { get; set; }
     }
 }

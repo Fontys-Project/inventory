@@ -79,14 +79,27 @@ namespace RabbitMQ
 
             if(product != null)
             {
+                scannerMessage.ProductName = product.Name;
+                scannerMessage.ProductPrice = product.Price;
+                int totalStock = 0;
+                foreach(StockDTO s in stocksFacade.GetAll().FindAll(s => s.ProductId == product.Id))
+                {
+                    totalStock += s.Amount;
+                }
+                scannerMessage.ProductStock = totalStock;
                 // is there a stock with the same date?
                 StockDTO stock = stocksFacade.GetAll().Find(s => s.ProductId == product.Id && s.Date.Year == DateTime.Now.Year && s.Date.Month == DateTime.Now.Month
                 && s.Date.Day == DateTime.Now.Day);
                 if(stock != null)
                 {
                     stock.Amount += 1; // add 1
+                    //product.Stocks.Find(s => s.Id == stock.Id).Amount += 1;
+                    product.Stocks.Clear();
+                    stocksFacade.Modify(stock);
+                    productsFacade.Modify(product);
+                    scannerMessage.ProductStock += 1;
                     stock.Date = DateTime.Now; // adjust time to now to reflect change.
-                    if (stocksFacade.Modify(stock))
+                    if (true)
                     {
                         // send message back
                         scannerMessage.ScannerResult = ScannerResult.AddedToStock; // indicate success
@@ -104,6 +117,7 @@ namespace RabbitMQ
                     // create new stock
                     StockDTO stockDTO = new StockDTO();
                     stockDTO.Amount = 1;
+                    scannerMessage.ProductStock += 1;
                     stockDTO.Date = DateTime.Now;
                     stockDTO.Product = product;
                     stockDTO.ProductId = product.Id;
