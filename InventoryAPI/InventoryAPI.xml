@@ -96,22 +96,27 @@
         </member>
         <member name="M:InventoryAPI.Tags.TagsController.GetAll">
             <summary>
-            List of all Stock definitions
+            List of all Tag definitions
             </summary>
         </member>
         <member name="M:InventoryAPI.Tags.TagsController.Get(System.Int32)">
             <summary>
-            Get a specified Stock definition
+            Get a specified Tag definition
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Tags.TagsController.Add(InventoryAPI.Tags.RequestModels.AddTagRequestModel)">
+            <summary>
+            Create a new Tag definition
             </summary>
         </member>
         <member name="M:InventoryAPI.Tags.TagsController.Modify(InventoryAPI.Tags.RequestModels.TagRequestModel)">
             <summary>
-            Modify a Stock definition
+            Modify a Tag definition
             </summary>
         </member>
         <member name="M:InventoryAPI.Tags.TagsController.Delete(System.Int32)">
             <summary>
-            Delete a Stock definition
+            Delete a Tag definition
             </summary>
         </member>
     </members>

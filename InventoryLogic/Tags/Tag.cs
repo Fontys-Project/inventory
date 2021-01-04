@@ -10,7 +10,7 @@ namespace InventoryLogic.Tags
         public int Id { get; set; }
         public string Name { get; set; }
         public List<Product> Products { get; set; }
-        
+
         public Tag(int id, string name, List<Product> products = null)
         {
             Id = id;
@@ -22,14 +22,14 @@ namespace InventoryLogic.Tags
         {
             this.Id = tagDTO.Id;
             this.Name = tagDTO.Name;
+            if (tagDTO.Products == null || tagDTO.Products.Count == 0) return;
             foreach (ProductDTO productDto in tagDTO.Products)
             {
-                Product productModel = new Product(productDto.Id,productDto.Name,productDto.Price,productDto.Sku);
+                Product productModel = new Product(productDto.Id, productDto.Name, productDto.Price, productDto.Sku);
                 productModel.ConvertFromDTO(productDto);
                 if (!Products.Contains(productModel))
                     Products.Add(productModel);
             }
-
         }
 
         public void ConvertToDTO(TagDTO tagDTO)
