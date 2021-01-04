@@ -66,15 +66,5 @@ namespace InventoryAPI.Tags
         {
             return tagsFacade.Remove(id);
         }
-        /// <summary>
-        /// Apply a tag to a product
-        /// </summary>
-        [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_tag_applytag")]
-        [Route("{productId}")]
-        public Boolean ApplyTag(int productId, int tagId)
-        {
-            return tagsFacade.ApplyTag(productId, tagId);
-        }
     }
 }
