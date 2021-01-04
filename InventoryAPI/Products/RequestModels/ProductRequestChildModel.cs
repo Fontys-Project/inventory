@@ -1,4 +1,5 @@
 ﻿using InventoryLogic.Products;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace InventoryAPI.Products.RequestModels
         public string Sku { get; set; }
         public int Id { get; set; }
        
-
+        [JsonConstructor]
         private ProductRequestChildModel(int Id, string Name, decimal Price, string Sku)
         {
             this.Id = Id;
@@ -29,6 +30,17 @@ namespace InventoryAPI.Products.RequestModels
             var productRequestChildModel = new ProductRequestChildModel(productDTO.Id, productDTO.Name, productDTO.Price, productDTO.Sku);
 
             return productRequestChildModel;
+        }
+
+        public static ProductDTO ProductRequestChildModelToProductDTO(ProductRequestChildModel productRequestChildModel)
+        {
+            return new ProductDTO()
+            {
+                Id = productRequestChildModel.Id,
+                Name = productRequestChildModel.Name,
+                Price = productRequestChildModel.Price,
+                Sku = productRequestChildModel.Sku
+            };
         }
 
 

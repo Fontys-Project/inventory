@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using InventoryLogic.EventBus;
+using InventoryLogic.Facade;
+using InventoryLogic.Interfaces;
 using Newtonsoft.Json;
 using RabbitMQ;
 
@@ -13,11 +15,11 @@ namespace InventoryDI
         private readonly Publisher publisher;
         private readonly MessageHandler messageHandler;
 
-        public RabbitMessenger()
+        public RabbitMessenger(ProductsFacade productsFacade, StocksFacade stocksFacade)
         {
             var channel = new ConnectionService().GetChannel();
             publisher = new Publisher(channel);
-            messageHandler = new MessageHandler(channel);
+            messageHandler = new MessageHandler(channel, productsFacade, stocksFacade);
             messageHandler.StartListening();
         }
 

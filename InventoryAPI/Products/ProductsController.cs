@@ -49,9 +49,9 @@ namespace InventoryAPI.Products
         /// </summary>
         [HttpPatch]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_stock_modify")]
-        public bool Modify([FromBody] ProductRequestModel product)
+        public bool Modify([FromBody] ProductRequestChildModel product)
         {
-            return productsFacade.Modify(ProductRequestModel.ProductRequestModelToProductDTO(product));
+            return productsFacade.Modify(ProductRequestChildModel.ProductRequestChildModelToProductDTO(product));
         }
 
         /// <summary>

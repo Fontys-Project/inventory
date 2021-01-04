@@ -70,6 +70,7 @@ namespace InventoryDAL.Stocks
 
         public void Remove(int id)
         {
+            stockCache.Remove(stockCache.Where(cacheEntity => cacheEntity.Key.Id == id).First().Key);
             stockEntityDAO.Remove(id);
         }
 

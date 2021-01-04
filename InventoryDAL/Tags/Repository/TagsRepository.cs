@@ -66,6 +66,7 @@ namespace InventoryDAL.Tags
 
         public void Remove(int id)
         {
+            tagCache.Remove(tagCache.Where(cacheEntity => cacheEntity.Key.Id == id).First().Key);
             tagEntityDAO.Remove(id);
         }
 
