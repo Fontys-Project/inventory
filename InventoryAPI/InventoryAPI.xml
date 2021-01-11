@@ -29,6 +29,11 @@
             Delete a <typeparamref name="Type"/> definition
             </summary>
         </member>
+        <member name="M:InventoryAPI.EventBusTest.EventBusTestController.Publish(System.String)">
+            <summary>
+            Publish a message to the event bus for testing purposes
+            </summary>
+        </member>
         <member name="M:InventoryAPI.Products.ProductsController.GetAll">
             <summary>
             List of all Product definitions
@@ -39,12 +44,12 @@
             Get a specified Product definition
             </summary>
         </member>
-        <member name="M:InventoryAPI.Products.ProductsController.Modify(InventoryLogic.Products.ProductDTO)">
+        <member name="M:InventoryAPI.Products.ProductsController.Modify(InventoryAPI.Products.RequestModels.ProductRequestChildModel)">
             <summary>
             Modify a Product definition
             </summary>
         </member>
-        <member name="M:InventoryAPI.Products.ProductsController.Add(InventoryAPI.Products.ApiModels.AddProductAM)">
+        <member name="M:InventoryAPI.Products.ProductsController.Add(InventoryAPI.Products.RequestModels.ProductNewRequestModel)">
             <summary>
             Create a new Product definition
             </summary>
@@ -54,9 +59,59 @@
             Delete a Product definition
             </summary>
         </member>
-        <member name="M:InventoryAPI.Tags.TagsController.ApplyTag(System.Int32,System.Int32)">
+        <member name="M:InventoryAPI.Products.ProductsController.ApplyTag(System.Int32,System.Int32)">
             <summary>
             Apply a tag to a product
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Products.ProductsController.RemoveTag(System.Int32,System.Int32)">
+            <summary>
+            Apply a tag to a product
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Stocks.StocksController.GetAll">
+            <summary>
+            List of all Stock definitions
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Stocks.StocksController.Get(System.Int32)">
+            <summary>
+            Get a specified Stock definition
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Stocks.StocksController.Modify(InventoryAPI.Stocks.RequestModels.StockRequestModel)">
+            <summary>
+            Modify a Stock definition
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Stocks.StocksController.Add(InventoryAPI.Stocks.RequestModels.StockNewRequestModel)">
+            <summary>
+            Create a new Stock definition
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Stocks.StocksController.Delete(System.Int32)">
+            <summary>
+            Delete a Stock definition
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Tags.TagsController.GetAll">
+            <summary>
+            List of all Stock definitions
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Tags.TagsController.Get(System.Int32)">
+            <summary>
+            Get a specified Stock definition
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Tags.TagsController.Modify(InventoryAPI.Tags.RequestModels.TagRequestModel)">
+            <summary>
+            Modify a Stock definition
+            </summary>
+        </member>
+        <member name="M:InventoryAPI.Tags.TagsController.Delete(System.Int32)">
+            <summary>
+            Delete a Stock definition
             </summary>
         </member>
     </members>

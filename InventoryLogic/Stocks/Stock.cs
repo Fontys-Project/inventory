@@ -12,36 +12,52 @@ namespace InventoryLogic.Stocks
         public int Amount { get; set; }
         public DateTime Date { get; set; }
 
-        // Constructor used by .net API framwork
-        public Stock()
-        {
-
-        }
-
         public Stock(int id, Product product, int amount)
         {
             Id = id;
+            ProductId = product != null ? product.Id : -1;
             Product = product;
             Amount = amount;
             Date = DateTime.Today;
+        }
+
+        public Stock(int id, int productId, int amount, Product product = null)
+        {
+            Id = id;
+            ProductId = productId;
+            Product = product;
+            Amount = amount;
+            Date = DateTime.Today;
+        }
+
+        public Stock(int id, int productId, int amount, DateTime date, Product product = null)
+        {
+            Id = id;
+            ProductId = productId;
+            Product = product;
+            Amount = amount;
+            Date = date;
         }
 
         public void ConvertFromDTO(StockDTO fromView)
         {
             Id = fromView.Id;
             ProductId = fromView.ProductId;
-            Product = fromView.Product;
+            Product = new Product(fromView.Product.Id,fromView.Product.Name,fromView.Product.Price,fromView.Product.Sku);
+            Product.ConvertFromDTO(fromView.Product);
             Amount = fromView.Amount;
             Date = fromView.Date;
-
-
         }
 
         public void ConvertToDTO(StockDTO toView)
         {
             toView.Id = Id;
             toView.ProductId = ProductId;
-            toView.Product = Product;
+            toView.Product = new ProductDTO();
+            toView.Product.Id = Product.Id;
+            toView.Product.Name = Product.Name;
+            toView.Product.Price = Product.Price;
+            toView.Product.Sku = Product.Sku;
             toView.Amount = Amount;
             toView.Date = Date;
 

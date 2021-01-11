@@ -3,6 +3,8 @@ version: '3.4'
 services:
   db:
     image: mysql:5.7
+    ports: 
+      - "3307:3306"
     environment:
        MYSQL_RANDOM_ROOT_PASSWORD: 1
        MYSQL_DATABASE: accountowner
@@ -11,15 +13,33 @@ services:
     volumes:
        - dbdata:/var/lib/mysql
     restart: always
+
   inventoryapi:
+    restart: on-failure  
     depends_on:
         - db
+        - rabbitmq
+    environment:
+      - RABBIT_HOSTNAME=rabbitmq
+      - ORDERS_EXCHANGE=orders
+      - SCANNER_EXCHANGE=scanner
+      - SCANNER_RESPONSE_EXCHANGE=scanner-response
     image: ${DOCKER_REGISTRY-}inventoryapi
     build:
       context: .
       dockerfile: InventoryAPI/Dockerfile
     ports:
       - "5001:80"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: my-rabbit
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+#    volumes:
+#    - ./RabbitMQ/etc/enabled_plugins:/etc/rabbitmq/enabled_plugins
 
 volumes:
     dbdata:

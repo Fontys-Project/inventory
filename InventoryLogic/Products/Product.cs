@@ -12,23 +12,27 @@ namespace InventoryLogic.Products
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string Sku { get; set; }
-        public List<Tag> Tags { get; set; } 
+        public List<Tag> Tags { get; set; }
         public List<Stock> Stocks { get; set; }
 
-        public Product()
-        {
-            Stocks = new List<Stock>();
-            Tags = new List<Tag>();
-        }
-
-        public Product(int id, string name, decimal price, string sku) 
+        public Product(int id, string name, decimal price, string sku)
         {
             Id = id;
             Name = name;
             Price = price;
             Sku = sku;
-            Stocks = new List<Stock>();
             Tags = new List<Tag>();
+            Stocks = new List<Stock>();
+        }
+
+        public Product(int id, string name, decimal price, string sku, List<Tag> tags, List<Stock> stocks)
+        {
+            Id = id;
+            Name = name;
+            Price = price;
+            Sku = sku;
+            Tags = tags;
+            Stocks = stocks;
         }
 
         public void ConvertFromDTO(ProductDTO fromDTO)
@@ -37,12 +41,19 @@ namespace InventoryLogic.Products
             Price = fromDTO.Price;
             Sku = fromDTO.Sku;
 
-            foreach(StockDTO stock in fromDTO.Stocks)
+            foreach (StockDTO stock in fromDTO.Stocks)
             {
-                Stock stockModel = new Stock();
+                Stock stockModel = new Stock(stock.Id,new Product(stock.Product.Id,stock.Product.Name,stock.Product.Price,stock.Product.Sku),stock.Amount);
                 stockModel.ConvertFromDTO(stock);
                 if (!Stocks.Contains(stockModel))
                     Stocks.Add(stockModel);
+            }
+            foreach (TagDTO tag in fromDTO.Tags)
+            {
+                Tag tagModel = new Tag(tag.Id,tag.Name);
+                tagModel.ConvertFromDTO(tag);
+                if (!Tags.Contains(tagModel))
+                    Tags.Add(tagModel);
             }
 
         }
@@ -53,6 +64,7 @@ namespace InventoryLogic.Products
             toDTO.Price = Price;
             toDTO.Id = Id;
             toDTO.Sku = Sku;
+
             toDTO.Stocks.Clear();
             foreach (Stock stock in Stocks)
             {
@@ -61,9 +73,18 @@ namespace InventoryLogic.Products
 
                 toDTO.Stocks.Add(newStockDTO);
             }
-            
+
+            toDTO.Tags.Clear();
+            foreach (Tag tag in Tags)
+            {
+                TagDTO newTagDTO = new TagDTO();
+                tag.ConvertToDTO(newTagDTO);
+
+                toDTO.Tags.Add(newTagDTO);
+            }
+
         }
 
-       
+
     }
 }

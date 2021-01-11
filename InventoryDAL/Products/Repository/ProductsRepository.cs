@@ -7,58 +7,75 @@ namespace InventoryDAL.Products
 {
     public class ProductsRepository : IProductsRepository
     {
-        private readonly IBuilderFactory builderFactory;
+        private readonly IConverterFactory converterFactory;
         private readonly IProductEntityDAO productEntityDAO;
 
+        private readonly Dictionary<Product,IProductEntity> productCache;
+
+
         public ProductsRepository(IProductEntityDAO productEntityDAO,
-                                  IBuilderFactory builderFactory)
+                                  IConverterFactory converterFactory)
         {
             this.productEntityDAO = productEntityDAO;
-            this.builderFactory = builderFactory;
+            this.converterFactory = converterFactory;
+            productCache = new Dictionary<Product, IProductEntity>();
+        }
+
+        // Handle cacheing of object on instantiation
+        private void OnObjectCreation(Product product, IProductEntity productEntity)
+        {
+            productCache.Add(product, productEntity);
         }
 
         public List<Product> GetAll()
-        {
+        {     
             List<ProductEntity> productEntities = productEntityDAO.GetAll();
-            return productEntities
-                .Select(productEntity => BuildProduct(productEntity))
-                .ToList();
+
+            // Trigger with where, only products not cached, and then select all uncached product entities to convert Products that will be added
+            // to the cache with the OnObjectCreation delegate.
+            productEntities.Where(productEntity => productCache.Values.Any(cacheEntity => cacheEntity.Id == productEntity.Id) == false
+            ).ToList().ForEach(productEntity => converterFactory.productConverter.Convert(productEntity, OnObjectCreation));
+            
+
+            return productCache.Keys.ToList<Product>();
         }
 
         public Product Get(int id)
         {
-            ProductEntity productEntity = productEntityDAO.Get(id);
-            return BuildProduct(productEntity);
+            Product product = productCache.Keys.Where(p => p.Id == id).FirstOrDefault();
+            if (product == null) {
+                ProductEntity productEntity = productEntityDAO.Get(id);
+                return converterFactory.productConverter.Convert(productEntity, OnObjectCreation);
+            } else
+            {
+                return product;
+            }
         }
 
         public Product Add(Product product)
         {
-            ProductEntity productEntity = BuildProductEntity(product);
+            ProductEntity productEntity = converterFactory.productEntityConverter.Convert(product);
             productEntity = productEntityDAO.Add(productEntity);
-            return BuildProduct(productEntity);
+            return converterFactory.productConverter.Convert(productEntity, OnObjectCreation);
         }
 
         public void Modify(Product product)
         {
-            ProductEntity productEntity = BuildProductEntity(product);
+            ProductEntity productEntity = converterFactory.productEntityConverter.Convert(product);
             productEntityDAO.Modify(productEntity);
         }
 
         public void Remove(int id)
         {
+            productCache.Remove(productCache.Where(cacheEntity => cacheEntity.Key.Id == id).First().Key);
             productEntityDAO.Remove(id);
+
+            //TODO : cleanup childs.
         }
 
-        private Product BuildProduct(ProductEntity productEntity)
+        public Product CreateNew()
         {
-            var productBuilder = builderFactory.CreateProductBuilder(productEntity);
-            return productBuilder.Build();
-        }
-
-        private ProductEntity BuildProductEntity(Product product)
-        {
-            var productEntityBuilder = builderFactory.CreateProductEntityBuilder(product);
-            return productEntityBuilder.Build();
+            return new Product(-1, "", 0M, "");
         }
     }
 }

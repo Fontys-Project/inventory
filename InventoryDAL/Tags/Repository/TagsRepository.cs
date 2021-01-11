@@ -7,57 +7,72 @@ namespace InventoryDAL.Tags
 {
     public class TagsRepository : ITagsRepository
     {
-        private readonly IBuilderFactory builderFactory; 
+        private readonly IConverterFactory converterFactory; 
         private readonly ITagEntityDAO tagEntityDAO;
+        private readonly Dictionary<Tag,ITagEntity> tagCache;
 
-        public TagsRepository(ITagEntityDAO tagEntityDAO, IBuilderFactory builderFactory)
+        public TagsRepository(ITagEntityDAO tagEntityDAO, IConverterFactory converterFactory)
         {
-            this.builderFactory = builderFactory; 
+            this.converterFactory = converterFactory; 
             this.tagEntityDAO = tagEntityDAO;
+            tagCache = new Dictionary<Tag, ITagEntity>();
+        }
+
+        // Handle cacheing of object on instantiation
+        private void OnObjectCreation(Tag tag, ITagEntity tagEntity)
+        {
+            tagCache.Add(tag, tagEntity);
         }
 
         public List<Tag> GetAll()
         {
             List<TagEntity> tagEntities = tagEntityDAO.GetAll();
-            return tagEntities
-                .Select(tagEntity => BuildTag(tagEntity))
-                .ToList();
+
+            // Trigger with where, only products not cached, and then select all uncached product entities to convert Products that will be added
+            // to the cache with the OnObjectCreation delegate.
+            tagEntities.Where(tagEntity => tagCache.Values.Any(cacheEntity => cacheEntity.Id == tagEntity.Id) == false)
+                .ToList().ForEach(tagEntity => converterFactory.tagConverter.Convert(tagEntity, OnObjectCreation));
+
+            return tagCache.Keys.ToList<Tag>();
         }
 
         public Tag Get(int id)
         {
-            TagEntity tagEntity = tagEntityDAO.Get(id);
-            return BuildTag(tagEntity);
+            Tag tag = tagCache.Keys.Where(t => t.Id == id).FirstOrDefault();
+            if (tag == null)
+            {
+                TagEntity tagEntity = tagEntityDAO.Get(id);
+                return converterFactory.tagConverter.Convert(tagEntity, OnObjectCreation);
+            }
+            else
+            {
+                return tag;
+            }
+
         }
 
         public Tag Add(Tag tag)
         {
-            TagEntity tagEntity = BuildTagEntity(tag);
+            TagEntity tagEntity = converterFactory.tagEntityConverter.Convert(tag);
             tagEntity = tagEntityDAO.Add(tagEntity);
-            return BuildTag(tagEntity);
+            return converterFactory.tagConverter.Convert(tagEntity, OnObjectCreation);
         }
 
         public void Modify(Tag tag)
         {
-            TagEntity tagEntity = BuildTagEntity(tag);
+            TagEntity tagEntity = converterFactory.tagEntityConverter.Convert(tag);
             tagEntityDAO.Modify(tagEntity);
         }
 
         public void Remove(int id)
         {
+            tagCache.Remove(tagCache.Where(cacheEntity => cacheEntity.Key.Id == id).First().Key);
             tagEntityDAO.Remove(id);
         }
 
-        private Tag BuildTag(TagEntity tagEntity)
+        public Tag CreateNew()
         {
-            var tagBuilder = builderFactory.CreateTagBuilder(tagEntity);
-            return tagBuilder.Build();
-        }
-
-        private TagEntity BuildTagEntity(Tag tag)
-        {
-            var tagEntityBuilder = builderFactory.CreateTagEntityBuilder(tag);
-            return tagEntityBuilder.Build();
+            return new Tag(-1, "");
         }
     }
 }

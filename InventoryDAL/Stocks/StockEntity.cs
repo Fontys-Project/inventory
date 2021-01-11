@@ -15,11 +15,5 @@ namespace InventoryDAL.Stocks
         public ProductEntity ProductEntity { get; set; }
         public int Amount { get; set; }
         public DateTime Date { get; set; }
-
-        // Constructor used by .net API framwork
-        public StockEntity()
-        {
-
-        }
     }
 }

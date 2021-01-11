@@ -1,6 +1,6 @@
-﻿# login branch to use
+# login branch to use
 $loginbranch = "develop"
-$inventorybranch = "IntegratieTests"
+$inventorybranch = "master"
 $gitdirs = @(($env:TEMP + "/inventorysvc"),($env:TEMP + "/loginsvc"))
 $workdirs = @(($env:TEMP + "/inventorysvc"),($env:TEMP + "/loginsvc/LoginService"))
 
@@ -60,7 +60,14 @@ $body = '
 }
 '
 
+$bodyAdmin = '
+{
+ "username": "admin@wmstest.nl",
+ "password": "WachtwoordAdmin1"
+}
+'
 #read-host "press key to continue"
+
 Write-Progress -PercentComplete 75 -Activity 'Integration test: Login to Inventory, to create a product' -Status "send restapi request: retrieve admin login token"
 
 $response = Invoke-RestMethod -Method Post -Uri $url -Body $bodyAdmin -ContentType "application/json" -verbose
@@ -84,7 +91,7 @@ $headers = @{"Authorization"=("Bearer "+$response.access_token)}
 $url = "http://localhost:5001/api/v0.1/Products"
 Write-Progress -PercentComplete 90 -Activity 'Integration test: Login to Inventory, to create a product' -Status "send restapi request: create new product using admin token"
 
-$responseProduct = Invoke-RestMethod -Method Put -Uri $url -Body $testbody -ContentType "application/json" -headers $headers -verbose
+$responseProduct = Invoke-RestMethod -Method Post -Uri $url -Body $testbody -ContentType "application/json" -headers $headers -verbose
 Out-String -InputObject $responseProduct
 
 start-sleep -Seconds 20

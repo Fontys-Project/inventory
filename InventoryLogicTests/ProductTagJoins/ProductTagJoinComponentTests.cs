@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace InventoryLogic.ProductTag.Tests
 {
-    [TestClass()]
+  /*  [TestClass()]
     public class ProductTagJoinComponentTests
     {
         [TestMethod]
@@ -32,5 +32,5 @@ namespace InventoryLogic.ProductTag.Tests
 
             Assert.AreEqual(expected, actual);
         }
-    }
+    }*/
 }

@@ -1,6 +1,6 @@
 ﻿using InventoryLogic.Products;
 using InventoryLogic.Facade;
-using InventoryAPI.Products.ApiModels;
+using InventoryAPI.Products.RequestModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -25,9 +25,13 @@ namespace InventoryAPI.Products
         /// List of all Product definitions
         /// </summary>
         [HttpGet]
-        public List<ProductDTO> GetAll()
+        public List<ProductRequestModel> GetAll()
         {
-            return productsFacade.GetAll();
+            var products = productsFacade.GetAll();
+
+            var productRequestModels = products.ConvertAll(new System.Converter<ProductDTO, ProductRequestModel>(ProductRequestModel.ProductDTOToProductRequestModel));
+
+            return productRequestModels;
         }
 
         /// <summary>
@@ -35,46 +39,64 @@ namespace InventoryAPI.Products
         /// </summary>
         [HttpGet]
         [Route("{id}")]
-        public ProductDTO Get(int id)
+        public ProductRequestModel Get(int id)
         {
-            return productsFacade.Get(id);
+            return ProductRequestModel.ProductDTOToProductRequestModel(productsFacade.Get(id));
         }
 
         /// <summary>
         /// Modify a Product definition
         /// </summary>
-        [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public bool Modify([FromBody] ProductDTO productDTO)
+        [HttpPatch]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_stock_modify")]
+        public bool Modify([FromBody] ProductRequestChildModel product)
         {
-            return productsFacade.Modify(productDTO);
+            return productsFacade.Modify(ProductRequestChildModel.ProductRequestChildModelToProductDTO(product));
         }
 
         /// <summary>
         /// Create a new Product definition
         /// </summary>
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpPut]
-        public ProductDTO Add([FromBody] AddProductAM vm)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_stock_add")]
+        [HttpPost]
+        public ProductRequestModel Add([FromBody] ProductNewRequestModel product)
         {
-            ProductDTO productDto = new ProductDTO // TODO: is newing ok?
-            {
-                Name = vm.Name,
-                Price = vm.Price,
-                Sku = vm.Sku
-            }; 
-            return productsFacade.Add(productDto);
+            return ProductRequestModel.ProductDTOToProductRequestModel(
+                productsFacade.Add(ProductNewRequestModel.ProductNewRequestModelToProductDTO(product)));
         }
 
         /// <summary>
         /// Delete a Product definition
         /// </summary>
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_stock_delete")]
         [HttpDelete]
         [Route("{id}")]
         public bool Delete(int id)
         {
             return productsFacade.Remove(id);
+        }
+
+        /// <summary>
+        /// Apply a tag to a product
+        /// </summary>
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_tag_applytag")]
+        // TODO: role aanpassen naar inventory_product_applytag
+        [HttpPost]
+        [Route("{id}/applytag")]
+        public bool ApplyTag(int id, int tagId)
+        {
+            return productsFacade.ApplyTag(id, tagId);
+        }
+
+        /// <summary>
+        /// Apply a tag to a product
+        /// </summary>
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_product_removetag")]
+        [HttpPost]
+        [Route("{id}/removetag")]
+        public bool RemoveTag(int id, int tagId)
+        {
+            return productsFacade.RemoveTag(id, tagId);
         }
     }
 }
