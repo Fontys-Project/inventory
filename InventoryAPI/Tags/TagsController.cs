@@ -23,7 +23,7 @@ namespace InventoryAPI.Tags
         }
 
         /// <summary>
-        /// List of all Stock definitions
+        /// List of all Tag definitions
         /// </summary>
         [HttpGet]
         public List<TagRequestModel> GetAll()
@@ -36,17 +36,29 @@ namespace InventoryAPI.Tags
         }
 
         /// <summary>
-        /// Get a specified Stock definition
+        /// Get a specified Tag definition
         /// </summary>
         [HttpGet]
         [Route("{id}")]
         public TagRequestModel Get(int id)
         {
-            return TagRequestModel.TagDTOToTagRequestModel(tagsFacade.Get(id));
+            TagDTO tag = tagsFacade.Get(id);
+            return TagRequestModel.TagDTOToTagRequestModel(tag);
         }
 
         /// <summary>
-        /// Modify a Stock definition
+        /// Create a new Tag definition
+        /// </summary>
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost]
+        public TagRequestModel Add([FromBody] AddTagRequestModel tag)
+        {
+            TagDTO dto = tagsFacade.Add(AddTagRequestModel.AddTagRequestModelToTagDTO(tag));
+            return TagRequestModel.TagDTOToTagRequestModel(dto);
+        }
+
+        /// <summary>
+        /// Modify a Tag definition
         /// </summary>
         [HttpPatch]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_tag_modify")]
@@ -55,9 +67,9 @@ namespace InventoryAPI.Tags
             return tagsFacade.Modify(TagRequestModel.TagRequestModelToTagDTO(tag));
         }
 
-       
+
         /// <summary>
-        /// Delete a Stock definition
+        /// Delete a Tag definition
         /// </summary>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_tag_delete")]
         [HttpDelete]

@@ -33,7 +33,8 @@ namespace InventoryLogic.Facade
         public DataTransferObject Get(int id)
         {
             DataTransferObject newView = new DataTransferObject();
-            DomainModel obj = repoFactory.GetCrudRepository<DomainModel>().Get(id);
+            var repo = repoFactory.GetCrudRepository<DomainModel>();
+            DomainModel obj = repo.Get(id);
             obj.ConvertToDTO(newView);
 
             return newView;

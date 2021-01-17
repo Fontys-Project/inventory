@@ -7,13 +7,13 @@ namespace InventoryDAL.Tags
 {
     public class TagsRepository : ITagsRepository
     {
-        private readonly IConverterFactory converterFactory; 
+        private readonly IConverterFactory converterFactory;
         private readonly ITagEntityDAO tagEntityDAO;
-        private readonly Dictionary<Tag,ITagEntity> tagCache;
+        private readonly Dictionary<Tag, ITagEntity> tagCache;
 
         public TagsRepository(ITagEntityDAO tagEntityDAO, IConverterFactory converterFactory)
         {
-            this.converterFactory = converterFactory; 
+            this.converterFactory = converterFactory;
             this.tagEntityDAO = tagEntityDAO;
             tagCache = new Dictionary<Tag, ITagEntity>();
         }
@@ -42,13 +42,9 @@ namespace InventoryDAL.Tags
             if (tag == null)
             {
                 TagEntity tagEntity = tagEntityDAO.Get(id);
-                return converterFactory.tagConverter.Convert(tagEntity, OnObjectCreation);
+                tag = converterFactory.tagConverter.Convert(tagEntity, OnObjectCreation);
             }
-            else
-            {
-                return tag;
-            }
-
+            return tag;
         }
 
         public Tag Add(Tag tag)
