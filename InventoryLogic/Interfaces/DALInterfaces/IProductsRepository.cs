@@ -7,5 +7,6 @@ namespace InventoryDAL.Products
 {
     public interface IProductsRepository : IRepository<Product>
     {
+        List<Product> GetAll(int tagId);
     }
 }

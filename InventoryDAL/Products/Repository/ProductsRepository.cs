@@ -40,6 +40,13 @@ namespace InventoryDAL.Products
             return productCache.Keys.ToList<Product>();
         }
 
+        public List<Product> GetAll(int tagId)
+        {
+            List<Product> products = this.GetAll();
+
+            return products.Where(product => product.Tags.Any(tag => tag.Id == tagId)).ToList();
+        }
+
         public Product Get(int id)
         {
             Product product = productCache.Keys.Where(p => p.Id == id).FirstOrDefault();

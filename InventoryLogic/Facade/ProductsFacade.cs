@@ -13,6 +13,21 @@ namespace InventoryLogic.Facade
         {
         }
 
+        public List<ProductDTO> GetAll(int tagId)
+        {
+            List<ProductDTO> dtos = new List<ProductDTO>();
+            List<Product> products = repoFactory.ProductsRepository.GetAll(tagId);
+
+            foreach (Product product in products)
+            {
+                ProductDTO newDto = new ProductDTO();
+                product.ConvertToDTO(newDto);
+                dtos.Add(newDto);
+            }
+
+            return dtos;
+        }
+
         public bool ApplyTag(int productId, int tagId)
         {
             Product product = repoFactory.GetCrudRepository<Product>().Get(productId);
