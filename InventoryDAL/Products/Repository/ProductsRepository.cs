@@ -10,7 +10,7 @@ namespace InventoryDAL.Products
         private readonly IConverterFactory converterFactory;
         private readonly IProductEntityDAO productEntityDAO;
 
-        private readonly Dictionary<Product,IProductEntity> productCache;
+        private readonly Dictionary<Product, IProductEntity> productCache;
 
 
         public ProductsRepository(IProductEntityDAO productEntityDAO,
@@ -24,29 +24,41 @@ namespace InventoryDAL.Products
         // Handle cacheing of object on instantiation
         private void OnObjectCreation(Product product, IProductEntity productEntity)
         {
+            RemoveFromCache(product);
             productCache.Add(product, productEntity);
         }
 
         public List<Product> GetAll()
-        {     
+        {
             List<ProductEntity> productEntities = productEntityDAO.GetAll();
 
             // Trigger with where, only products not cached, and then select all uncached product entities to convert Products that will be added
             // to the cache with the OnObjectCreation delegate.
-            productEntities.Where(productEntity => productCache.Values.Any(cacheEntity => cacheEntity.Id == productEntity.Id) == false
-            ).ToList().ForEach(productEntity => converterFactory.productConverter.Convert(productEntity, OnObjectCreation));
-            
+            var entitiesNotCached = productEntities
+                .Where(productEntity => productCache.Values.Any(cacheEntity => cacheEntity.Id == productEntity.Id) == false)
+                .ToList();
+            entitiesNotCached.ForEach(productEntity => converterFactory.productConverter.Convert(productEntity, OnObjectCreation));
+
 
             return productCache.Keys.ToList<Product>();
+        }
+
+        public List<Product> GetAll(int tagId)
+        {
+            List<Product> products = this.GetAll();
+
+            return products.Where(product => product.Tags.Any(tag => tag.Id == tagId)).ToList();
         }
 
         public Product Get(int id)
         {
             Product product = productCache.Keys.Where(p => p.Id == id).FirstOrDefault();
-            if (product == null) {
+            if (product == null)
+            {
                 ProductEntity productEntity = productEntityDAO.Get(id);
                 return converterFactory.productConverter.Convert(productEntity, OnObjectCreation);
-            } else
+            }
+            else
             {
                 return product;
             }
@@ -61,8 +73,16 @@ namespace InventoryDAL.Products
 
         public void Modify(Product product)
         {
+            RemoveFromCache(product);
+
             ProductEntity productEntity = converterFactory.productEntityConverter.Convert(product);
             productEntityDAO.Modify(productEntity);
+        }
+
+        private void RemoveFromCache(Product product) // used in Facade. TODO: solve in DAL
+        {
+            Product productInCache = productCache.Keys.Where(p => p.Id == product.Id).FirstOrDefault();
+            if (productInCache != null) productCache.Remove(productInCache);
         }
 
         public void Remove(int id)
@@ -70,7 +90,7 @@ namespace InventoryDAL.Products
             productCache.Remove(productCache.Where(cacheEntity => cacheEntity.Key.Id == id).First().Key);
             productEntityDAO.Remove(id);
 
-            //TODO : cleanup childs.
+            //TODO: cleanup childs.
         }
 
         public Product CreateNew()

@@ -8,14 +8,14 @@ namespace InventoryDAL.Stocks
 {
     public class StocksRepository : IStocksRepository
     {
-        private readonly IConverterFactory converterFactory; 
+        private readonly IConverterFactory converterFactory;
         private readonly IStockEntityDAO stockEntityDAO;
         private readonly Dictionary<Stock, IStockEntity> stockCache;
 
 
         public StocksRepository(IStockEntityDAO stockEntityDAO, IConverterFactory converterFactory)
         {
-            this.converterFactory = converterFactory; 
+            this.converterFactory = converterFactory;
             this.stockEntityDAO = stockEntityDAO;
             stockCache = new Dictionary<Stock, IStockEntity>();
         }
@@ -24,19 +24,19 @@ namespace InventoryDAL.Stocks
         // Handle cacheing of object on instantiation
         private void OnObjectCreation(Stock stock, IStockEntity stockEntity)
         {
-            if(!stockCache.ContainsValue(stockEntity))
-                stockCache.Add(stock, stockEntity);
+            RemoveFromCache(stock);
+            stockCache.Add(stock, stockEntity);
         }
 
         public List<Stock> GetAll()
         {
             List<StockEntity> stockEntities = stockEntityDAO.GetAll();
-           
+
             // Trigger with where, only stocks not cached, and then select all uncached stock entities to convert Stocks that will be added
             // to the cache with the OnObjectCreation delegate.
             stockEntities.Where(stockEntity => stockCache.Values.Any(cacheEntity => stockEntity.Id == cacheEntity.Id) == false)
-            .ToList().ForEach(stockEntity => converterFactory.stockConverter.Convert(stockEntity,OnObjectCreation));
-          
+            .ToList().ForEach(stockEntity => converterFactory.stockConverter.Convert(stockEntity, OnObjectCreation));
+
             return stockCache.Keys.ToList<Stock>();
         }
 
@@ -64,8 +64,16 @@ namespace InventoryDAL.Stocks
 
         public void Modify(Stock stock)
         {
+            RemoveFromCache(stock);
+
             StockEntity stockEntity = converterFactory.stockEntityConverter.Convert(stock);
             stockEntityDAO.Modify(stockEntity);
+        }
+
+        private void RemoveFromCache(Stock stock) // used in Facade. TODO: solve in DAL
+        {
+            Stock stockInCache = stockCache.Keys.Where(s => s.Id == stock.Id).FirstOrDefault();
+            if (stockInCache != null) stockCache.Remove(stockInCache);
         }
 
         public void Remove(int id)

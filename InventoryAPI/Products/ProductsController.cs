@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using InventoryDAL.Interfaces;
 using System.Collections.Generic;
+using System;
 
 namespace InventoryAPI.Products
 {
@@ -29,9 +30,22 @@ namespace InventoryAPI.Products
         {
             var products = productsFacade.GetAll();
 
-            var productRequestModels = products.ConvertAll(new System.Converter<ProductDTO, ProductRequestModel>(ProductRequestModel.ProductDTOToProductRequestModel));
+            var productRequestModels = products.ConvertAll(new Converter<ProductDTO, ProductRequestModel>(ProductRequestModel.ProductDTOToProductRequestModel));
 
             return productRequestModels;
+        }
+
+        /// <summary>
+        /// Get a list of all Product definitions with a specified tag
+        /// </summary>
+        [HttpGet]
+        [Route("filter/{tagId}")]
+        public List<ProductRequestModel> GetAll(int tagId)
+        {
+            var products = productsFacade.GetAll(tagId);
+
+            return products.ConvertAll(new Converter<ProductDTO, ProductRequestModel>(
+                ProductRequestModel.ProductDTOToProductRequestModel));
         }
 
         /// <summary>
@@ -91,7 +105,7 @@ namespace InventoryAPI.Products
         /// <summary>
         /// Apply a tag to a product
         /// </summary>
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_product_removetag")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "inventory_product_removetag")]
         [HttpPost]
         [Route("{id}/removetag")]
         public bool RemoveTag(int id, int tagId)
