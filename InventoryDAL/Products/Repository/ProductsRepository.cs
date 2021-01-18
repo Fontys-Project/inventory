@@ -77,7 +77,7 @@ namespace InventoryDAL.Products
             productCache.Remove(productCache.Where(cacheEntity => cacheEntity.Key.Id == id).First().Key);
             productEntityDAO.Remove(id);
 
-            //TODO : cleanup childs.
+            //TODO: cleanup childs.
         }
 
         public Product CreateNew()
