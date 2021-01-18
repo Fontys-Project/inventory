@@ -30,15 +30,20 @@ namespace InventoryLogic.Facade
 
         public bool ApplyTag(int productId, int tagId)
         {
-            Product product = repoFactory.GetCrudRepository<Product>().Get(productId);
-            Tag tag = repoFactory.GetCrudRepository<Tag>().Get(tagId);
+            var productsRepo = repoFactory.ProductsRepository;
+            var tagsRepo = repoFactory.TagsRepository;
+            
+            Product product = productsRepo.Get(productId);
+            Tag tag = tagsRepo.Get(tagId);
 
-            if (product == null) throw new ArgumentException("Product not found.");
+            if (product == null) throw new ArgumentException("Product not found."); 
             if (tag == null) throw new ArgumentException("Tag not found.");
             if (product.Tags.Contains(tag)) return false;
 
             product.Tags.Add(tag);
-            repoFactory.GetCrudRepository<Product>().Modify(product);
+            productsRepo.Modify(product);
+            tagsRepo.RemoveFromCache(tag); // TODO: solve in DAL!
+
             return true;
         }
 

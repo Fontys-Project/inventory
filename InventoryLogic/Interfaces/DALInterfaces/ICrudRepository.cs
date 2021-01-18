@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using InventoryLogic.Tags;
+using System.Collections.Generic;
 
 namespace InventoryLogic.Interfaces
 {

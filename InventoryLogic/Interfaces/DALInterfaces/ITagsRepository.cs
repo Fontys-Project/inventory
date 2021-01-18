@@ -7,5 +7,6 @@ namespace InventoryDAL.Tags
 {
     public interface ITagsRepository : IRepository<Tag>
     {
+        void RemoveFromCache(Tag tag);
     }
 }

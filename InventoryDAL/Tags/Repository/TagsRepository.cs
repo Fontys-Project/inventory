@@ -56,8 +56,15 @@ namespace InventoryDAL.Tags
 
         public void Modify(Tag tag)
         {
+            RemoveFromCache(tag);
             TagEntity tagEntity = converterFactory.tagEntityConverter.Convert(tag);
             tagEntityDAO.Modify(tagEntity);
+        }
+
+        public void RemoveFromCache(Tag tag) // used in Facade. TODO: solve in DAL
+        {
+            Tag tagInCache = tagCache.Keys.Where(t => t.Id == tag.Id).FirstOrDefault();
+            tagCache.Remove(tagInCache);
         }
 
         public void Remove(int id)

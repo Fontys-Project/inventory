@@ -99,7 +99,7 @@ namespace RabbitMQ
                     productsFacade.Modify(product);
                     scannerMessage.ProductStock += 1;
                     stock.Date = DateTime.Now; // adjust time to now to reflect change.
-                    if (true)
+                    if (true) // TODO: fix
                     {
                         // send message back
                         scannerMessage.ScannerResult = ScannerResult.AddedToStock; // indicate success

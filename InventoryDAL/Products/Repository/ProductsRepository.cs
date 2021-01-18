@@ -10,7 +10,7 @@ namespace InventoryDAL.Products
         private readonly IConverterFactory converterFactory;
         private readonly IProductEntityDAO productEntityDAO;
 
-        private readonly Dictionary<Product,IProductEntity> productCache;
+        private readonly Dictionary<Product, IProductEntity> productCache;
 
 
         public ProductsRepository(IProductEntityDAO productEntityDAO,
@@ -28,14 +28,16 @@ namespace InventoryDAL.Products
         }
 
         public List<Product> GetAll()
-        {     
+        {
             List<ProductEntity> productEntities = productEntityDAO.GetAll();
 
             // Trigger with where, only products not cached, and then select all uncached product entities to convert Products that will be added
             // to the cache with the OnObjectCreation delegate.
-            productEntities.Where(productEntity => productCache.Values.Any(cacheEntity => cacheEntity.Id == productEntity.Id) == false
-            ).ToList().ForEach(productEntity => converterFactory.productConverter.Convert(productEntity, OnObjectCreation));
-            
+            var entitiesNotCached = productEntities
+                .Where(productEntity => productCache.Values.Any(cacheEntity => cacheEntity.Id == productEntity.Id) == false)
+                .ToList();
+            entitiesNotCached.ForEach(productEntity => converterFactory.productConverter.Convert(productEntity, OnObjectCreation));
+
 
             return productCache.Keys.ToList<Product>();
         }
@@ -50,10 +52,12 @@ namespace InventoryDAL.Products
         public Product Get(int id)
         {
             Product product = productCache.Keys.Where(p => p.Id == id).FirstOrDefault();
-            if (product == null) {
+            if (product == null)
+            {
                 ProductEntity productEntity = productEntityDAO.Get(id);
                 return converterFactory.productConverter.Convert(productEntity, OnObjectCreation);
-            } else
+            }
+            else
             {
                 return product;
             }
@@ -68,6 +72,9 @@ namespace InventoryDAL.Products
 
         public void Modify(Product product)
         {
+            Product productInCache = productCache.Keys.Where(p => p.Id == product.Id).FirstOrDefault();
+            productCache.Remove(productInCache);
+
             ProductEntity productEntity = converterFactory.productEntityConverter.Convert(product);
             productEntityDAO.Modify(productEntity);
         }
