@@ -30,10 +30,12 @@ namespace InventoryDAL.Products
             List<Tag> tags = new List<Tag>();
             List<Stock> stocks = new List<Stock>();
             //compose product
-            Product product = new Product(productEntity.Id
-                , productEntity.Name
-                , productEntity.Price
-                , productEntity.Sku,tags,stocks);
+            Product product = domainFactory.CreateProduct(productEntity.Id,
+                                                          productEntity.Name,
+                                                          productEntity.Price,
+                                                          productEntity.Sku,
+                                                          tags,
+                                                          stocks);
 
             // handle instantiated products. Needed by repository to prevent looping.
             onObjectCreation(product, productEntity);
