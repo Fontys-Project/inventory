@@ -24,6 +24,7 @@ namespace InventoryDAL.Products
         // Handle cacheing of object on instantiation
         private void OnObjectCreation(Product product, IProductEntity productEntity)
         {
+            RemoveFromCache(product);
             productCache.Add(product, productEntity);
         }
 
@@ -72,11 +73,16 @@ namespace InventoryDAL.Products
 
         public void Modify(Product product)
         {
-            Product productInCache = productCache.Keys.Where(p => p.Id == product.Id).FirstOrDefault();
-            productCache.Remove(productInCache);
+            RemoveFromCache(product);
 
             ProductEntity productEntity = converterFactory.productEntityConverter.Convert(product);
             productEntityDAO.Modify(productEntity);
+        }
+
+        private void RemoveFromCache(Product product) // used in Facade. TODO: solve in DAL
+        {
+            Product productInCache = productCache.Keys.Where(p => p.Id == product.Id).FirstOrDefault();
+            if (productInCache != null) productCache.Remove(productInCache);
         }
 
         public void Remove(int id)
